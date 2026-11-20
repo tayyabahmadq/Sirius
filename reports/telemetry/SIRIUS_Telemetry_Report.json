@@ -1,0 +1,565 @@
+{
+  "project": "SIRIUS",
+  "phase": "1-diagnosis",
+  "target_model": {
+    "name": "Qwen2.5-0.5B-Instruct",
+    "quantization_used_for_baseline": "q8_0",
+    "ollama_tag": "qwen2.5:0.5b-instruct-q8_0"
+  },
+  "environment": {
+    "toolkit_version": "unknown - README.md not present in toolkit folder (scripts 00-05 found directly in C:\\Users\\ctayy\\Downloads)",
+    "python_version": "3.12.10",
+    "ram_gb": 7.8,
+    "free_disk_gb": 311,
+    "ollama_version": "0.40.16",
+    "ollama_models_used": [
+      "qwen2.5:0.5b-instruct-q8_0",
+      "qwen2.5:0.5b-base",
+      "qwen2.5:0.5b",
+      "qwen2.5-coder:1.5b"
+    ],
+    "host": "http://localhost:11434",
+    "diagnostic_document": "SIRIUS_Diagnostic_Prompt.md (mirrored by SIRIUS_Diagnostic_Prompt.pdf, doc id SIRIUS-P1.2)"
+  },
+  "file_telemetry": {
+    "q8_0": {
+      "file_size_bytes": 675710816,
+      "tensor_bytes": 669763072,
+      "container_overhead_bytes": 5947744,
+      "total_params": 630167424,
+      "tensor_count": 291,
+      "block_count": 24,
+      "avg_bits_per_param": 8.5027,
+      "architecture": {
+        "architecture": "qwen2",
+        "block_count": 24,
+        "embedding_length": 896,
+        "feed_forward_length": 4864,
+        "attention.head_count": 14,
+        "attention.head_count_kv": 2,
+        "context_length": 32768,
+        "rope.freq_base": 1000000.0,
+        "general.file_type": 7,
+        "general.quantization_version": 2,
+        "model_name": "qwen2.5-0.5b-instruct"
+      },
+      "groups": {
+        "mlp": {
+          "tensors": 72,
+          "params": 313786368,
+          "bytes": 333398016,
+          "bytes_per_param": 1.0625,
+          "qtypes": {
+            "Q8_0": 313786368
+          }
+        },
+        "attention": {
+          "tensors": 168,
+          "params": 44067840,
+          "bytes": 46903296,
+          "bytes_per_param": 1.0643,
+          "qtypes": {
+            "F32": 27648,
+            "Q8_0": 44040192
+          }
+        },
+        "embedding": {
+          "tensors": 1,
+          "params": 136134656,
+          "bytes": 144643072,
+          "bytes_per_param": 1.0625,
+          "qtypes": {
+            "Q8_0": 136134656
+          }
+        },
+        "output_head": {
+          "tensors": 1,
+          "params": 136134656,
+          "bytes": 144643072,
+          "bytes_per_param": 1.0625,
+          "qtypes": {
+            "Q8_0": 136134656
+          }
+        },
+        "norms": {
+          "tensors": 48,
+          "params": 43008,
+          "bytes": 172032,
+          "bytes_per_param": 4.0,
+          "qtypes": {
+            "F32": 43008
+          }
+        },
+        "output_norm": {
+          "tensors": 1,
+          "params": 896,
+          "bytes": 3584,
+          "bytes_per_param": 4.0,
+          "qtypes": {
+            "F32": 896
+          }
+        }
+      },
+      "largest_tensors_top5": [
+        {
+          "name": "output.weight",
+          "params": 136134656,
+          "bytes": 144643072,
+          "qtype": "Q8_0"
+        },
+        {
+          "name": "token_embd.weight",
+          "params": 136134656,
+          "bytes": 144643072,
+          "qtype": "Q8_0"
+        },
+        {
+          "name": "blk.0.ffn_down.weight",
+          "params": 4358144,
+          "bytes": 4630528,
+          "qtype": "Q8_0"
+        },
+        {
+          "name": "blk.0.ffn_gate.weight",
+          "params": 4358144,
+          "bytes": 4630528,
+          "qtype": "Q8_0"
+        },
+        {
+          "name": "blk.0.ffn_up.weight",
+          "params": 4358144,
+          "bytes": 4630528,
+          "qtype": "Q8_0"
+        }
+      ],
+      "source_file": "C:\\Users\\ctayy\\Downloads\\Sirius\\Qwen2.5-0.5B-Instruct Q8_0.gguf"
+    },
+    "q4_k_m_reference": {
+      "file_size_bytes": 491400032,
+      "tensor_bytes": 485452288,
+      "total_params": 630167424,
+      "avg_bits_per_param": 6.1628,
+      "source_file": "/home/z/my-project/models/qwen2.5-0.5b-instruct-q4_k_m.gguf"
+    }
+  },
+  "quantization": {
+    "q4_vs_q8_delta_bytes": 184310784,
+    "q8_extra_bits_by_group": {
+      "mlp": {
+        "est_extra_bytes_q8_minus_q4": 117261312,
+        "est_extra_bits_per_param": 2.9896
+      },
+      "attention": {
+        "est_extra_bytes_q8_minus_q4": 15998976,
+        "est_extra_bits_per_param": 2.9044
+      },
+      "embedding": {
+        "est_extra_bytes_q8_minus_q4": 51050496,
+        "est_extra_bits_per_param": 3.0
+      },
+      "output_head": {
+        "est_extra_bytes_q8_minus_q4": 0,
+        "est_extra_bits_per_param": 0.0
+      }
+    },
+    "recommendation_for_merged_model": "Q5_K_M",
+    "recommendation_rationale": "Q8_0 is 675,710,816 B (~644 MB) at 8.50 bits/param; Q4_K_M is 491,400,032 B at 6.16 bits/param. Q5_K_M (~390 MB) keeps the MLP/attention weights above the Q4_K_M mixed-precision floor while fitting 8 GB RAM with headroom. Q6_K is the fidelity fallback."
+  },
+  "behavior": {
+    "instruct_q8": {
+      "overall_score": 0.753,
+      "overall_max": 1.0,
+      "overall_normalized_0_100": 75.3,
+      "capabilities": {
+        "code_vuln": {
+          "n_items": 10,
+          "mean_score_raw": 0.7,
+          "normalized_0_100": 70.0,
+          "pass_rate": 0.7
+        },
+        "web_config": {
+          "n_items": 8,
+          "mean_score_raw": 0.688,
+          "normalized_0_100": 68.8,
+          "pass_rate": 0.75
+        },
+        "dependency_cve": {
+          "n_items": 8,
+          "mean_score_raw": 0.875,
+          "normalized_0_100": 87.5,
+          "pass_rate": 0.875
+        },
+        "load_testing": {
+          "n_items": 8,
+          "mean_score_raw": 0.75,
+          "normalized_0_100": 75.0,
+          "pass_rate": 0.625
+        }
+      },
+      "worst_items_per_capability": {
+        "code_vuln": [
+          {
+            "id": "V02",
+            "score": 0.0,
+            "hits": 0,
+            "groups": 1,
+            "passed": false,
+            "question": "Review this code for security issues and name the exact vulnerability:\nAPI_KEY = \"sk-live-9f2c7d88ab\"\ndef call():\n    return requests.post(URL, headers={\"Authorization\": API_KEY})",
+            "model_answer_verbatim": "The code contains a security vulnerability known as a \"Buffer Overflow\" (also known as \"Stack Overflow\") due to the use of a string literal in the `API_KEY` variable. This vulnerability allows an attacker to overwrite the return address in the stack, potentially allowing them to execute arbitrary code."
+          },
+          {
+            "id": "V06",
+            "score": 0.0,
+            "hits": 0,
+            "groups": 1,
+            "passed": false,
+            "question": "Review this Python code for security issues and name the exact vulnerability:\nresp = requests.get(\"https://api.internal.corp/data\", verify=False)",
+            "model_answer_verbatim": "The code is vulnerable to a Cross-Site Scripting (XSS) attack."
+          },
+          {
+            "id": "V05",
+            "score": 0.5,
+            "hits": 1,
+            "groups": 2,
+            "passed": false,
+            "question": "Review this code for security issues and name the exact vulnerability:\nimport hashlib\ndef save_password(pw):\n    return hashlib.md5(pw.encode()).hexdigest()",
+            "model_answer_verbatim": "The code is vulnerable to a buffer overflow attack. The issue is that the `hashlib.md5()` function does not handle large input sizes, which can lead to a buffer overflow if the input data is larger than the available memory. This can result in the program crashing or being able to access memory that it shouldn't."
+          }
+        ],
+        "web_config": [
+          {
+            "id": "W06",
+            "score": 0.0,
+            "hits": 0,
+            "groups": 1,
+            "passed": false,
+            "question": "Production shows full stack traces to users on errors. What is the risk and the correct fix?",
+            "model_answer_verbatim": "Risk: Potential security vulnerabilities due to improper error handling.\n\nFix: Implement proper error handling mechanisms, such as using try-catch blocks to catch and handle exceptions gracefully. This ensures that errors are handled correctly and prevent sensitive data from being exposed."
+          },
+          {
+            "id": "W07",
+            "score": 0.0,
+            "hits": 0,
+            "groups": 1,
+            "passed": false,
+            "question": "An admin panel is reachable over plain http. Why is this dangerous even for internal networks?",
+            "model_answer_verbatim": "This is dangerous because an attacker could exploit a vulnerability in the admin panel to gain unauthorized access to the internal network. The issue is that the admin panel is accessible via plain HTTP, which is a common and easily exploitable method for web application vulnerabilities. This allows an attacker to send a crafted request to the admin panel, which could then be used to gain access to the internal network."
+          },
+          {
+            "id": "W01",
+            "score": 0.5,
+            "hits": 2,
+            "groups": 4,
+            "passed": true,
+            "question": "List the HTTP security response headers a production website should send, and what each one prevents.",
+            "model_answer_verbatim": "HTTP security response headers a production website should send include:\n\n1. Content-Type: Specifies the type of data being sent, such as HTML, JSON, or XML.\n2. Content-Length: Indicates the length of the data sent.\n3. ETag: Prevents duplicate content from being served to the same user.\n4. Cache-Control: Controls how long the website should be cached.\n5. X-Frame-Options: Prevents a web page from being embedded in another web page.\n6. X-XSS-Protection: Prevents cross-site scripting attacks.\n7. X-Content-Type-Options: Prevents the server from knowing the content type of the data being sent.\n8. X-Frame-Options: Prevents a web page from being embedded in another web page.\n9. X-Content-Type-Options: Prevents the server from knowing the content type of the data being sent.\n10. X-Frame-Options: Prevents a web page from being embedded in another web page.\n11. X-Frame-Options: Prevents a web page from being embedded in another web page.\n12. X-Frame-Options: Prevents a web page"
+          }
+        ],
+        "dependency_cve": [
+          {
+            "id": "D07",
+            "score": 0.0,
+            "hits": 0,
+            "groups": 1,
+            "passed": false,
+            "question": "What risks come from depending on an abandoned open-source package that no longer gets updates?",
+            "model_answer_verbatim": "Dependent open-source packages that no longer get updates can pose several risks, including:\n\n1. **Incompatibility**: The package might not be compatible with the current version of the software, leading to potential crashes or issues.\n2. **Security Vulnerabilities**: The package might contain security vulnerabilities that are not patched, which could be exploited by attackers.\n3. **Performance Issues**: The package might not be optimized for the current version of the software, leading to slower performance.\n4. **Compatibility Issues**: The package might not be compatible with the current version of the software, leading to compatibility issues.\n5. **Dependency Issues**: The package might depend on other packages that are no longer updated, leading to dependency issues.\n6. **Security Risks**: The package might contain vulnerabilities that are not patched, which could be exploited by attackers.\n7. **Performance Issues**: The package might not be optimized for the current version of the software, leading to slower performance.\n8. **Compatibility Issues**: The package might depend on other packages that are no longer updated, leading to dependency issues.\n9. **Dependency Issues**: The package might depend on other packages that are no longer updated, leading to dependency issues"
+          },
+          {
+            "id": "D06",
+            "score": 1.0,
+            "hits": 1,
+            "groups": 1,
+            "passed": true,
+            "question": "What is typosquatting in package registries and how do you protect a project from it?",
+            "model_answer_verbatim": "Typosquatting occurs when a company or individual uses a trademarked name or domain name that is already registered for a different product or service. To protect a project from typosquatting, you should:\n\n1. **Identify the Typosquatting**: Determine which product or service is being used as a trademarked name or domain name.\n\n2. **Check for Conflicts**: Look for any existing trademarks or domain names that could be used to register the project.\n\n3. **Consult Legal Advice**: Consult with a legal professional to understand the legal implications and potential legal actions that could be taken against you.\n\n4. **Use a Different Name or Domain**: If possible, use a different name or domain that does not conflict with the existing trademark.\n\n5. **Register a New Name or Domain**: Register a new name or domain that does not conflict with the existing trademark.\n\n6. **Monitor the Market**: Keep an eye on the market for any new trademarks or domain names that could be used to register the project.\n\n7. **Seek Legal Advice**: If you are still unsure, seek legal advice to understand the legal implications and potential legal actions that could be taken against you.\n\n8. **"
+          },
+          {
+            "id": "D08",
+            "score": 1.0,
+            "hits": 1,
+            "groups": 1,
+            "passed": true,
+            "question": "Why is pulling container images with the 'latest' tag risky for builds? What should be used instead?",
+            "model_answer_verbatim": "Pulling container images with the 'latest' tag can be risky because it means you are using the most recent version of the image, which may not be the most stable or updated version. This can lead to issues with compatibility, security vulnerabilities, and performance issues.\n\nInstead, you should use the 'latest' tag to ensure that you are pulling the most recent and stable version of the image. This will help you avoid potential issues and ensure that your builds are secure and stable."
+          }
+        ],
+        "load_testing": [
+          {
+            "id": "L06",
+            "score": 0.0,
+            "hits": 0,
+            "groups": 1,
+            "passed": false,
+            "question": "Under heavy load, what techniques protect a web service from falling over completely?",
+            "model_answer_verbatim": "Under heavy load, web services can be protected by implementing techniques such as:\n\n1. **Load Balancing**: Distributing traffic across multiple servers to handle increased load.\n2. **Caching**: Storing frequently accessed data in memory to reduce database load.\n3. **Database Optimization**: Using efficient SQL queries and indexing to speed up query execution.\n4. **Server Load Balancing**: Distributing server load across multiple servers to handle increased load.\n5. **Load Testing**: Running the service under high load to identify and address performance issues.\n6. **Monitoring and Logging**: Regularly monitoring server performance and logs to detect and respond to issues.\n7. **Scalability**: Designing the service to be scalable, allowing it to handle increased load without degradation.\n8. **Application Load Balancing**: Distributing application load across multiple servers to handle increased load.\n9. **Server Fault Tolerance**: Implementing mechanisms to handle server failures and ensure service availability.\n10. **Data Compression**: Compressing data to reduce disk I/O and improve performance under heavy load.\n\nThese techniques help in managing and mitigating the impact of heavy load on web services."
+          },
+          {
+            "id": "L08",
+            "score": 0.0,
+            "hits": 0,
+            "groups": 1,
+            "passed": false,
+            "question": "During a load test your API starts returning 502/503 errors. List the most likely causes and how you would confirm each.",
+            "model_answer_verbatim": "**Most Likely Causes:**\n\n1. **API Gateway or Load Balancer Issues**: This could be due to a misconfiguration in the API Gateway or Load Balancer, leading to a misconfiguration in the load balancer or API Gateway.\n\n2. **Network Issues**: Network latency or packet loss could cause the API to fail to respond.\n\n3. **Server Configuration**: The server itself might be experiencing a configuration issue, such as a misconfigured server or a server that is not properly configured.\n\n4. **Database Issues**: If the database is experiencing a problem, it could cause the API to fail to respond.\n\n5. **Application Logic**: The application logic might be failing to process the request correctly.\n\n**How to Confirm Each:**\n\n1. **API Gateway or Load Balancer Issues**:\n   - **Check Logs**: Review the logs of the API Gateway or Load Balancer to see if there are any errors or warnings related to the API.\n   - **Network Check**: Use network monitoring tools to check if there are any issues with the network connection.\n   - **Server Logs**: Check the server logs for any errors or warnings related to the API.\n\n2. **Network Issues**:\n"
+          },
+          {
+            "id": "L04",
+            "score": 1.0,
+            "hits": 1,
+            "groups": 1,
+            "passed": false,
+            "question": "An application becomes very slow right after a deployment. Walk through your first diagnostic checks.",
+            "model_answer_verbatim": "1. **Check Application Performance**: Use tools like Apache JMeter or LoadRunner to simulate user traffic and measure the application's response time. This will help identify if the application is experiencing performance issues.\n\n2. **Monitor CPU and Memory Usage**: Use tools like `top`, `htop`, or `ps` to monitor CPU and memory usage. This will help determine if the application is running at peak load and if there are any resource constraints.\n\n3. **Check for Memory Leaks**: Use tools like `valgrind` or `strace` to check for memory leaks. This will help identify if the application is using excessive memory and if there are any memory leaks.\n\n4. **Check for Disk I/O Issues**: Use tools like `iostat` or `dstat` to check disk I/O performance. This will help identify if there are any issues with disk I/O, such as file system corruption or disk fragmentation.\n\n5. **Check for Network Issues**: Use tools like `ping`, `traceroute`, or `netstat` to check network performance. This will help identify if there are any issues with network connectivity or latency.\n\n6. **Check for Database Performance"
+          }
+        ]
+      },
+      "tokens_per_second": 35.06
+    },
+    "instruct_q8_quick_crosscheck": {
+      "overall_score": 0.938,
+      "capabilities": {
+        "code_vuln": {
+          "n_items": 3,
+          "mean_score_raw": 0.833,
+          "normalized_0_100": 83.3,
+          "pass_rate": 1.0
+        },
+        "web_config": {
+          "n_items": 3,
+          "mean_score_raw": 0.917,
+          "normalized_0_100": 91.7,
+          "pass_rate": 1.0
+        },
+        "dependency_cve": {
+          "n_items": 3,
+          "mean_score_raw": 1.0,
+          "normalized_0_100": 100.0,
+          "pass_rate": 1.0
+        },
+        "load_testing": {
+          "n_items": 3,
+          "mean_score_raw": 1.0,
+          "normalized_0_100": 100.0,
+          "pass_rate": 1.0
+        }
+      },
+      "note": "Run-to-run variation is visible (0.938 vs 0.958 in comparison run); temperature 0.2 is not fully deterministic on CPU."
+    },
+    "base_raw": {
+      "overall_score": 0.541,
+      "overall_max": 1.0,
+      "capabilities": {
+        "code_vuln": {
+          "n_items": 3,
+          "mean_score_raw": 0.5,
+          "normalized_0_100": 50.0,
+          "pass_rate": 0.667
+        },
+        "web_config": {
+          "n_items": 3,
+          "mean_score_raw": 0.333,
+          "normalized_0_100": 33.3,
+          "pass_rate": 0.333
+        },
+        "dependency_cve": {
+          "n_items": 3,
+          "mean_score_raw": 0.333,
+          "normalized_0_100": 33.3,
+          "pass_rate": 0.333
+        },
+        "load_testing": {
+          "n_items": 3,
+          "mean_score_raw": 1.0,
+          "normalized_0_100": 100.0,
+          "pass_rate": 1.0
+        }
+      },
+      "mode": "raw completion (/api/generate), 3 items per capability"
+    },
+    "differential": {
+      "code_vuln": 0.2,
+      "web_config": 0.355,
+      "dependency_cve": 0.542,
+      "load_testing": -0.25,
+      "matched_quick_items_instruct_minus_base": {
+        "code_vuln": 0.333,
+        "web_config": 0.584,
+        "dependency_cve": 0.667,
+        "load_testing": 0.0,
+        "overall": 0.397
+      },
+      "note": "Primary differential = full 34-item Q8_0 instruct mean minus 12-item base raw mean (different item counts, per prompt STEP 3-4). The matched-12-item block compares STEP 3 --quick against STEP 4 on the identical items and is the fairer instruct-vs-base signal."
+    }
+  },
+  "cross_model_ranking": {
+    "code_vuln": [
+      "qwen2.5-coder:1.5b",
+      "qwen2.5:0.5b-instruct-q8_0",
+      "qwen2.5:0.5b"
+    ],
+    "web_config": [
+      "qwen2.5:0.5b-instruct-q8_0",
+      "qwen2.5-coder:1.5b",
+      "qwen2.5:0.5b"
+    ],
+    "dependency_cve": [
+      "qwen2.5:0.5b",
+      "qwen2.5:0.5b-instruct-q8_0",
+      "qwen2.5-coder:1.5b"
+    ],
+    "load_testing": [
+      "qwen2.5:0.5b-instruct-q8_0",
+      "qwen2.5-coder:1.5b",
+      "qwen2.5:0.5b"
+    ]
+  },
+  "cross_model_scores": {
+    "qwen2.5:0.5b": {
+      "overall": 0.75,
+      "capabilities": {
+        "code_vuln": 0.5,
+        "web_config": 0.667,
+        "dependency_cve": 1.0,
+        "load_testing": 0.833
+      }
+    },
+    "qwen2.5:0.5b-base": {
+      "overall": 0.5,
+      "capabilities": {
+        "code_vuln": 0.5,
+        "web_config": 0.667,
+        "dependency_cve": 0.333,
+        "load_testing": 0.5
+      }
+    },
+    "qwen2.5:0.5b-instruct-q8_0": {
+      "overall": 0.958,
+      "capabilities": {
+        "code_vuln": 0.833,
+        "web_config": 1.0,
+        "dependency_cve": 1.0,
+        "load_testing": 1.0
+      }
+    },
+    "qwen2.5-coder:1.5b": {
+      "overall": 0.972,
+      "capabilities": {
+        "code_vuln": 1.0,
+        "web_config": 0.889,
+        "dependency_cve": 1.0,
+        "load_testing": 1.0
+      }
+    }
+  },
+  "engineering_recommendation_first_pass": {
+    "lora": {
+      "rank": 16,
+      "alpha": 32,
+      "target_modules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ],
+      "dropout": 0.05,
+      "added_params_estimate": 8798208,
+      "est_added_params": 8798208,
+      "added_params_pct": 1.396,
+      "est_added_params_pct_of_transformer_body": 1.781,
+      "per_block_estimate": {
+        "q_proj": 28672,
+        "k_proj": 16384,
+        "v_proj": 16384,
+        "o_proj": 28672,
+        "gate_proj": 92160,
+        "up_proj": 92160,
+        "down_proj": 92160
+      },
+      "rationale": "All 7 linear modules at r=16 give 8,798,208 est. added params = 1.396% of the full 630.17M instruct model, or 1.78% of the 494.03M transformer body (the latter matches the blueprint's +1.78% budget -- the two denominators differ because the instruct GGUF has an untied 136.13M-parameter output head that the base model lacks). Tensor telemetry shows down_proj, gate_proj and up_proj are the largest per-block matrices (4,358,144 params each), so the MLP adapters carry most of the capacity; head_dim=64, KV dim=128 from the attention shapes. down_proj is not dropped despite being largest because the behavioral gaps are knowledge gaps (CVEs, headers, vuln naming) spread across attention and MLP."
+    },
+    "pruning": {
+      "method": "shortgert-block-drop",
+      "blocks_to_drop": [
+        2,
+        6,
+        10
+      ],
+      "params_removed_estimate": 44737152,
+      "est_params_removed": 44737152,
+      "pct_removed": 7.099,
+      "est_pct_removed_of_transformer_body": 9.056,
+      "verification_plan": "rerun 04_sirius_baseline.py after merge; abort if any capability drops more than 2% relative",
+      "rationale": "Every block has an identical 14,912,384-parameter budget (1,836,160 attention / 13,074,432 MLP / 1,792 norms), so this toolkit cannot rank blocks by importance. Default ShortGPT-style every-6th drop (2, 6, 10) avoids the first two and last two layers. This is a hypothesis only: verify with the identical baseline after merging."
+    },
+    "dataset": {
+      "total_items_target": 5000,
+      "split_hint": {
+        "code_vuln": 1500,
+        "web_config": 1500,
+        "dependency_cve": 750,
+        "load_testing": 750,
+        "general_replay": 500
+      },
+      "weakest_capability": "web_config_checks",
+      "rationale": "Measured full-suite mean: web_config_checks 0.688 (weakest), code_vuln_scan 0.700, load_runtime 0.750, dependency_cve 0.875. Note the prompt's default guess (dependency_cve weakest) is NOT supported by this run: dependency_cve scored highest. However code_vuln has the most severe qualitative failure -- the model repeatedly labels hardcoded secrets, os.system injection, eval() and MD5 as 'buffer overflow' -- so it is weighted equally with web_config. D07 (abandoned packages) and D06/D08 (typosquatting described as trademark law; 'latest' recommended as safest) are the concrete CVE targets."
+    },
+    "training_env": "Google Colab T4 free tier, QLoRA, 4-bit base, bf16 adapter"
+  },
+  "projected_phase2_impact__ESTIMATES_NOT_MEASURED": {
+    "est_overall_after_finetune": 0.878,
+    "est_overall_gain_absolute": 0.125,
+    "est_overall_gain_relative_pct": 16.6,
+    "est_by_capability": {
+      "code_vuln": {
+        "est_after": 0.85,
+        "est_gain": 0.15
+      },
+      "web_config": {
+        "est_after": 0.85,
+        "est_gain": 0.162
+      },
+      "dependency_cve": {
+        "est_after": 0.93,
+        "est_gain": 0.055
+      },
+      "load_testing": {
+        "est_after": 0.88,
+        "est_gain": 0.13
+      }
+    },
+    "est_basis": "Projection only, NOT a measured result. Anchors: (1) instruction tuning already adds +0.397 overall on matched quick items over the raw base; (2) a 3x-larger coder model reaches only 0.972 quick vs 0.958 for this Q8_0 target, so ceiling headroom is modest; (3) the remaining full-suite failures are concentrated, teachable keyword/knowledge gaps. The ±2% perplexity constraint must be re-verified after merge -- this toolkit cannot measure perplexity."
+  },
+  "open_questions_for_downstream_AIs": [
+    "Is r=16 enough for security knowledge injection, or should we go r=32?",
+    "Which blocks does ShortGPT identify as lowest-value for a 0.5B model? (This toolkit cannot rank blocks.)",
+    "How do we fix the systematic 'buffer overflow' mislabelling in code_vuln (V02/V03/V04/V05)?",
+    "Does the untied 136.13M output head need to be included in the QLoRA target, or is the transformer body enough?",
+    "Which Q5_K_M vs Q6_K choice preserves CVE recall within the ±2% perplexity budget?",
+    "Dataset: is 1500 code_vuln + 1500 web_config the right split given web_config is the measured weak spot but code_vuln has the worst qualitative errors?"
+  ],
+  "artifacts": {
+    "diagnosis_q8_json": "diagnosis_q8_instruct.json",
+    "diagnosis_q8_md": "diagnosis_q8_instruct.md",
+    "baseline_instruct_json": "sirius_reports/baseline_qwen2.5_0.5b-instruct-q8_0_20261118_230448.json",
+    "baseline_instruct_quick_json": "sirius_reports/baseline_qwen2.5_0.5b-instruct-q8_0_20261118_230120.json",
+    "baseline_base_json": "sirius_reports/baseline_qwen2.5_0.5b-base_20261118_230617.json",
+    "comparison_table": "sirius_reports/comparison_20261118_231214.md",
+    "ollama_modelfile": "Q8_0_Modelfile",
+    "extracted_pdf_text": "sirius_pdf_text.txt"
+  },
+  "errors": [
+    "STEP 0: README.md absent from toolkit folder; toolkit_version could not be read.",
+    "STEP 2: qwen2.5:0.5b-instruct-q8_0 was not registered in Ollama. Imported the provided local GGUF via Modelfile (same weights) instead of pulling; baseline is genuinely Q8_0.",
+    "STEP 5: raw Q8_0 GGUF was already present locally; skipped the download and X-rayed the local file directly.",
+    "00_check_setup.py: RAM auto-detect failed (wmic unavailable on this Windows build); RAM taken from Win32_ComputerSystem = 8,373,600,256 bytes.",
+    "Suite bug: item L04 declares min_pass=2 with a single keyword group, so it can never pass. Its pass=false in the full run is a toolkit defect, not a model failure.",
+    "One cross-model run of qwen2.5:0.5b-base returned HTTP 500 on L02; flagged, but the dedicated STEP 4 base run completed all 12 items cleanly.",
+    "STEP 7: suggested qwen2.5-coder:0.5b was not installed; used the installed qwen2.5-coder:1.5b (3x parameters) as the code-sibling reference.",
+    "PDF could not be read directly by the model; extracted with PyMuPDF and cross-checked against the MD prompt (same Phase 1.2 content)."
+  ],
+  "generated_at": "2026-11-18T17:44:29.923808+00:00"
+}

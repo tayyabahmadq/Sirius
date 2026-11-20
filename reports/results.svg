@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="360" viewBox="0 0 760 360" role="img" aria-label="SIRIUS baseline versus Pass 5 scores">
+  <rect width="760" height="360" fill="#0d1117" rx="12"/>
+  <text x="28" y="38" fill="#f0f6fc" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700">SIRIUS — Baseline vs Pass 5 (s=0.5)</text>
+  <text x="28" y="58" fill="#8b949e" font-family="Segoe UI, Arial, sans-serif" font-size="12">SIRIUS Security Baseline v0.1 · 34 items · higher is better</text>
+  <rect x="520" y="28" width="12" height="12" rx="2" fill="#6e7681"/><text x="540" y="39" fill="#c9d1d9" font-family="Segoe UI, Arial, sans-serif" font-size="12">Baseline Q8_0</text>
+  <rect x="640" y="28" width="12" height="12" rx="2" fill="#3fb950"/><text x="660" y="39" fill="#c9d1d9" font-family="Segoe UI, Arial, sans-serif" font-size="12">Pass 5</text>
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#c9d1d9">
+    <text x="28" y="102">Code vulnerability</text>
+    <text x="28" y="152">Web configuration</text>
+    <text x="28" y="202">Dependency / CVE</text>
+    <text x="28" y="252">Load &amp; runtime</text>
+    <text x="28" y="312" font-weight="700">OVERALL</text>
+  </g>
+  <g>
+    <rect x="200" y="86" width="294" height="12" rx="3" fill="#6e7681"/><rect x="200" y="101" width="294" height="12" rx="3" fill="#3fb950"/>
+    <rect x="200" y="136" width="289" height="12" rx="3" fill="#6e7681"/><rect x="200" y="151" width="385" height="12" rx="3" fill="#3fb950"/>
+    <rect x="200" y="186" width="368" height="12" rx="3" fill="#6e7681"/><rect x="200" y="201" width="368" height="12" rx="3" fill="#3fb950"/>
+    <rect x="200" y="236" width="315" height="12" rx="3" fill="#6e7681"/><rect x="200" y="251" width="289" height="12" rx="3" fill="#3fb950"/>
+    <rect x="200" y="296" width="316" height="12" rx="3" fill="#6e7681"/><rect x="200" y="311" width="334" height="12" rx="3" fill="#3fb950"/>
+  </g>
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#8b949e">
+    <text x="500" y="96">0.700</text><text x="500" y="111">0.700</text>
+    <text x="591" y="146">0.688</text><text x="591" y="161">0.917</text>
+    <text x="574" y="196">0.875</text><text x="574" y="211">0.875</text>
+    <text x="521" y="246">0.750</text><text x="495" y="261">0.688</text>
+    <text x="522" y="306">0.753</text><text x="540" y="321" fill="#3fb950" font-weight="700">0.795</text>
+  </g>
+  <line x1="200" y1="335" x2="700" y2="335" stroke="#30363d"/>
+  <text x="200" y="352" fill="#8b949e" font-family="Segoe UI, Arial, sans-serif" font-size="11">0</text>
+  <text x="695" y="352" fill="#8b949e" font-family="Segoe UI, Arial, sans-serif" font-size="11" text-anchor="end">1.0</text>
+</svg>

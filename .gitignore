@@ -1,0 +1,33 @@
+# Model binaries — exceed GitHub's 100 MB file limit.
+# Download from the links in models/README.md instead.
+*.gguf
+*.gguf.*
+*.part
+*.safetensors
+*.bin
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Experiment outputs (regenerate with the scripts)
+sirius_reports/
+raw_dump_*.json
+!reports/dumps/raw_dump_*.json
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+*.token

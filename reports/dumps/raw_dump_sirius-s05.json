@@ -1,0 +1,952 @@
+{
+  "model": "sirius-s05",
+  "budgets": [
+    240,
+    64
+  ],
+  "system_prompt": "You are a security auditor assistant. Answer concisely, technically, and name the exact issue.",
+  "items": [
+    {
+      "id": "V01",
+      "cap": "code_vuln_scan",
+      "min_pass": 1,
+      "np240": {
+        "output": "Vulnerability: SQL injection.\nExplanation: The input to `db.execute()` is a string containing the user and password; this string is then passed directly into the query, which allows an attacker to inject arbitrary SQL.",
+        "eval_count": 45,
+        "hits": [
+          true,
+          false
+        ],
+        "n_hit": 1,
+        "n_groups": 2,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "Vulnerability: SQL injection.\nExplanation: The input string is directly inserted into a SQL query without proper sanitization. This allows an attacker to execute arbitrary SQL commands on the database, potentially revealing sensitive information or altering data.",
+        "eval_count": 46,
+        "hits": [
+          true,
+          false
+        ],
+        "n_hit": 1,
+        "n_groups": 2,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "V02",
+      "cap": "code_vuln_scan",
+      "min_pass": 1,
+      "np240": {
+        "output": "Vulnerability: The API key is hardcoded in a script without being securely stored or encrypted.\nExplanation: Without encryption and storage, the API key can be read by anyone who has access to the script.",
+        "eval_count": 42,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "Vulnerability: The API key is hardcoded in the function definition.\nType of vulnerability: Unauthenticated input via environment variables.\nImpact: An attacker could inject a malicious API key that would allow them to make unauthorized requests.",
+        "eval_count": 45,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "V03",
+      "cap": "code_vuln_scan",
+      "min_pass": 1,
+      "np240": {
+        "output": "Vulnerability: Command injection.\nExplanation: The `os.system()` function is used to execute shell commands, which can be malicious. The attacker could inject a command that runs arbitrary shell commands on the host machine, potentially gaining root access or executing any command they choose.",
+        "eval_count": 55,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "Vulnerability: Command injection.\nExplanation: The `os.system` call is vulnerable to command injection by passing a string literal directly into the shell's command. This allows an attacker to execute arbitrary commands on the system, including one that connects to a remote host and performs a ping.",
+        "eval_count": 58,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "V04",
+      "cap": "code_vuln_scan",
+      "min_pass": 1,
+      "np240": {
+        "output": "Vulnerability: Untrusted input is evaluated in an untrusted context.\nType of vulnerability: Command injection.\nFix: Validate input before evaluation, use a trusted interpreter.",
+        "eval_count": 35,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "Vulnerability: Untrusted input is not properly sanitized.\nType of vulnerability: Command-line injection.\nFix: Use a try/except block to catch invalid inputs.",
+        "eval_count": 34,
+        "hits": [
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 1,
+        "passed": false,
+        "verdict": "OTHER"
+      }
+    },
+    {
+      "id": "V05",
+      "cap": "code_vuln_scan",
+      "min_pass": 2,
+      "np240": {
+        "output": "Vulnerability: MD5 is not securely generated or hashed.\nExplanation: MD5 is a weak hash function that can be easily forged, making it vulnerable to attacks like rainbow table cracking and brute force.",
+        "eval_count": 42,
+        "hits": [
+          true,
+          false
+        ],
+        "n_hit": 1,
+        "n_groups": 2,
+        "passed": false,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "Vulnerability: MD5 is not secure.\nName of the issue: MD5 is a weak hash function, which can be cracked with enough time.",
+        "eval_count": 32,
+        "hits": [
+          true,
+          false
+        ],
+        "n_hit": 1,
+        "n_groups": 2,
+        "passed": false,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "V06",
+      "cap": "code_vuln_scan",
+      "min_pass": 1,
+      "np240": {
+        "output": "Vulnerability: No specific vulnerability is present in this snippet of code.\nExplanation: The `verify` parameter to `requests.get()` is set to `False`, which disables SSL verification. This allows the connection to be made over an insecure channel, potentially exposing sensitive data.",
+        "eval_count": 56,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "Vulnerability: The client does not validate the server's certificate.\nExplanation: The `verify` parameter in `requests.get()` is set to `False`, which disables certificate verification. This means that the request will attempt to connect to a host without validating its SSL/TLS certificate, allowing an attacker with the appropriate credentials",
+        "eval_count": 64,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "V07",
+      "cap": "code_vuln_scan",
+      "min_pass": 1,
+      "np240": {
+        "output": "Vulnerability: No SQL injection.\nExplanation: The function uses a string concatenation to build the file path, which is vulnerable to SQL injection.",
+        "eval_count": 31,
+        "hits": [
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 1,
+        "passed": false,
+        "verdict": "OTHER"
+      },
+      "np64": {
+        "output": "Vulnerability: path traversal.\nExplanation: The attacker can access arbitrary files by concatenating a user-provided filename with the directory path.",
+        "eval_count": 29,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "V08",
+      "cap": "code_vuln_scan",
+      "min_pass": 1,
+      "np240": {
+        "output": "Vulnerability: Cross-site scripting (XSS) via innerHTML.\nExplanation: The script overwrites the entire document's `innerHTML`, allowing any HTML within that string to be displayed.",
+        "eval_count": 39,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "Vulnerability: Cross-site scripting (XSS) via innerHTML.\nExplanation: The `innerHTML` property is used to insert HTML into an element, which can be exploited by injecting malicious script that executes in the browser's context. This allows attackers to inject arbitrary JavaScript code into the page, potentially redirecting users to",
+        "eval_count": 64,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "V09",
+      "cap": "code_vuln_scan",
+      "min_pass": 1,
+      "np240": {
+        "output": "Vulnerability: No known vulnerabilities in this code snippet.\nExplanation: The function is returning a JSON response with all users from the database, which is secure.",
+        "eval_count": 33,
+        "hits": [
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 1,
+        "passed": false,
+        "verdict": "OTHER"
+      },
+      "np64": {
+        "output": "VULNERABILITY: No SQL injection or cross-site scripting (XSS) vulnerabilities.\nFUNCTIONALITY: The function returns a JSON representation of all users in the database, which is vulnerable to SQL injection and XSS attacks.",
+        "eval_count": 46,
+        "hits": [
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 1,
+        "passed": false,
+        "verdict": "WRONG_LABEL(xss)"
+      }
+    },
+    {
+      "id": "V10",
+      "cap": "code_vuln_scan",
+      "min_pass": 2,
+      "np240": {
+        "output": "Vulnerability: Random number generation is not cryptographically secure.\nType of vulnerability: Weak randomness.\nImpact: An attacker could generate predictable or even identical session tokens, allowing an attacker to impersonate the user.",
+        "eval_count": 43,
+        "hits": [
+          true,
+          true
+        ],
+        "n_hit": 2,
+        "n_groups": 2,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "Vulnerability: The function returns a string of random bytes instead of an integer.\nExplanation: A random number is returned, which can be used to generate session tokens.",
+        "eval_count": 35,
+        "hits": [
+          true,
+          false
+        ],
+        "n_hit": 1,
+        "n_groups": 2,
+        "passed": false,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "W01",
+      "cap": "web_config_checks",
+      "min_pass": 2,
+      "np240": {
+        "output": "HTTP Security Response Headers:\n- Strict-Transport-Security: Prevents man-in-the-middle attacks by requiring secure connections.\n- X-Frame-Options: Prevents frames from being opened on the page.\n- X-XSS-Protection: Prevents Cross-Site Scripting attacks by disabling scripting sandbox.\n- Content-Security-Policy: Limits how content is loaded, preventing XSS and other cross-site requests.",
+        "eval_count": 83,
+        "hits": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "n_hit": 3,
+        "n_groups": 4,
+        "passed": true,
+        "verdict": "OTHER"
+      },
+      "np64": {
+        "output": "HTTP Response Headers:\n- Strict-Transport-Security: Prevents man-in-the-middle attacks by requiring secure connections.\n- X-Frame-Options: Prevents frames from being embedded in web pages.\n- X-XSS-Protection: Prevents Cross Site Scripting.\n- Content-Security-Policy: Ensures that",
+        "eval_count": 64,
+        "hits": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "n_hit": 3,
+        "n_groups": 4,
+        "passed": true,
+        "verdict": "TRUNCATED_SUSPECT"
+      }
+    },
+    {
+      "id": "W02",
+      "cap": "web_config_checks",
+      "min_pass": 2,
+      "np240": {
+        "output": "SESSION cookies should not contain sensitive information like passwords or credit card numbers. They should expire after 24 hours or be encrypted with HTTPS.\nSUSPICIOUS: The cookie contains the user's IP address in plain text. It could be used to track users and infer their location.\nUNSURE: The cookie is set by a trusted app (e.g., browser) that does not have access to session information, so it cannot be compromised.\nSUSPICIOUS: The cookie is sent over unencrypted HTTPS traffic. It could be sniffed or eavesdropped on.\nUNSURE: The cookie contains the user's IP address in plain text. It could be used to track users and infer their location.\nSUSPICIOUS: The cookie is set by a trusted app (e.g., browser) that does not have access to session information, so it cannot be compromised.\nUNSURE: The cookie is sent over unencrypted HTTPS traffic. It could be sniffed or eavesdropped on.",
+        "eval_count": 203,
+        "hits": [
+          false,
+          false,
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 3,
+        "passed": false,
+        "verdict": "HEDGE"
+      },
+      "np64": {
+        "output": "SESSION cookies should not contain sensitive information (e.g., user ID, password) or expire too quickly. They should also only be set by trusted sources.\nSNIFFING stops: Session ID expiration, domain check, IP check, cookie age limit.",
+        "eval_count": 52,
+        "hits": [
+          false,
+          false,
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 3,
+        "passed": false,
+        "verdict": "OTHER"
+      }
+    },
+    {
+      "id": "W03",
+      "cap": "web_config_checks",
+      "min_pass": 1,
+      "np240": {
+        "output": "PROBLEM: The site uses HTTP for internal traffic but HTTPS for external access.\nSOLUTION: Change all URLs to use HTTPS, e.g., from \"http://example.com\" to \"https://example.com\".",
+        "eval_count": 44,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "PROBLEM: The site uses HTTP instead of HTTPS.\nSOLUTION: Update to HTTPS (SSL/TLS) for all connections, including web pages, emails, and API requests.",
+        "eval_count": 37,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "W04",
+      "cap": "web_config_checks",
+      "min_pass": 1,
+      "np240": {
+        "output": "CONTENT-Security-Policy mitigates XSS by enforcing strict CSP that blocks inline scripts and stylesheets.",
+        "eval_count": 21,
+        "hits": [
+          true,
+          true,
+          true
+        ],
+        "n_hit": 3,
+        "n_groups": 3,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "CONTENT-Security-Policy mitigates XSS by restricting inline scripts to trusted sources.",
+        "eval_count": 17,
+        "hits": [
+          true,
+          true,
+          true
+        ],
+        "n_hit": 3,
+        "n_groups": 3,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "W05",
+      "cap": "web_config_checks",
+      "min_pass": 1,
+      "np240": {
+        "output": "RISK: Directory listings expose sensitive information about user activities on your system.\nCONFIGURATION: Use a Content Security Policy (CSP) to restrict what resources are allowed in the page, or use a content filter like ufw with a rule for directory listing.",
+        "eval_count": 53,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "RISK: Directory listings expose sensitive information about your site to potential attackers.\nCONFIGURATION: Use a content filter or deny access for directories; use a reverse proxy with a Content Security Policy (CSP).",
+        "eval_count": 42,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "W06",
+      "cap": "web_config_checks",
+      "min_pass": 1,
+      "np240": {
+        "output": "Risk: Full stack trace information leaks.\nFix: Use only the necessary fields in the error message; hide sensitive data by using a custom error code or logging the error with a unique identifier.",
+        "eval_count": 39,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "RISK: Full stack trace information leaks.\nFIX: Use only the most critical information in a secure way (e.g., only show the user's IP, timestamp, and request URL).",
+        "eval_count": 39,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "W07",
+      "cap": "web_config_checks",
+      "min_pass": 1,
+      "np240": {
+        "output": "HTTPS makes it impossible to sniff plain HTTP traffic.",
+        "eval_count": 11,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "PLAIN HTTPS makes it easy to sniff traffic; it’s vulnerable to man-in-the-middle attacks.",
+        "eval_count": 20,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "W08",
+      "cap": "web_config_checks",
+      "min_pass": 1,
+      "np240": {
+        "output": "ISSUE: Password hashes are exposed in the response.\nFIX: Return plain-text passwords instead of hashed values.\nREASON: Without hashing, plaintext passwords can be easily decrypted with a hash function (e.g., SHA-256).",
+        "eval_count": 49,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "ISSUE: Password hashes are exposed in plaintext.\nFIX: Use bcrypt or Argon2 for hashing; salted HMAC for signing.",
+        "eval_count": 29,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "D01",
+      "cap": "dependency_cve",
+      "min_pass": 1,
+      "np240": {
+        "output": "RISK: Vulnerabilities in the older library remain exploitable.\nTIP: Upgrade to the latest version immediately.",
+        "eval_count": 24,
+        "hits": [
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 1,
+        "passed": false,
+        "verdict": "OTHER"
+      },
+      "np64": {
+        "output": "RISK: The library is no longer actively maintained or supported.\nTIP: Upgrade to the latest version immediately; check its compatibility with your current environment.",
+        "eval_count": 32,
+        "hits": [
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 1,
+        "passed": false,
+        "verdict": "OTHER"
+      }
+    },
+    {
+      "id": "D02",
+      "cap": "dependency_cve",
+      "min_pass": 1,
+      "np240": {
+        "output": "CVE stands for Common Vulnerabilities and Exposures. It's a standardized way to identify vulnerabilities across different software platforms.\nCVE identifiers are assigned by NIST (National Institute of Standards and Technology) to each vulnerability, which helps organizations quickly find and track vulnerabilities.",
+        "eval_count": 53,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "CVE stands for Common Vulnerabilities and Exposures. It's a standardized way to identify vulnerabilities across different software platforms.\nCVE identifiers are unique numbers assigned to each vulnerability, which helps in:\n1. Identifying the same vulnerability on multiple systems\n2. Facilitating easy resolution by using a common identifier\n3. Ens",
+        "eval_count": 64,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "D03",
+      "cap": "dependency_cve",
+      "min_pass": 1,
+      "np240": {
+        "output": "Pipenv, pip-tools, tox, and flake8.",
+        "eval_count": 15,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "NVD, PyPI, PIP, CVE, OWASP Dependency Check, PyPI, PIP",
+        "eval_count": 22,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "D04",
+      "cap": "dependency_cve",
+      "min_pass": 1,
+      "np240": {
+        "output": "SCAN, NPM, PGP, OWASP Dependency Check",
+        "eval_count": 13,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "NPM, Yarn, Pnpm, npm-check-updates",
+        "eval_count": 14,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "D05",
+      "cap": "dependency_cve",
+      "min_pass": 1,
+      "np240": {
+        "output": "Pinning dependencies ensures they match your environment's versioning policy (e.g., stable, beta, unstable). This prevents breaking changes from upstream packages.",
+        "eval_count": 31,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "Pinning dependencies ensures they match the current environment as closely as possible. This reduces risk of breaking changes due to version mismatches.",
+        "eval_count": 27,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "D06",
+      "cap": "dependency_cve",
+      "min_pass": 1,
+      "np240": {
+        "output": "LABEL: typosquatting, registry poisoning, malware injection\nFUNCTION: Typosquatting occurs when an attacker uses a legitimate package name to trick the package manager into installing a malicious package.\nSOLUTION: Use a trusted package repository, such as the official repositories of your operating system or package managers. Regularly update and scan your package management tools for vulnerabilities.",
+        "eval_count": 74,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "LABEL: typosquatting, registry poisoning, misconfiguration\nFUNCTION: Typosquatting occurs when an attacker uses a legitimate package name to trick the package manager into installing a malicious package. Registry poisoning involves injecting malicious code into the registry, which can then be installed by the package manager.\nRESOLUTION: Use a",
+        "eval_count": 64,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "D07",
+      "cap": "dependency_cve",
+      "min_pass": 1,
+      "np240": {
+        "output": "dependency management, version incompatibility, security vulnerabilities, maintenance burden, risk of breaking changes.",
+        "eval_count": 20,
+        "hits": [
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 1,
+        "passed": false,
+        "verdict": "OTHER"
+      },
+      "np64": {
+        "output": "version control; vulnerabilities; misconfiguration; out-of-date dependencies; exploitation; downgrade attacks; exposure to known bugs; security information not being updated; outdated software; unpatched vulnerabilities; unauthorized access.",
+        "eval_count": 41,
+        "hits": [
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 1,
+        "passed": false,
+        "verdict": "OTHER"
+      }
+    },
+    {
+      "id": "D08",
+      "cap": "dependency_cve",
+      "min_pass": 1,
+      "np240": {
+        "output": "RISK: Pulling from an untrusted repository.\nFUNCTION: The latest tag is a known vulnerability.\nTIP: Use a trusted registry or pull from a secure source.",
+        "eval_count": 36,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "RISK: Pulling from the latest tag can expose you to vulnerabilities.\nFUNCTION: Use a tag that reflects the current stable version of your image, or use a branch that's not tagged.",
+        "eval_count": 40,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "L01",
+      "cap": "load_runtime",
+      "min_pass": 1,
+      "np240": {
+        "output": "K6: No suitable script found for this query.",
+        "eval_count": 12,
+        "hits": [
+          true,
+          false
+        ],
+        "n_hit": 1,
+        "n_groups": 2,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "K6: No K6 is installed or available on this system.\nNo script provided.",
+        "eval_count": 19,
+        "hits": [
+          true,
+          false
+        ],
+        "n_hit": 1,
+        "n_groups": 2,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "L02",
+      "cap": "load_runtime",
+      "min_pass": 1,
+      "np240": {
+        "output": "p95 latency means 95% of requests take less than this amount of time to complete. It’s more useful because it shows that a request can be completed in half the time it would have taken if it had been processed by all servers at once, which is often faster and reduces average response times.",
+        "eval_count": 64,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "p95 latency means 95% of requests were completed within this time frame. It's more useful because it indicates that the system can handle a significant portion of traffic without dropping or taking too long to respond, which is crucial for performance.",
+        "eval_count": 51,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "L03",
+      "cap": "load_runtime",
+      "min_pass": 1,
+      "np240": {
+        "output": "LABEL: requests per second vs concurrent users\nFUNCTION: RPS measures how many requests are processed by your system per second.\nREASON: It's not useful for measuring actual user experience, which depends on concurrent users.\nTIP: Use it to gauge the scalability of your application and its ability to handle a steady stream of traffic.",
+        "eval_count": 68,
+        "hits": [
+          true,
+          true
+        ],
+        "n_hit": 2,
+        "n_groups": 2,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "LABEL: request rate vs concurrency\nFUNCTION: The RPS is the number of requests made per second by all simultaneous users.\nTHE DIFFERENCE:\n  - RPS measures total capacity, not throughput.\n  - Concurrency measures how many users can be served simultaneously.\n  - A high RPS does not necessarily mean a",
+        "eval_count": 64,
+        "hits": [
+          true,
+          true
+        ],
+        "n_hit": 2,
+        "n_groups": 2,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "L04",
+      "cap": "load_runtime",
+      "min_pass": 2,
+      "np240": {
+        "output": "BEGIN: CONDITIONAL PROBLEM DESCRIPTION:\n- Application performance is degraded immediately after deployment.\n- The degradation occurs within 10 seconds of deployment.\n- No other factors (e.g., hardware, software version) cause the issue.\n- The application runs on a Linux environment with Apache and MySQL.\n- The service has been running for over two months without issues.\nEND: CONDITIONAL PROBLEM DESCRIPTION:\n\nBEGIN: DIAGNOSTIC CHECKS:\n1. Application performance is degraded immediately after deployment.\n2. No other factors (e.g., hardware, software version) cause the issue.\n3. The application runs on a Linux environment with Apache and MySQL.\n4. The service has been running for over two months without issues.\n5. The application uses a static site generator that generates HTML files.\n6. The static site generator is configured to serve content from a CDN.\n7. The static site generator is not using any caching mechanisms.\n8. The application does not use any external services or APIs.\n9. The application has no known vulnerabilities.\nEND: DIAGNOSTIC CHECKS:\n\nBEGIN: CONCLUSION:\nThe issue is likely due to the static site generator's configuration, which serves content from",
+        "eval_count": 240,
+        "hits": [
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 1,
+        "passed": false,
+        "verdict": "TRUNCATED_SUSPECT"
+      },
+      "np64": {
+        "output": "BEGIN: CONDITIONAL PROOF\nFUNCTION: Application performance monitoring (APM), CPU usage, memory utilization, disk I/O.\nADVICE: Run APM on the application to identify bottlenecks and monitor CPU, memory, and disk activity in real time.\nEND: CONDITIONAL PROOF",
+        "eval_count": 60,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": false,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "L05",
+      "cap": "load_runtime",
+      "min_pass": 1,
+      "np240": {
+        "output": "MEMORY LEAK; check for memory leaks in code or by using tools like Valgrind",
+        "eval_count": 19,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "LARGE MEMORY USAGE; CHECK MEMORY USAGE REPORTS AND MEMORY LIMITS IN SERVICE CONFIGURATION; RUN MEMORY ANALYZER TO IDENTIFY HIGH-USED PROCESSES; MONITOR MEMORY USAGE OVER TIME WITH A MEMORY MONITORING TOOL.",
+        "eval_count": 49,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "L06",
+      "cap": "load_runtime",
+      "min_pass": 1,
+      "np240": {
+        "output": "load balancing, circuit breakers, heartbeat monitoring, retries.",
+        "eval_count": 13,
+        "hits": [
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 1,
+        "passed": false,
+        "verdict": "OTHER"
+      },
+      "np64": {
+        "output": "failover, failfast, heartbeat, health checks, retries.",
+        "eval_count": 14,
+        "hits": [
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 1,
+        "passed": false,
+        "verdict": "OTHER"
+      }
+    },
+    {
+      "id": "L07",
+      "cap": "load_runtime",
+      "min_pass": 1,
+      "np240": {
+        "output": "CANARY: Continuous Application Release Nudging (also known as Canary releases) reduces risk by:\n1. Gradually exposing new features to users.\n2. Avoiding over-reliance on the latest version.\n3. Ensuring stability through gradual updates.\n4. Mitigating potential issues early in a project lifecycle.",
+        "eval_count": 65,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": ") A canary release is a phased rollout of new code that tests for bugs before rolling out to production. It reduces risk by:\n1. Detecting issues early.\n2. Avoiding over-provisioned resources.\n3. Ensuring the right version of the product is deployed first, minimizing downtime and cost.",
+        "eval_count": 64,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "L08",
+      "cap": "load_runtime",
+      "min_pass": 1,
+      "np240": {
+        "output": "LABEL: service unavailability, misconfiguration, network issues, workload overload\nFUNCTION: The application is unavailable due to an error in its configuration or the underlying infrastructure.\nRECOMMENDATION: Perform a diagnostic scan of the server logs, check for misconfigurations, and monitor the load on the system.",
+        "eval_count": 62,
+        "hits": [
+          true
+        ],
+        "n_hit": 1,
+        "n_groups": 1,
+        "passed": true,
+        "verdict": "PASS"
+      },
+      "np64": {
+        "output": "LABEL: service unavailability, misconfiguration, network issues\nFUNCTION: The application is unable to connect or process requests due to an error in the server configuration.\nACTION: Verify that the API endpoint is configured correctly for the target service; check the status of the service and its health checks; confirm that the port is open",
+        "eval_count": 64,
+        "hits": [
+          false
+        ],
+        "n_hit": 0,
+        "n_groups": 1,
+        "passed": false,
+        "verdict": "TRUNCATED_SUSPECT"
+      }
+    }
+  ]
+}

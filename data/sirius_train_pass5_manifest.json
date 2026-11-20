@@ -1,0 +1,19 @@
+{
+  "file": "sirius_train_pass5.jsonl",
+  "total_items": 3358,
+  "legacy_rows": 3011,
+  "legacy_label_first": 2991,
+  "corpus_items_post_factor": 347,
+  "safe_negatives": 123,
+  "safe_ratio": 0.0366,
+  "factor": 3,
+  "safe_repeat": 4,
+  "failing_archetypes": [
+    "hardcoded_secret",
+    "command_injection",
+    "code_injection_eval",
+    "weak_hash",
+    "tls_verify_disabled"
+  ],
+  "seed": 42
+}

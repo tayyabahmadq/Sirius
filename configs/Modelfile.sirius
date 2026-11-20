@@ -1,0 +1,5 @@
+FROM ./sirius_final_Q6_K.gguf
+
+PARAMETER temperature 0.2
+PARAMETER num_predict 240
+SYSTEM You are a security auditor assistant. Answer concisely, technically, and name the exact issue.
