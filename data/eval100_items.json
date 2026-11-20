@@ -1,0 +1,2005 @@
+{
+ "system_prompt": "You are a security auditor assistant. Answer concisely, technically, and name the exact issue.",
+ "items": [
+  {
+   "id": "E-S001",
+   "cap": "code_vuln_scan",
+   "min_pass": 2,
+   "groups": [
+    [
+     "sql injection",
+     "parameterized",
+     "prepared statement"
+    ],
+    [
+     "concat",
+     "string formatting",
+     "f-string",
+     "interpolat"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nq = \"SELECT * FROM audit WHERE actor = '{}'\".format(request.args['actor'])\nrows = db.execute(q).fetchall()",
+   "reference": "LABEL: sql injection — the query is built with string formatting (.format interpolation) so the actor value can break out of the literal.\nFIX: parameterized query with a bound parameter."
+  },
+  {
+   "id": "E-S002",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "sql injection",
+     "parameterized",
+     "prepared statement"
+    ]
+   ],
+   "prompt": "Review this JavaScript code for security issues and name the exact vulnerability:\nconst q = \"SELECT * FROM logs WHERE host = '\" + req.body.host + \"'\";\nawait db.query(q);",
+   "reference": "LABEL: sql injection — the host from the request body is concatenated into the query string.\nFIX: use a parameterized/prepared statement with placeholders."
+  },
+  {
+   "id": "E-S003",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "sql injection",
+     "sort",
+     "order by",
+     "column",
+     "parameterized"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nsort_col = request.args.get('sort', 'id')\nq = f\"SELECT id, name FROM items ORDER BY {sort_col}\"\nreturn db.execute(q)",
+   "reference": "LABEL: sql injection — the sort column is interpolated into the ORDER BY clause; identifiers cannot be bound as parameters, so allowlist the column name.\nFIX: validate sort_col against a fixed set of allowed columns (parameterization alone cannot bind identifiers)."
+  },
+  {
+   "id": "E-S004",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "hardcoded",
+     "hard-coded",
+     "hard coded",
+     "embedded credential",
+     "secret in source"
+    ]
+   ],
+   "prompt": "Review this config for security issues and name the exact vulnerability:\n# docker-compose.yml\nenvironment:\n  - GF_SECURITY_ADMIN_PASSWORD=Sup3rS3cret!",
+   "reference": "LABEL: hardcoded secret — the Grafana admin password is an embedded credential in source (docker-compose file in the repo).\nFIX: inject from a secret store; rotate the exposed password."
+  },
+  {
+   "id": "E-S005",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "hardcoded",
+     "hard-coded",
+     "hard coded",
+     "embedded credential",
+     "secret in source"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nOAUTH_CLIENT_SECRET = \"8f3c1d9e2b4a4f5e8a7c6d5e4f3b2a1d\"\ndef token_url():\n    return f\"https://sso.corp/token?client_secret={OAUTH_CLIENT_SECRET}\"",
+   "reference": "LABEL: hardcoded secret — the OAuth client secret is committed in source; the secret in source also leaks via the token URL it is interpolated into.\nFIX: load from the environment/secret manager; send secrets in the request body, never the URL; rotate."
+  },
+  {
+   "id": "E-S006",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "hardcoded",
+     "hard-coded",
+     "hard coded",
+     "embedded credential",
+     "secret in source"
+    ]
+   ],
+   "prompt": "Review this YAML for security issues and name the exact vulnerability:\nintegrations:\n  pagerduty:\n    routing_key: \"R1O9U8T7INGKEY6543\"\n  datadog:\n    api_key: \"dd_live_4f9e2c1a8b7d\"",
+   "reference": "LABEL: hardcoded secret — integration API keys are embedded credentials in source (committed YAML).\nFIX: move to a secret manager/env injection; rotate both keys."
+  },
+  {
+   "id": "E-S007",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "command injection",
+     "shell injection",
+     "os.system",
+     "subprocess",
+     "shell=true"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nimport os\ndef lookup(domain):\n    return os.system(\"dig +short \" + domain)",
+   "reference": "LABEL: command injection — the domain is concatenated into a command executed by the shell via os.system.\nFIX: subprocess.run([\"dig\", \"+short\", domain], shell=False) with list arguments."
+  },
+  {
+   "id": "E-S008",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "command injection",
+     "shell injection",
+     "os.system",
+     "subprocess",
+     "shell=true"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\ncmd = \"kubectl logs \" + request.args['pod']\nsubprocess.Popen(cmd, shell=True)",
+   "reference": "LABEL: command injection — the pod name from the request reaches a shell=True Popen.\nFIX: subprocess.run([\"kubectl\", \"logs\", pod], shell=False) and validate the pod name."
+  },
+  {
+   "id": "E-S009",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "command injection",
+     "shell injection",
+     "os.system",
+     "subprocess",
+     "shell=true"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nimport os\ndef stop_job(jid):\n    os.system(f\"kill -9 {jid}\")",
+   "reference": "LABEL: command injection — the job id from user input is interpolated into a shell command (os.system).\nFIX: pass the pid as a list argument with shell=False and validate it is numeric."
+  },
+  {
+   "id": "E-S010",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "eval",
+     "arbitrary code",
+     "code execution",
+     "code injection"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nfn = eval(\"lambda x: \" + request.args['expr'])\nreturn fn(value)",
+   "reference": "LABEL: arbitrary code execution — eval builds and runs a function from user input.\nFIX: parse with a restricted expression parser (ast with a whitelist of nodes); never eval user text."
+  },
+  {
+   "id": "E-S011",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "eval",
+     "arbitrary code",
+     "code execution",
+     "code injection"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\ncode = request.json['snippet']\nexec(compile(code, \"<user>\", \"exec\"))",
+   "reference": "LABEL: arbitrary code execution — exec runs user-supplied code directly on the server.\nFIX: run untrusted code only in an isolated sandbox (separate process/container, no secrets) or replace with a declarative rule format."
+  },
+  {
+   "id": "E-S012",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "eval",
+     "arbitrary code",
+     "code execution",
+     "code injection"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nfor rule in pricing_rules:\n    price = eval(rule['expression'], {'price': price})",
+   "reference": "LABEL: arbitrary code execution — pricing rule expressions are evaluated with eval; anyone who can edit a rule gets code execution.\nFIX: use a safe expression evaluator (asteval/numexpr with restricted namespace) instead of eval."
+  },
+  {
+   "id": "E-S013",
+   "cap": "code_vuln_scan",
+   "min_pass": 2,
+   "groups": [
+    [
+     "md5",
+     "weak hash",
+     "sha1",
+     "unsalted",
+     "fast hash"
+    ],
+    [
+     "bcrypt",
+     "argon2",
+     "scrypt",
+     "salt"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nimport hashlib\ndef check_login(pw, stored):\n    return hashlib.new('md5', pw.encode()).hexdigest() == stored",
+   "reference": "LABEL: weak hash — md5 is an unsalted fast hash unsuitable for passwords; replace with bcrypt or argon2 salted password hashing."
+  },
+  {
+   "id": "E-S014",
+   "cap": "code_vuln_scan",
+   "min_pass": 2,
+   "groups": [
+    [
+     "md5",
+     "weak hash",
+     "sha1",
+     "unsalted",
+     "fast hash"
+    ],
+    [
+     "bcrypt",
+     "argon2",
+     "scrypt",
+     "salt"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\napi_key = generate_key()\nstored = hashlib.sha1(api_key.encode()).hexdigest()",
+   "reference": "LABEL: weak hash — sha1 is an unsalted fast hash; leaked digest tables are cheaply brute-forced. Fix: store only salted slow hashes (bcrypt/argon2) or HMAC-SHA256 with a server-side pepper."
+  },
+  {
+   "id": "E-S015",
+   "cap": "code_vuln_scan",
+   "min_pass": 2,
+   "groups": [
+    [
+     "md5",
+     "weak hash",
+     "sha1",
+     "unsalted",
+     "fast hash"
+    ],
+    [
+     "bcrypt",
+     "argon2",
+     "scrypt",
+     "salt"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\ndef hash_password(pw):\n    return hashlib.sha256(pw.encode()).hexdigest()",
+   "reference": "LABEL: weak hash — plain sha256 is an unsalted fast hash for passwords (GPU-crackable); use a password KDF: bcrypt, argon2, or scrypt with a per-user salt."
+  },
+  {
+   "id": "E-S016",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "verify=false",
+     "certificate",
+     "tls",
+     "ssl",
+     "mitm",
+     "man-in-the-middle"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nimport aiohttp\nasync def fetch(url):\n    async with aiohttp.ClientSession() as s:\n        async with s.get(url, ssl=False) as r:\n            return await r.text()",
+   "reference": "LABEL: tls verification disabled — ssl=False turns off certificate validation: mitm (man-in-the-middle) can impersonate the server.\nFIX: default ssl context or a CA bundle; never ssl=False."
+  },
+  {
+   "id": "E-S017",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "verify=false",
+     "certificate",
+     "tls",
+     "ssl",
+     "mitm",
+     "man-in-the-middle"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nimport smtplib, ssl\nctx = ssl.SSLContext()\nctx.verify_mode = ssl.CERT_NONE\nwith smtplib.SMTP('mail.corp', 465) as s:\n    s.starttls(context=ctx)",
+   "reference": "LABEL: tls verification disabled — CERT_NONE accepts any certificate; a mitm (man-in-the-middle) can intercept mail credentials.\nFIX: keep CERT_REQUIRED and load the internal CA (load_verify_locations)."
+  },
+  {
+   "id": "E-S018",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "verify=false",
+     "certificate",
+     "tls",
+     "ssl",
+     "mitm",
+     "man-in-the-middle"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nfrom elasticsearch import Elasticsearch\nes = Elasticsearch(['https://es.corp:9200'], verify_certs=False, ssl_show_warn=False)",
+   "reference": "LABEL: tls verification disabled — verify_certs=False skips certificate validation (mitm risk on the search cluster); ssl_show_warn=False hides it.\nFIX: verify_certs=True with the CA bundle path (ca_certs)."
+  },
+  {
+   "id": "E-S019",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "path traversal",
+     "traversal",
+     "../",
+     "directory",
+     "sanitize the path",
+     "basename",
+     "containment"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nimport os\ndef read_log(f):\n    return open(os.path.join('/var/log/app', f)).read()",
+   "reference": "LABEL: path traversal — os.path.join does not stop '../' segments: f=../../etc/passwd escapes /var/log/app (no containment check).\nFIX: sanitize the path with basename or verify the resolved realpath stays inside the log directory."
+  },
+  {
+   "id": "E-S020",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "path traversal",
+     "traversal",
+     "../",
+     "directory",
+     "sanitize the path",
+     "basename",
+     "containment"
+    ]
+   ],
+   "prompt": "Review this JavaScript code for security issues and name the exact vulnerability:\napp.get('/files/:name', (req, res) => {\n  res.sendFile('/data/public/' + req.params.name);\n});",
+   "reference": "LABEL: path traversal — the :name parameter is concatenated onto /data/public; ../ segments escape the directory.\nFIX: sanitize with path.basename and assert the resolved path has /data/public as its prefix (containment)."
+  },
+  {
+   "id": "E-S021",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "path traversal",
+     "traversal",
+     "../",
+     "directory",
+     "sanitize the path",
+     "basename",
+     "containment"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nfrom pathlib import Path\ndef export(user_sub, out):\n    src = Path('/srv/templates') / user_sub\n    out.write(src.read_text())",
+   "reference": "LABEL: path traversal — user_sub joins straight onto the templates root; ../ components escape the directory (no containment check).\nFIX: resolve and verify src.is_relative_to(base); sanitize the path before reading."
+  },
+  {
+   "id": "E-S022",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "xss",
+     "cross-site scripting",
+     "innerhtml",
+     "escape",
+     "sanitiz",
+     "dangerouslysetinnerhtml"
+    ]
+   ],
+   "prompt": "Review this JavaScript code for security issues and name the exact vulnerability:\n<div dangerouslySetInnerHTML={{ __html: comment.body }} />",
+   "reference": "LABEL: cross-site scripting (xss) — user comment rendered as raw HTML via dangerouslySetInnerHTML; payloads execute in every viewer's session.\nFIX: render as text, or sanitize the HTML with a real sanitizer before inserting."
+  },
+  {
+   "id": "E-S023",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "xss",
+     "cross-site scripting",
+     "innerhtml",
+     "escape",
+     "sanitiz",
+     "insertadjacenthtml"
+    ]
+   ],
+   "prompt": "Review this JavaScript code for security issues and name the exact vulnerability:\npanel.insertAdjacentHTML('beforeend', serverData.html);",
+   "reference": "LABEL: cross-site scripting (xss) — serverData.html is inserted unparsed into the DOM; unescaped user content in it executes as script.\nFIX: build DOM nodes with textContent, or escape/sanitize before insertAdjacentHTML."
+  },
+  {
+   "id": "E-S024",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "xss",
+     "cross-site scripting",
+     "escape",
+     "sanitiz",
+     "safe"
+    ]
+   ],
+   "prompt": "Review this Jinja template for security issues and name the exact vulnerability:\n<p>{{ user_bio | safe }}</p>",
+   "reference": "LABEL: cross-site scripting (xss) — the |safe filter disables autoescaping, so the user bio is emitted unescaped into the page.\nFIX: drop |safe and render escaped; sanitize server-side only if rich text is a requirement."
+  },
+  {
+   "id": "E-S025",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "auth",
+     "authorization",
+     "access control",
+     "unauthorized",
+     "session",
+     "login"
+    ]
+   ],
+   "prompt": "Review this FastAPI code for security issues and name the exact vulnerability:\n@app.get('/cards/{user_id}')\ndef list_cards(user_id: int):\n    return db.query(Card).filter(Card.user_id == user_id).all()",
+   "reference": "LABEL: missing access control — the endpoint returns any user's cards with no authentication and no ownership check against the session user (IDOR).\nFIX: require login, scope the query to the authenticated user, and 404 cross-tenant access."
+  },
+  {
+   "id": "E-S026",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "auth",
+     "authorization",
+     "access control",
+     "unauthorized",
+     "session",
+     "login"
+    ]
+   ],
+   "prompt": "Review this Express code for security issues and name the exact vulnerability:\napp.get('/api/admin/settings', (req, res) => {\n  res.json(settings.getAll());\n});",
+   "reference": "LABEL: missing access control — the admin settings endpoint has no authentication/authorization middleware; unauthorized callers read full app settings.\nFIX: gate the route behind login + admin role (session check or middleware)."
+  },
+  {
+   "id": "E-S027",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "auth",
+     "authorization",
+     "access control",
+     "unauthorized",
+     "session",
+     "login"
+    ]
+   ],
+   "prompt": "Review this Django code for security issues and name the exact vulnerability:\ndef destroy_view(request, doc_id):\n    Document.objects.get(id=doc_id).delete()\n    return HttpResponse('deleted')",
+   "reference": "LABEL: missing access control — destructive delete with no login_required and no ownership/authorization check; anyone (unauthenticated) can delete any document.\nFIX: require an authenticated session, verify ownership, and confirm via POST."
+  },
+  {
+   "id": "E-S028",
+   "cap": "code_vuln_scan",
+   "min_pass": 2,
+   "groups": [
+    [
+     "random",
+     "predictable",
+     "insecure"
+    ],
+    [
+     "secrets",
+     "crypto",
+     "os.urandom",
+     "secure random",
+     "token_hex",
+     "token_urlsafe"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nimport random, string\ndef new_api_key():\n    return ''.join(random.choice(string.ascii_letters) for _ in range(24))",
+   "reference": "LABEL: insecure predictable random — API keys generated from the random module are predictable (Mersenne Twister is not crypto-secure).\nFIX: secrets.token_urlsafe(24) or os.urandom — secure random only."
+  },
+  {
+   "id": "E-S029",
+   "cap": "code_vuln_scan",
+   "min_pass": 2,
+   "groups": [
+    [
+     "random",
+     "predictable",
+     "insecure"
+    ],
+    [
+     "secrets",
+     "crypto",
+     "os.urandom",
+     "secure random",
+     "token_hex",
+     "token_urlsafe"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nimport random\ndef otp():\n    return str(random.randrange(10**6)).zfill(6)",
+   "reference": "LABEL: insecure predictable random — OTP codes from random.randrange are predictable once the stream is observed.\nFIX: secrets.randbelow(10**6) (crypto/secure random) and rate-limit verification."
+  },
+  {
+   "id": "E-S030",
+   "cap": "code_vuln_scan",
+   "min_pass": 2,
+   "groups": [
+    [
+     "random",
+     "predictable",
+     "insecure"
+    ],
+    [
+     "secrets",
+     "crypto",
+     "os.urandom",
+     "secure random",
+     "token_hex",
+     "token_urlsafe",
+     "uuid4"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nimport uuid\ndef reset_token(user):\n    return str(uuid.uuid1())",
+   "reference": "LABEL: insecure predictable random — uuid1 embeds the MAC address and a timestamp, making reset tokens guessable (not a secure random source).\nFIX: secrets.token_hex(32) or uuid4 (crypto-grade randomness) with single-use, short-TTL storage."
+  },
+  {
+   "id": "E-S031",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "ssrf",
+     "server-side request forgery",
+     "internal",
+     "allowlist",
+     "metadata"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\n@app.route('/preview')\ndef preview():\n    html = requests.get(request.args['url'], timeout=3).text\n    return render_template('preview.html', title=extract_title(html))",
+   "reference": "LABEL: ssrf (server-side request forgery) — the server fetches an attacker-chosen URL: internal/metadata endpoints (169.254.169.254) are reachable and their content is echoed back.\nFIX: allowlist target hosts, block private/link-local IPs after DNS resolution."
+  },
+  {
+   "id": "E-S032",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "ssrf",
+     "server-side request forgery",
+     "internal",
+     "allowlist",
+     "metadata"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nmetrics = requests.get(f\"http://{body['host']}/metrics\").text\nreturn parse_prometheus(metrics)",
+   "reference": "LABEL: ssrf — the scrape host comes from the request body: internal services and cloud metadata endpoints can be targeted from the server's network position.\nFIX: allowlist the host against the registered instances; block private ranges."
+  },
+  {
+   "id": "E-S033",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "pickle",
+     "unsafe deserialization",
+     "deserialization",
+     "torch.load",
+     "allow_pickle",
+     "marshal"
+    ],
+    [
+     "code execution",
+     "arbitrary code"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\ntask = pickle.loads(queue.get(job_id))\nrun(task)",
+   "reference": "LABEL: unsafe deserialization — queue payloads unpickled with pickle.loads; a poisoned job message is arbitrary code execution on the worker.\nFIX: serialize jobs as JSON (or signed+pickle with restricted unpickler); treat the queue as a trust boundary."
+  },
+  {
+   "id": "E-S034",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "pickle",
+     "unsafe deserialization",
+     "deserialization",
+     "torch.load",
+     "allow_pickle",
+     "marshal"
+    ],
+    [
+     "code execution",
+     "arbitrary code"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nstate = marshal.loads(bytes.fromhex(request.cookies['s']))\nsession.update(state)",
+   "reference": "LABEL: unsafe deserialization — session state restored with marshal.loads from a client cookie; marshal streams can carry payloads leading to arbitrary code execution and the cookie is fully attacker-controlled.\nFIX: signed JSON (HMAC) for session state; never deserialize untrusted bytes."
+  },
+  {
+   "id": "E-S035",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "open redirect",
+     "redirect",
+     "return_to",
+     "next",
+     "relaystate"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\n@app.route('/logout')\ndef logout():\n    logout_user()\n    return redirect(request.args['return_to'])",
+   "reference": "LABEL: open redirect — the post-logout target comes straight from the return_to parameter; //evil.com bounces users from the trusted site to a phishing page.\nFIX: accept only same-origin relative paths (starts with '/' and not '//'); else default route."
+  },
+  {
+   "id": "E-S036",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "open redirect",
+     "redirect",
+     "return_to",
+     "next",
+     "relaystate",
+     "saml"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\ndef sso_callback(request):\n    relay = request.form['RelayState']\n    return HttpResponseRedirect(relay)",
+   "reference": "LABEL: open redirect — the SAML RelayState is used as the redirect target without validation, bouncing authenticated users anywhere.\nFIX: validate RelayState against the service allowlist before redirecting."
+  },
+  {
+   "id": "E-S037",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "jwt",
+     "token",
+     "signature verification",
+     "verify_signature",
+     "algorithm",
+     "forged",
+     "alg"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nclaims = jwt.decode(token, SECRET, options={'verify_signature': False})\nif claims['role'] == 'admin':\n    grant_admin()",
+   "reference": "LABEL: jwt verification disabled — signature verification is off, so tokens (including role=admin) can be forged by anyone.\nFIX: verify the signature with the correct key and pinned algorithm before reading claims."
+  },
+  {
+   "id": "E-S038",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "jwt",
+     "token",
+     "signature verification",
+     "verify_signature",
+     "algorithm",
+     "forged",
+     "alg",
+     "none"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nclaims = jwt.decode(token, KEY, algorithms=['HS256', 'none'])",
+   "reference": "LABEL: jwt verification misconfigured — the accepted algorithm list includes 'none', so unsigned forged tokens validate.\nFIX: pin algorithms to exactly the intended one (e.g., ['HS256']) and never allow none."
+  },
+  {
+   "id": "E-S039",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "cors",
+     "cross-origin",
+     "credentials",
+     "allow-origin",
+     "origin"
+    ]
+   ],
+   "prompt": "Review this Express code for security issues and name the exact vulnerability:\nconst cors = require('cors');\napp.use(cors({ origin: true, credentials: true }));",
+   "reference": "LABEL: permissive cors — origin:true reflects any origin while credentials are allowed: any website can make authenticated cross-origin calls and read the responses.\nFIX: allowlist trusted origins; credentials only for first-party apps."
+  },
+  {
+   "id": "E-S040",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "cors",
+     "cross-origin",
+     "credentials",
+     "allow-origin",
+     "origin",
+     "acac"
+    ]
+   ],
+   "prompt": "Review this Flask code for security issues and name the exact vulnerability:\nresp.headers.add('Access-Control-Allow-Origin', request.headers.get('Origin', '*'))\nresp.headers.add('Access-Control-Allow-Credentials', 'true')",
+   "reference": "LABEL: permissive cors — the Origin header is reflected verbatim with Allow-Credentials: equivalent to '*' with credentials, enabling cross-origin data theft.\nFIX: compare the origin against a server-side allowlist before echoing it."
+  },
+  {
+   "id": "E-S041",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "logs",
+     "logging",
+     "log"
+    ],
+    [
+     "password",
+     "token",
+     "credential",
+     "secret",
+     "authorization"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nlogger.info('password reset requested', extra={\n    'reset_url': f'https://app.corp/reset?token={token}', 'user': user.id})",
+   "reference": "LABEL: secrets written to logs — the password-reset token (a credential) is logged; everyone with log access can take over accounts.\nFIX: log the user id and event only; never the token (or log a truncated fingerprint)."
+  },
+  {
+   "id": "E-S042",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "logs",
+     "logging",
+     "log"
+    ],
+    [
+     "password",
+     "token",
+     "credential",
+     "secret",
+     "authorization",
+     "header"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\naudit.write(f'{ts} AUTH {username}:{password} ok={ok}')",
+   "reference": "LABEL: secrets written to logs — the audit line includes the password: credential material flows into the log pipeline.\nFIX: log username and outcome only; scrub credential fields at the logger boundary."
+  },
+  {
+   "id": "E-S043",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "race condition",
+     "toctou",
+     "check-then-act",
+     "double-spend",
+     "atomic",
+     "transaction",
+     "lock"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nif not coupon.used_by.exists():\n    coupon.used_by.add(user)\n    coupon.save()",
+   "reference": "LABEL: race condition — check-then-act on coupon redemption without a lock or atomic constraint: parallel requests both pass the check and double-redeem.\nFIX: enforce uniqueness atomically (DB unique constraint / SELECT FOR UPDATE inside a transaction)."
+  },
+  {
+   "id": "E-S044",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "race condition",
+     "toctou",
+     "check-then-act",
+     "double-spend",
+     "atomic",
+     "transaction",
+     "lock",
+     "oversell"
+    ]
+   ],
+   "prompt": "Review this Python code for security issues and name the exact vulnerability:\nif seats_remaining > 0:\n    book_seat(flight_id, user)\n    seats_remaining -= 1",
+   "reference": "LABEL: race condition — unsynchronized check-then-act: concurrent bookings oversell the flight (counter decrement is not atomic).\nFIX: atomic conditional update (UPDATE ... WHERE seats_remaining > 0) in a transaction, check rowcount."
+  },
+  {
+   "id": "E-S045",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "mass assignment",
+     "setattr",
+     "allowlist",
+     "is_admin",
+     "privilege",
+     "fields",
+     "schema"
+    ]
+   ],
+   "prompt": "Review this Django/DRF code for security issues and name the exact vulnerability:\nclass UserSerializer(ModelSerializer):\n    class Meta:\n        model = User\n        fields = '__all__'\n# view: UserSerializer(data=request.data).save()",
+   "reference": "LABEL: mass assignment — fields='__all__' binds every model column from the request: is_admin/role can be set by any caller (privilege escalation).\nFIX: allowlist the writable fields explicitly in the serializer schema."
+  },
+  {
+   "id": "E-S046",
+   "cap": "code_vuln_scan",
+   "min_pass": 1,
+   "groups": [
+    [
+     "mass assignment",
+     "setattr",
+     "allowlist",
+     "is_admin",
+     "privilege",
+     "fields",
+     "schema",
+     "update"
+    ]
+   ],
+   "prompt": "Review this Node code for security issues and name the exact vulnerability:\nawait Account.update(req.body, { where: { id: user.id } });",
+   "reference": "LABEL: mass assignment — the whole request body is passed to the update: plan, role, or quota fields can be modified by the client (privilege escalation).\nFIX: pick an explicit allowlist of fields from req.body before updating."
+  },
+  {
+   "id": "E-W001",
+   "cap": "web_config_checks",
+   "min_pass": 2,
+   "groups": [
+    [
+     "strict-transport-security",
+     "hsts"
+    ],
+    [
+     "content-security-policy",
+     "csp"
+    ],
+    [
+     "x-frame-options",
+     "frame-ancestors",
+     "clickjacking"
+    ],
+    [
+     "x-content-type-options"
+    ]
+   ],
+   "prompt": "This production Express app sets no security headers anywhere (no helmet, no manual middleware). List the HTTP security response headers it is missing and what each prevents.",
+   "reference": "LABEL: missing security headers. strict-transport-security (hsts) prevents downgrade; content-security-policy (csp) blocks xss payloads; x-frame-options prevents clickjacking; x-content-type-options: nosniff prevents MIME confusion. All four are absent."
+  },
+  {
+   "id": "E-W002",
+   "cap": "web_config_checks",
+   "min_pass": 2,
+   "groups": [
+    [
+     "strict-transport-security",
+     "hsts"
+    ],
+    [
+     "content-security-policy",
+     "csp"
+    ],
+    [
+     "x-frame-options",
+     "frame-ancestors",
+     "clickjacking"
+    ],
+    [
+     "x-content-type-options"
+    ]
+   ],
+   "prompt": "A Spring app is configured with .headers().frameOptions().disable() and no other header customization. Which header is disabled, what does that allow, and which headers are still missing?",
+   "reference": "LABEL: missing security headers. x-frame-options is explicitly disabled → clickjacking becomes possible. strict-transport-security (hsts), content-security-policy (csp) and x-content-type-options are still missing and must be set."
+  },
+  {
+   "id": "E-W003",
+   "cap": "web_config_checks",
+   "min_pass": 2,
+   "groups": [
+    [
+     "httponly"
+    ],
+    [
+     "secure"
+    ],
+    [
+     "samesite",
+     "csrf"
+    ]
+   ],
+   "prompt": "Review this cookie and name what is missing:\nSet-Cookie: rememberme=9f8e7d; Domain=.corp.example; Max-Age=2592000",
+   "reference": "LABEL: cookie missing flags — rememberme is issued without Secure (sent over http), without HttpOnly (readable by any script), and without SameSite (csrf exposure).\nFIX: Set-Cookie: rememberme=...; Secure; HttpOnly; SameSite=Lax."
+  },
+  {
+   "id": "E-W004",
+   "cap": "web_config_checks",
+   "min_pass": 2,
+   "groups": [
+    [
+     "httponly"
+    ],
+    [
+     "secure"
+    ],
+    [
+     "samesite",
+     "csrf",
+     "javascript"
+    ]
+   ],
+   "prompt": "The SPA sets its session cookie from JavaScript: document.cookie = 'session=' + token + '; path=/'. What is wrong with this approach?",
+   "reference": "LABEL: cookie missing flags — a JavaScript-set session cookie cannot get HttpOnly (script-readable → session theft via any xss), and it is set without Secure or SameSite (csrf/downgrade exposure).\nFIX: set the session cookie server-side with Secure; HttpOnly; SameSite=Lax."
+  },
+  {
+   "id": "E-W005",
+   "cap": "web_config_checks",
+   "min_pass": 2,
+   "groups": [
+    [
+     "http"
+    ],
+    [
+     "admin",
+     "dashboard"
+    ],
+    [
+     "https",
+     "redirect",
+     "tls",
+     "cleartext"
+    ]
+   ],
+   "prompt": "Review this ingress and name the exact issue:\nkind: Ingress\nspec:\n  rules:\n  - http:\n      paths:\n      - path: /grafana\n        backend: { serviceName: grafana, servicePort: 80 }",
+   "reference": "LABEL: admin panel over plain http — the Grafana dashboard is exposed on the http (port 80) ingress with no tls/https termination or redirect: logins cross the network in cleartext.\nFIX: serve admin on https only; redirect http; restrict the route."
+  },
+  {
+   "id": "E-W006",
+   "cap": "web_config_checks",
+   "min_pass": 2,
+   "groups": [
+    [
+     "http"
+    ],
+    [
+     "admin",
+     "ops"
+    ],
+    [
+     "https",
+     "tls",
+     "cleartext"
+    ]
+   ],
+   "prompt": "Review this code and name the exact issue:\nOPS_URL = 'http://ops.internal:8080/execute'\nresp = requests.post(OPS_URL, json={'job': name}, auth=('ops', os.environ['OPS_PASS']))",
+   "reference": "LABEL: admin panel over plain http — an operations (admin) endpoint is called over http with basic auth: the ops credential crosses the network in cleartext.\nFIX: use https with the internal CA for the ops service."
+  },
+  {
+   "id": "E-W007",
+   "cap": "web_config_checks",
+   "min_pass": 1,
+   "groups": [
+    [
+     "autoindex",
+     "directory listing",
+     "indexes"
+    ],
+    [
+     "403",
+     "disable",
+     "off"
+    ]
+   ],
+   "prompt": "Review this Apache config and name the exact issue:\n<Directory /srv/app/backups>\n  Options +Indexes\n</Directory>",
+   "reference": "LABEL: directory listing enabled — Options +Indexes lets anyone enumerate the backups directory (data/source disclosure).\nFIX: disable listing (Options -Indexes) and return 403 on directory URIs."
+  },
+  {
+   "id": "E-W008",
+   "cap": "web_config_checks",
+   "min_pass": 1,
+   "groups": [
+    [
+     "autoindex",
+     "directory listing"
+    ],
+    [
+     "403",
+     "disable",
+     "off"
+    ]
+   ],
+   "prompt": "Review this nginx config and name the exact issue:\nlocation /archive {\n  root /srv/data;\n  autoindex on;\n}",
+   "reference": "LABEL: directory listing enabled — autoindex on exposes the archive directory tree to anyone.\nFIX: autoindex off; 403 on directory URIs; serve only explicit file paths."
+  },
+  {
+   "id": "E-W009",
+   "cap": "web_config_checks",
+   "min_pass": 1,
+   "groups": [
+    [
+     "debug"
+    ],
+    [
+     "stack trace",
+     "error",
+     "exception"
+    ]
+   ],
+   "prompt": "Review this Dockerfile line and name the exact issue:\nCMD [\"python\", \"manage.py\", \"runserver\", \"0.0.0.0:8000\", \"--insecure\"]\n# settings.py: DEBUG = True",
+   "reference": "LABEL: debug/stack traces exposed in production — DEBUG=True serves full stack traces and settings internals on every error page (information disclosure), and runserver is not a production server.\nFIX: DEBUG=False, gunicorn/uwsgi, generic 500 pages, logs to a structured sink."
+  },
+  {
+   "id": "E-W010",
+   "cap": "web_config_checks",
+   "min_pass": 1,
+   "groups": [
+    [
+     "debug"
+    ],
+    [
+     "stack trace",
+     "error",
+     "exception"
+    ]
+   ],
+   "prompt": "Review this .env in the production deploy and name the exact issue:\nAPP_ENV=production\nAPP_DEBUG=true\nLOG_LEVEL=debug",
+   "reference": "LABEL: debug/stack traces exposed in production — APP_DEBUG=true in production prints exceptions/stack traces to clients (information disclosure); LOG_LEVEL=debug adds verbose internal detail.\nFIX: APP_DEBUG=false; raise the log level; ship traces to server-side logs only."
+  },
+  {
+   "id": "E-W011",
+   "cap": "web_config_checks",
+   "min_pass": 2,
+   "groups": [
+    [
+     "301",
+     "redirect"
+    ],
+    [
+     "https",
+     "tls"
+    ]
+   ],
+   "prompt": "Review this nginx server block and name the exact issue:\nserver {\n  listen 80;\n  listen 443 ssl;\n  location / { proxy_pass http://app:8000; }\n}",
+   "reference": "LABEL: no http-to-https redirect — the same app is served identically on port 80 and 443: the first request can stay in cleartext (no 301 redirect to https, no tls enforcement).\nFIX: on port 80 return 301 https://$host$request_uri; add hsts on 443."
+  },
+  {
+   "id": "E-W012",
+   "cap": "web_config_checks",
+   "min_pass": 2,
+   "groups": [
+    [
+     "301",
+     "redirect"
+    ],
+    [
+     "https",
+     "tls"
+    ]
+   ],
+   "prompt": "The load balancer terminates TLS and forwards plain http to the app; the app never checks the forwarded protocol and sets cookies with secure:false 'auto'. Name the issue.",
+   "reference": "LABEL: no http-to-https redirect/enforcement — after tls termination at the LB the app speaks plain http and 'auto' secure cookies downgrade on http hops.\nFIX: redirect http→https at the edge (301), trust the forwarded proto, set secure cookies unconditionally."
+  },
+  {
+   "id": "E-W013",
+   "cap": "web_config_checks",
+   "min_pass": 2,
+   "groups": [
+    [
+     "content-security-policy",
+     "csp"
+    ],
+    [
+     "unsafe-inline",
+     "default-src",
+     "allowlist"
+    ]
+   ],
+   "prompt": "Review this header and name the exact issue:\nContent-Security-Policy: default-src *; script-src * 'unsafe-inline' https:",
+   "reference": "LABEL: unsafe content-security-policy — csp allows every source (*, https:) plus unsafe-inline scripts: it blocks nothing and amplifies xss instead of stopping it.\nFIX: default-src 'self'; script-src 'self'; no unsafe-inline; iterate per app."
+  },
+  {
+   "id": "E-W014",
+   "cap": "web_config_checks",
+   "min_pass": 2,
+   "groups": [
+    [
+     "content-security-policy",
+     "csp"
+    ],
+    [
+     "unsafe-inline",
+     "default-src",
+     "allowlist",
+     "absent"
+    ]
+   ],
+   "prompt": "A production site sends only these headers: Server: nginx, Content-Type, Date. Name what is missing.",
+   "reference": "LABEL: missing content-security-policy — no csp header at all (absent): inline injected scripts run unrestricted. Also missing: strict-transport-security/hsts, x-frame-options, x-content-type-options.\nFIX: add the full header baseline starting with default-src 'self'."
+  },
+  {
+   "id": "E-W015",
+   "cap": "web_config_checks",
+   "min_pass": 1,
+   "groups": [
+    [
+     "pii",
+     "sensitive",
+     "over-fetch",
+     "fields",
+     "leak"
+    ],
+    [
+     "allowlist",
+     "schema",
+     "response model",
+     "minimal"
+    ]
+   ],
+   "prompt": "Review this serializer and name the exact issue:\nclass UserSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = User\n        fields = '__all__'  # includes password_hash, mfa_secret, internal_notes",
+   "reference": "LABEL: api over-fetch — the serializer returns every model field including password_hash, mfa_secret and internal_notes: sensitive pii/credential material leaks to any caller.\nFIX: explicit allowlist schema with the minimal public fields (response model)."
+  },
+  {
+   "id": "E-W016",
+   "cap": "web_config_checks",
+   "min_pass": 1,
+   "groups": [
+    [
+     "pii",
+     "sensitive",
+     "over-fetch",
+     "fields",
+     "leak"
+    ],
+    [
+     "allowlist",
+     "schema",
+     "response model",
+     "minimal",
+     "scope"
+    ]
+   ],
+   "prompt": "Review this GraphQL resolver and name the exact issue:\n@public_query\ndef user(id):\n    return db.users.get(id)  # full object incl. internal_notes, recovery_email",
+   "reference": "LABEL: api over-fetch — the public resolver returns the full user object: internal_notes and recovery data (sensitive fields) leak to unauthenticated callers.\nFIX: return a minimal public schema; field-level authorization for sensitive fields."
+  },
+  {
+   "id": "E-D001",
+   "cap": "dependency_cve",
+   "min_pass": 2,
+   "groups": [
+    [
+     "cve",
+     "known vulnerabilities",
+     "vulnerable version"
+    ],
+    [
+     "upgrade",
+     "fixed version",
+     "pin",
+     "bump"
+    ]
+   ],
+   "prompt": "Review this manifest entry and name the exact issue:\n# requirements.txt\ndjango==3.0.1  # released Jan 2020, no patches applied since",
+   "reference": "LABEL: outdated dependency with known cve — django 3.0.x is end-of-life with multiple published CVEs unpatched.\nFIX: upgrade to a supported patched version and pin it exactly."
+  },
+  {
+   "id": "E-D002",
+   "cap": "dependency_cve",
+   "min_pass": 2,
+   "groups": [
+    [
+     "cve",
+     "known vulnerabilities",
+     "vulnerable version"
+    ],
+    [
+     "upgrade",
+     "fixed version",
+     "pin",
+     "bump"
+    ]
+   ],
+   "prompt": "Review this build file and name the exact issue:\nimplementation 'org.apache.logging.log4j:log4j-core:2.14.0'",
+   "reference": "LABEL: outdated dependency with known cve — log4j-core 2.14.0 is in the Log4Shell range (CVE-2021-44228, JNDI remote code execution).\nFIX: upgrade to 2.17.1+ and pin the version; scan transitives."
+  },
+  {
+   "id": "E-D003",
+   "cap": "dependency_cve",
+   "min_pass": 1,
+   "groups": [
+    [
+     "typosquat",
+     "near-miss",
+     "package name",
+     "misspelled"
+    ],
+    [
+     "registry",
+     "rotate",
+     "official",
+     "pypi",
+     "npm"
+    ]
+   ],
+   "prompt": "Review these entries and name the exact issue:\n# requirements.txt\nflask-loginn==0.6.2\npython-dotenv==1.0.0",
+   "reference": "LABEL: typosquatted package name — flask-loginn is a near-miss of flask-login; squatted packages run arbitrary code with build credentials.\nFIX: install the official package from pypi (registry check), purge the lockfile entry, and rotate CI credentials."
+  },
+  {
+   "id": "E-D004",
+   "cap": "dependency_cve",
+   "min_pass": 1,
+   "groups": [
+    [
+     "typosquat",
+     "near-miss",
+     "package name",
+     "misspelled"
+    ],
+    [
+     "registry",
+     "rotate",
+     "official",
+     "pypi",
+     "npm"
+    ]
+   ],
+   "prompt": "Review this package.json fragment and name the exact issue:\n\"dependencies\": { \"express\": \"^4.18.2\", \"expresss\": \"^1.0.3\" }",
+   "reference": "LABEL: typosquatted package name — expresss (triple s) is not the official express package; installing it runs a stranger's code at install time.\nFIX: remove the entry, verify names against the npm registry, rotate tokens the install had access to."
+  },
+  {
+   "id": "E-D005",
+   "cap": "dependency_cve",
+   "min_pass": 1,
+   "groups": [
+    [
+     "latest"
+    ],
+    [
+     "digest",
+     "pin",
+     "version tag",
+     "immutable"
+    ]
+   ],
+   "prompt": "Review this Dockerfile and name the exact issue:\nFROM node:latest\nCOPY . /srv\nRUN npm ci",
+   "reference": "LABEL: container image uses latest tag — builds are non-reproducible and a poisoned or broken latest pull changes production overnight.\nFIX: pin a version tag or digest (node:20.x@sha256:...) — immutable, verifiable pulls."
+  },
+  {
+   "id": "E-D006",
+   "cap": "dependency_cve",
+   "min_pass": 1,
+   "groups": [
+    [
+     "latest"
+    ],
+    [
+     "digest",
+     "pin",
+     "version tag",
+     "immutable"
+    ]
+   ],
+   "prompt": "Review this k8s deployment and name the exact issue:\ncontainers:\n- name: cache\n  image: redis:latest\n  imagePullPolicy: Always",
+   "reference": "LABEL: container image uses latest tag — redis:latest with Always pull means every restart may run different upstream code; rollback is impossible.\nFIX: pin the digest (immutable) and use IfNotPresent."
+  },
+  {
+   "id": "E-D007",
+   "cap": "dependency_cve",
+   "min_pass": 1,
+   "groups": [
+    [
+     "pin",
+     "lockfile",
+     "exact version",
+     "constraint"
+    ],
+    [
+     "nondeterministic",
+     "supply chain",
+     "reproducib"
+    ]
+   ],
+   "prompt": "Review this requirements.txt and name the exact issue:\nflask>=2.0\nrequests\nnumpy",
+   "reference": "LABEL: unpinned dependency versions — only an open-ended lower bound and unpinned entries: installs are nondeterministic and a compromised future release flows in automatically (supply chain risk).\nFIX: pin exact versions and commit the lockfile."
+  },
+  {
+   "id": "E-D008",
+   "cap": "dependency_cve",
+   "min_pass": 1,
+   "groups": [
+    [
+     "pin",
+     "lockfile",
+     "exact version",
+     "constraint"
+    ],
+    [
+     "nondeterministic",
+     "supply chain",
+     "reproducib"
+    ]
+   ],
+   "prompt": "Review this fragment and name the exact issue:\n\"dependencies\": { \"react\": \"*\", \"axios\": \">=0.21\" }\n# package-lock.json: not committed (in .gitignore)",
+   "reference": "LABEL: unpinned dependency versions — '*' and open ranges with the lockfile gitignored: every build resolves differently (nondeterministic, supply chain exposure).\nFIX: pin exact versions, commit package-lock.json, un-ignore it."
+  },
+  {
+   "id": "E-D009",
+   "cap": "dependency_cve",
+   "min_pass": 1,
+   "groups": [
+    [
+     "pip-audit",
+     "npm audit",
+     "trivy",
+     "dependabot",
+     "audit",
+     "scanning"
+    ],
+    [
+     "ci",
+     "gate",
+     "fail build",
+     "pipeline"
+    ]
+   ],
+   "prompt": "Review this CI config and name the exact issue:\n# .gitlab-ci.yml\nstages: [test, build, deploy]\ntest:  { script: pytest }\nbuild: { script: docker build -t app . }\ndeploy: { script: ./deploy.sh }",
+   "reference": "LABEL: no dependency audit tooling — the pipeline tests and builds but never scans dependencies: known CVEs reach production unnoticed.\nFIX: add pip-audit --strict and trivy image scanning as a failing CI gate before deploy."
+  },
+  {
+   "id": "E-D010",
+   "cap": "dependency_cve",
+   "min_pass": 1,
+   "groups": [
+    [
+     "pip-audit",
+     "npm audit",
+     "trivy",
+     "dependabot",
+     "audit",
+     "scanning"
+    ],
+    [
+     "ci",
+     "gate",
+     "fail build",
+     "pipeline",
+     "automated"
+    ]
+   ],
+   "prompt": "A repo has no dependabot.yml, no sbom generation, and no vulnerability scanning anywhere. What is the risk and the fix?",
+   "reference": "LABEL: no dependency audit tooling — with no automated scanning, sbom, or update PRs, new CVEs and compromised packages reach production silently and there is no inventory to respond with.\nFIX: enable automated update PRs, add an audit gate (pip-audit/npm audit/trivy) to the pipeline, emit an sbom."
+  },
+  {
+   "id": "E-D011",
+   "cap": "dependency_cve",
+   "min_pass": 2,
+   "groups": [
+    [
+     "abandoned",
+     "unmaintained",
+     "eol",
+     "no release"
+    ],
+    [
+     "replace",
+     "migration",
+     "fork",
+     "plan"
+    ]
+   ],
+   "prompt": "A core dependency had its last release 4 years ago and has 3 open CVEs with no maintainer response. What is the risk and what do you do?",
+   "reference": "LABEL: abandoned dependency — the package is effectively unmaintained (no release in 4 years) and its CVEs will never be fixed upstream.\nFIX: plan a migration to a maintained replacement or a maintained fork; pin interim with patches backported."
+  },
+  {
+   "id": "E-D012",
+   "cap": "dependency_cve",
+   "min_pass": 2,
+   "groups": [
+    [
+     "transitive",
+     "indirect"
+    ],
+    [
+     "lockfile",
+     "scan",
+     "sbom",
+     "dependency tree"
+    ]
+   ],
+   "prompt": "Your direct dependencies are all clean, but a teammate says CVEs can still reach you. Through what, and how do you check?",
+   "reference": "LABEL: transitive dependencies — indirect packages pulled by your direct deps can carry CVEs even when your manifest is clean.\nFIX: scan the full dependency tree from the lockfile (pip-audit, npm audit, dependency-tree/sbom tooling), not just declared versions."
+  },
+  {
+   "id": "E-L001",
+   "cap": "load_testing",
+   "min_pass": 2,
+   "groups": [
+    [
+     "threshold",
+     "p95",
+     "p(95)",
+     "http_req_duration"
+    ],
+    [
+     "stages",
+     "ramp",
+     "executor"
+    ]
+   ],
+   "prompt": "Review this k6 script and name the exact defect:\nimport http from 'k6/http';\nexport default function () { http.get('https://api.svc/items'); }",
+   "reference": "LABEL: load-test spec defect — no stages (no ramp model), no thresholds (the test cannot fail), no checks.\nFIX: add ramping stages, thresholds (http_req_duration p(95)<500, error rate<1%) and check() assertions."
+  },
+  {
+   "id": "E-L002",
+   "cap": "load_testing",
+   "min_pass": 2,
+   "groups": [
+    [
+     "threshold",
+     "p95",
+     "p(95)",
+     "http_req_duration"
+    ],
+    [
+     "stages",
+     "ramp",
+     "executor"
+    ]
+   ],
+   "prompt": "Review this k6 config and name the exact defect:\nexport const options = { vus: 500, duration: '10m' };",
+   "reference": "LABEL: load-test spec defect — fixed 500 VUs dumped in instantly (no ramp/stages) looks like an attack and produces synthetic failures; with no thresholds a saturated p95 still 'passes'.\nFIX: stages ramp-up/steady/ramp-down plus thresholds on p95 duration and error rate."
+  },
+  {
+   "id": "E-L003",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "clean",
+     "correct",
+     "well-formed",
+     "proper load test"
+    ]
+   ],
+   "prompt": "Is this k6 script a sound load test? Name what it includes:\nexport const options = { stages: [{duration:'2m',target:50},{duration:'5m',target:50},{duration:'1m',target:0}],\n  thresholds: { http_req_duration: ['p(95)<500'], http_req_failed: ['rate<0.01'] } };\nexport default function () { check(http.get(URL), { 'ok': r => r.status === 200 }); }",
+   "reference": "LABEL: no defect — this is a well-formed load test: ramping stages, p95 and error-rate thresholds, and a status check. It can fail, which is the point."
+  },
+  {
+   "id": "E-L004",
+   "cap": "load_testing",
+   "min_pass": 2,
+   "groups": [
+    [
+     "threshold",
+     "p95",
+     "p(95)",
+     "slo"
+    ],
+    [
+     "check",
+     "assert",
+     "status"
+    ],
+    [
+     "stages",
+     "ramp"
+    ]
+   ],
+   "prompt": "What three things must a load test contain so that it can actually fail and its results are meaningful?",
+   "reference": "LABEL: load-test spec requirements — (1) thresholds tied to the SLO (e.g., p95 http_req_duration < 500ms, error rate < 1%) so the run can fail; (2) checks/assertions on status and body; (3) ramping stages (ramp-up → steady → ramp-down) instead of instant VU counts."
+  },
+  {
+   "id": "E-L005",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "unbounded",
+     "unbounded growth",
+     "never evicted",
+     "no bound",
+     "module-level"
+    ],
+    [
+     "memory leak",
+     "rss",
+     "oom",
+     "maxlen",
+     "ttl",
+     "lru"
+    ]
+   ],
+   "prompt": "Review this handler and name the exact runtime defect:\nevents_seen = []  # module-level\n@app.post('/event')\ndef event():\n    events_seen.append(request.json)\n    return 'ok'",
+   "reference": "LABEL: unbounded growth (memory leak) — the module-level list grows one entry per request and is never evicted: RSS climbs monotonically until OOM kill.\nFIX: deque(maxlen=N), TTL/LRU cache, or persist to a real store."
+  },
+  {
+   "id": "E-L006",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "bounded",
+     "maxlen",
+     "ttl",
+     "correct",
+     "no defect",
+     "lru"
+    ]
+   ],
+   "prompt": "Is this handler sound with respect to memory? Name the relevant property:\nfrom collections import deque\nhistory = deque(maxlen=10000)\n@app.post('/event')\ndef event():\n    history.append(request.json)\n    return 'ok'",
+   "reference": "LABEL: no defect — the buffer is bounded (deque maxlen): memory per process stays constant regardless of traffic, so there is no leak."
+  },
+  {
+   "id": "E-L007",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "unbounded",
+     "no ttl",
+     "never expires",
+     "no eviction",
+     "memory leak"
+    ],
+    [
+     "ttl",
+     "maxsize",
+     "lru",
+     "evict"
+    ]
+   ],
+   "prompt": "Review this cache and name the exact runtime defect:\ncache = {}  # global\ndef get_cfg(key):\n    if key not in cache:\n        cache[key] = load_from_db(key)\n    return cache[key]",
+   "reference": "LABEL: unbounded cache (memory leak) — the global dict has no TTL and no max size: every new key stays forever, so long-lived processes grow until OOM.\nFIX: TTL/LRU cache (maxsize + expiration) or a shared cache (redis)."
+  },
+  {
+   "id": "E-L008",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "rss",
+     "memory grows",
+     "monotonic",
+     "signature",
+     "never returns"
+    ],
+    [
+     "leak",
+     "unbounded",
+     "oom"
+    ]
+   ],
+   "prompt": "In production, pod memory climbs during load and never drops after traffic stops. What is the signature and the first code patterns to look for?",
+   "reference": "LABEL: memory leak signature — RSS growing monotonically with request count and never returning after load stops means unbounded retention, not cache churn.\nFIX: hunt module-level lists/dicts appended per request, caches without TTL/max-size, and listeners/connections registered per request and never removed."
+  },
+  {
+   "id": "E-L009",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "n+1",
+     "per-item",
+     "one query per",
+     "loop"
+    ],
+    [
+     "join",
+     "batch",
+     "in query",
+     "joinedload"
+    ]
+   ],
+   "prompt": "Review this endpoint and name the exact performance defect:\ndef orders_page():\n    orders = Order.objects.all()[:100]\n    for o in orders:\n        o.customer_name = Customer.objects.get(id=o.customer_id).name",
+   "reference": "LABEL: n+1 queries — the page fires one customer query per order (101 queries): p95 and DB load blow up exactly under traffic.\nFIX: single JOIN or one batched IN query (joinedload/select_related) for all referenced ids."
+  },
+  {
+   "id": "E-L010",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "join",
+     "single query",
+     "batch",
+     "correct",
+     "no defect"
+    ]
+   ],
+   "prompt": "Is this data access sound? Name the relevant property:\nrows = db.execute(\n  'SELECT o.id, c.name FROM orders o JOIN customers c ON c.id = o.customer_id')",
+   "reference": "LABEL: no defect — one JOIN returns everything in a single query: query count is constant regardless of page size (no n+1)."
+  },
+  {
+   "id": "E-L011",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "lazy",
+     "template loop",
+     "per-row",
+     "n+1"
+    ],
+    [
+     "eager",
+     "select_related",
+     "prefetch",
+     "joinedload"
+    ]
+   ],
+   "prompt": "Review this ORM usage and name the exact performance defect:\n{% for o in invoice.orders.all %} {{ o.customer.name }} {% endfor %}",
+   "reference": "LABEL: n+1 queries (lazy loading in template loop) — each iteration triggers a fresh query for customer: a 200-row invoice runs 200+ queries.\nFIX: select_related/prefetch (eager load) customers before rendering."
+  },
+  {
+   "id": "E-L012",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "slow list",
+     "endpoint",
+     "diagnose",
+     "measure"
+    ],
+    [
+     "n+1",
+     "query count",
+     "logging",
+     "aprof",
+     "explain"
+    ]
+   ],
+   "prompt": "A list endpoint got 20× slower after adding a 'customer_name' column. What is the likely cause and how do you confirm it?",
+   "reference": "LABEL: n+1 queries — the list endpoint resolves the new customer_name per row, so query count scales with page size.\nFIX to confirm: measure by logging/counting queries for one request (query-count middleware) — if count ≈ rows, batch with a JOIN (n+1 confirmed)."
+  },
+  {
+   "id": "E-L013",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "serial",
+     "fan-out",
+     "in the request path",
+     "background",
+     "queue"
+    ],
+    [
+     "latency",
+     "amplification",
+     "timeout",
+     "worker"
+    ]
+   ],
+   "prompt": "Review this handler and name the exact performance defect:\n@app.post('/broadcast')\ndef broadcast():\n    for u in users:\n        requests.post(WEBHOOK, json={'user': u.id})\n    return 'sent'",
+   "reference": "LABEL: serial external calls in the request path — one outbound call per user amplifies latency linearly (50 users × 300ms = 15s) and pins workers.\nFIX: move the fan-out to a background queue/job with timeouts and retries."
+  },
+  {
+   "id": "E-L014",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "background",
+     "queue",
+     "async",
+     "correct",
+     "no defect"
+    ]
+   ],
+   "prompt": "Is this design sound for webhook delivery? Name the relevant property:\nqueue.enqueue('send_webhooks', user_ids)\nreturn {'status': 'queued'}",
+   "reference": "LABEL: no defect — delivery moved off the request path into a background job: the request returns immediately and third-party slowness cannot pin workers."
+  },
+  {
+   "id": "E-L015",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "uncached",
+     "no cache",
+     "external",
+     "third-party",
+     "request path"
+    ],
+    [
+     "cache",
+     "ttl",
+     "timeout",
+     "degrade",
+     "batch"
+    ]
+   ],
+   "prompt": "Review this function and name the exact performance defect:\ndef get_price(sym):\n    return requests.get(EXTERNAL + '/quote/' + sym).json()['price']",
+   "reference": "LABEL: serial external calls (uncached third-party fetch in the request path) — every lookup pays the provider's latency and rate limits; their slowdown becomes your outage.\nFIX: short-TTL cache, client timeout, batch where possible, and degrade to last-known price."
+  },
+  {
+   "id": "E-L016",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "third-party",
+     "external",
+     "dependency"
+    ],
+    [
+     "measure",
+     "isolate",
+     "timeout",
+     "cache",
+     "circuit"
+    ]
+   ],
+   "prompt": "p95 jumped from 80ms to 2s but CPU is flat and DB looks idle. What do you suspect and how do you confirm?",
+   "reference": "LABEL: external dependency latency — with local CPU and DB idle, the time went to an external/third-party call (or DNS) inside the request path.\nFIX to confirm: trace one request (span timings), then add a timeout + circuit breaker and cache the call."
+  },
+  {
+   "id": "E-L017",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "unbounded",
+     "whole table",
+     "all()",
+     "no limit",
+     "pagination"
+    ],
+    [
+     "limit",
+     "cursor",
+     "offset",
+     "page"
+    ]
+   ],
+   "prompt": "Review this endpoint and name the exact performance defect:\n@app.get('/users')\ndef users():\n    return jsonify([u.to_dict() for u in User.query.all()])",
+   "reference": "LABEL: unbounded result set — the endpoint serializes the whole table per request: memory and response size grow with the table until latency collapses.\nFIX: LIMIT/OFFSET or cursor pagination with a bounded page size."
+  },
+  {
+   "id": "E-L018",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "cursor",
+     "limit",
+     "page",
+     "correct",
+     "no defect",
+     "bounded"
+    ]
+   ],
+   "prompt": "Is this endpoint sound? Name the relevant property:\n@app.get('/users')\ndef users(cursor=None):\n    q = User.query.order_by(User.id).limit(100)\n    if cursor: q = q.filter(User.id > cursor)\n    return jsonify([u.to_dict() for u in q])",
+   "reference": "LABEL: no defect — cursor pagination with a hard page cap keeps per-request memory and latency constant regardless of table size."
+  },
+  {
+   "id": "E-L019",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "size=10000",
+     "deep page",
+     "large page",
+     "unbounded"
+    ],
+    [
+     "search_after",
+     "cursor",
+     "default page",
+     "cap"
+    ]
+   ],
+   "prompt": "Review this search endpoint and name the exact performance defect:\nhits = es.search(index='logs', body={'query': q, 'size': 10000})\nreturn hits['hits']['hits']",
+   "reference": "LABEL: unbounded result set — a 10k-hit page serializes megabytes per request; concurrent large pages OOM the service.\nFIX: search_after/cursor pagination, small default page, hard maximum."
+  },
+  {
+   "id": "E-L020",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "memory grows",
+     "response size",
+     "table size",
+     "measure"
+    ],
+    [
+     "pagination",
+     "limit",
+     "profile"
+    ]
+   ],
+   "prompt": "An endpoint's latency grows week over week with no code change. Data volume grows too. What do you check first?",
+   "reference": "LABEL: unbounded result set — if rows served per request grow with the table, serialization/query time grows with data volume.\nFIX to confirm: log the response size/row count; if it grows, add pagination (LIMIT/cursor) with a bounded page."
+  },
+  {
+   "id": "E-L021",
+   "cap": "load_testing",
+   "min_pass": 2,
+   "groups": [
+    [
+     "timeout"
+    ],
+    [
+     "rate limit",
+     "circuit breaker",
+     "backpressure",
+     "max_conns",
+     "connection pool"
+    ]
+   ],
+   "prompt": "Review this upstream call and name the exact defect:\ndef proxy(path):\n    return requests.get(UPSTREAM + path)\n# edge: no rate limiting configured",
+   "reference": "LABEL: overload protection missing — no timeout on the upstream call (a slow upstream pins every worker/connection) and no rate limiting at the edge: one burst collapses the service.\nFIX: timeout=(3,10), bounded connection pool, rate limit + circuit breaker, fail fast 503 with retry-after."
+  },
+  {
+   "id": "E-L022",
+   "cap": "load_testing",
+   "min_pass": 2,
+   "groups": [
+    [
+     "timeout",
+     "limit_req",
+     "correct",
+     "no defect"
+    ],
+    [
+     "rate limit",
+     "max_conns",
+     "bounded"
+    ]
+   ],
+   "prompt": "Is this configuration sound? Name the relevant properties:\nrequests.get(UPSTREAM + path, timeout=(3, 10))\n# nginx: limit_req zone=api burst=100 nodelay; upstream app { max_conns=200; }",
+   "reference": "LABEL: no defect — bounded timeout on the upstream call plus rate limiting and a connection cap: the service fails fast instead of collapsing."
+  },
+  {
+   "id": "E-L023",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "502",
+     "503",
+     "upstream timeout",
+     "saturation",
+     "workers exhausted"
+    ],
+    [
+     "p95",
+     "slow upstream",
+     "pool",
+     "oom"
+    ]
+   ],
+   "prompt": "Under bursts the service returns 502s, workers sit at 100%, and the upstream answers in 8-12s at p95. Name the mechanism.",
+   "reference": "LABEL: overload collapse — the upstream's p95 exceeds what the proxy tolerates: workers block on slow upstream calls until the pool/worker set is exhausted and the proxy returns 502.\nFIX: upstream timeout below the SLO, circuit breaker, bounded concurrency, 503 + retry-after under saturation."
+  },
+  {
+   "id": "E-L024",
+   "cap": "load_testing",
+   "min_pass": 2,
+   "groups": [
+    [
+     "timeout",
+     "rate limit",
+     "circuit breaker",
+     "backpressure",
+     "protection"
+    ],
+    [
+     "fail fast",
+     "503",
+     "retry-after",
+     "graceful"
+    ]
+   ],
+   "prompt": "Name the protections that keep a service from collapsing under overload, and what it should do when saturated anyway.",
+   "reference": "LABEL: overload protection set — per-call timeouts, rate limiting, circuit breakers, bounded connection pools and queues (backpressure). When saturated anyway: fail fast with 503 + retry-after instead of queueing forever."
+  },
+  {
+   "id": "E-L025",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "step load",
+     "ramp",
+     "saturation point",
+     "find the ceiling",
+     "max rps"
+    ],
+    [
+     "p95",
+     "threshold",
+     "error rate"
+    ]
+   ],
+   "prompt": "How do you find a service's saturation point (maximum sustainable RPS) with a load test?",
+   "reference": "LABEL: capacity probe — ramp load in steps and watch p95 latency and error rate per step: the saturation point is the last step where p95 stays within the threshold and errors stay flat.\nFIX: record max sustainable RPS vs the latency SLO separately — they are different numbers."
+  },
+  {
+   "id": "E-L026",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "p95",
+     "p99",
+     "tail"
+    ],
+    [
+     "mean",
+     "average",
+     "not the mean",
+     "misleading"
+    ]
+   ],
+   "prompt": "Which latency metric should an SLO use and why not the mean?",
+   "reference": "LABEL: tail latency — SLOs use p95/p99 because the mean hides the slow tail that real users hit; a mean of 100ms can hide 10% of requests at 2s.\nFIX: set SLOs on percentiles (p95/p99) and alert on them, not on averages."
+  },
+  {
+   "id": "E-L027",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "cannot fail",
+     "no thresholds",
+     "always passes"
+    ],
+    [
+     "add thresholds",
+     "p95",
+     "slo"
+    ]
+   ],
+   "prompt": "A load test 'passed' every run, including during two outages. What is wrong?",
+   "reference": "LABEL: load-test spec defect — a test without thresholds cannot fail; it reports green regardless of latency or errors.\nFIX: add thresholds tied to the SLO (p95 duration, error rate) so the run fails when the service would hurt users."
+  },
+  {
+   "id": "E-L028",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "cache hit",
+     "repeats",
+     "same payload",
+     "parameterize",
+     "unique"
+    ],
+    [
+     "realistic",
+     "representative"
+    ]
+   ],
+   "prompt": "A load test shows 5ms p95 in staging but production is 300ms. One likely test defect?",
+   "reference": "LABEL: cache-flat load — if every request repeats the same payload/URL, the test measures cache hits, not the real path.\nFIX: parameterize payloads (unique ids per request) and include the production request mix for a representative result."
+  },
+  {
+   "id": "E-L029",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "connection pool",
+     "pool exhaustion",
+     "pool size"
+    ],
+    [
+     "p95",
+     "wait time",
+     "timeout",
+     "cap"
+    ]
+   ],
+   "prompt": "p95 correlates with concurrency, not with RPS, and DB CPU is low. What do you check?",
+   "reference": "LABEL: connection pool starvation — if p95 tracks concurrency while DB CPU is low, requests are queueing on a too-small pool, not on the database.\nFIX: raise/bound the pool to match concurrency, measure pool wait time separately, and cap concurrent handlers."
+  },
+  {
+   "id": "E-L030",
+   "cap": "load_testing",
+   "min_pass": 1,
+   "groups": [
+    [
+     "after deploy",
+     "diff",
+     "new code",
+     "n+1",
+     "cache key",
+     "synchronous"
+    ],
+    [
+     "compare",
+     "bisect",
+     "profile"
+    ]
+   ],
+   "prompt": "p95 degraded 40% right after a deploy. What is your first diagnostic move?",
+   "reference": "LABEL: post-deploy regression triage — diff the deploy: new queries (n+1), changed cache keys, new synchronous work in the hot path, dependency changes.\nFIX: bisect by re-running the same load against the previous build and profile one request on both to localize the added time."
+  }
+ ]
+}

@@ -41,6 +41,11 @@ SIRIUS is the full investigation: a measurement-first diagnostic, a multi-model 
 
 > Full acceptance table, per-item dumps, and the honest caveats live in [docs/04-final-results.md](docs/04-final-results.md).
 
+**Held-out stress test (Phase 4a).** A separate 104-item eval with novel snippets gives
+baseline 0.310 vs Sirius 0.255; McNemar exact **p = 0.3616 → not significant**. So the win is
+real on the fixed SIRIUS suite, but the two models are statistically indistinguishable on
+unseen phrasings — reported openly in [docs/05-eval100-result.md](docs/05-eval100-result.md).
+
 ---
 
 ## How it works
@@ -80,17 +85,22 @@ SIRIUS-Security-Audit/
 │   ├── sirius_train_pass5.jsonl     3,358 LABEL-first ChatML items
 │   ├── sirius_dev.jsonl             100 held-out dev items
 │   ├── sirius_train_pass5_manifest.json
-│   └── sirius_train_contrastive.jsonl
+│   ├── sirius_train_contrastive.jsonl
+│   └── eval100_items.json                  104 held-out acceptance items
 ├── docs/
 │   ├── 01-diagnostic-telemetry.md   phase-1 "before" snapshot
 │   ├── 02-consultation-merge.md     three seats + fourth-seat merge
 │   ├── 03-phase2-runbook.md         configs, escalation ladder
 │   ├── 04-final-results.md          acceptance table + verdict
+│   ├── 05-eval100-result.md         104-item held-out eval + McNemar test
 │   ├── taxonomy.md                  canonical LABEL contract per archetype
 │   └── development-log.md           session-to-session status and bug fixes
 ├── scripts/
 │   ├── 00_check_setup.py … 05_compare_models.py    diagnostic toolkit
+│   ├── 04b_run_eval100.py                           104-item eval + McNemar
 │   ├── 06_build_dataset.py                          corpus assembly
+│   ├── 15_build_eval_expanded.py                    eval100 builder
+│   ├── 16_ppl_recheck_gguf.py                       post-quant PPL gate
 │   ├── 07_train_colab.py                            Pass 5 trainer (SplitLR)
 │   ├── 08_prune_quantize_colab.py                   ShortGPT / GGUF export
 │   ├── 09_eval_gate.py                              dual gate + scale sweep
