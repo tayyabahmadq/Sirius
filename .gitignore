@@ -1,3 +1,6 @@
+# Local llama.cpp toolchain (downloaded prebuilt binaries, not source)
+.tools/
+
 # Model binaries — exceed GitHub's 100 MB file limit.
 # Download from the links in models/README.md instead.
 *.gguf
