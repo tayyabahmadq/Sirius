@@ -50,6 +50,12 @@ unseen phrasings — reported openly in [docs/05-eval100-result.md](docs/05-eval
 PPL(base Q8_0) = 15.68 and PPL(shipped Q6_K) = 14.71 → ratio **0.938 ≤ 1.05 → PASS**. Details
 and the measurement caveats: [docs/06-ppl-recheck.md](docs/06-ppl-recheck.md).
 
+**Security-lead layer (Phase 5).** `security-lead/` adds the Head-of-Security role, 9 SDLC
+playbooks, a 50-item capability eval, and `sirius_cli.py` — a deterministic CI gate with
+**dynamic context routing** (only the relevant playbook is injected into a 0.5B's context),
+conservative decoding (`min_p=0.05`, `repeat_penalty=1.1`), syntax anchors and an explicit
+restraint rule. Baseline lead score: stock 0.200, current Sirius 0.107 (p=0.219, paired noise).
+
 ---
 
 ## How it works
