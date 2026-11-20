@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use SIRIUS in your research or work, please cite it as below."
+type: software
+title: "SIRIUS: Measurement-driven fine-tuning of a 0.5B local security auditor"
+abstract: >-
+  SIRIUS is a local-first security-auditing assistant built on
+  Qwen2.5-0.5B-Instruct. The repository contains the complete measurement,
+  diagnosis, consultation, fine-tuning and acceptance pipeline: GGUF
+  telemetry, a 34-item security baseline, a dual retention/task gate,
+  LABEL-first contrastive training data, and the final Q6_K/Q5_K_M GGUF
+  artifacts description. The resulting model improves the baseline score
+  from 0.753 to 0.795 and fixes 4 of 5 systematic vulnerability-label errors.
+authors:
+  - family-names: Ahmed
+    given-names: Tayyab
+version: 1.0.0
+date-released: 2026-11-20
+url: "https://github.com/tayyabahmadq/Sirius"
+license: MIT
+keywords:
+  - security-auditing
+  - small-language-models
+  - qlora
+  - gguf
+  - ollama
+  - local-first
+  - model-diagnostics
+preferred-citation:
+  type: software
+  title: "SIRIUS: Measurement-driven fine-tuning of a 0.5B local security auditor"
+  authors:
+    - family-names: Ahmed
+      given-names: Tayyab
+  year: 2026
+  url: "https://github.com/tayyabahmadq/Sirius"
+  version: 1.0.0
