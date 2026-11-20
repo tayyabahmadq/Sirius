@@ -46,6 +46,10 @@ baseline 0.310 vs Sirius 0.255; McNemar exact **p = 0.3616 → not significant**
 real on the fixed SIRIUS suite, but the two models are statistically indistinguishable on
 unseen phrasings — reported openly in [docs/05-eval100-result.md](docs/05-eval100-result.md).
 
+**Post-quantization check (Phase 4b).** On an identical wikitext slice with one tool,
+PPL(base Q8_0) = 15.68 and PPL(shipped Q6_K) = 14.71 → ratio **0.938 ≤ 1.05 → PASS**. Details
+and the measurement caveats: [docs/06-ppl-recheck.md](docs/06-ppl-recheck.md).
+
 ---
 
 ## How it works
@@ -93,6 +97,7 @@ SIRIUS-Security-Audit/
 │   ├── 03-phase2-runbook.md         configs, escalation ladder
 │   ├── 04-final-results.md          acceptance table + verdict
 │   ├── 05-eval100-result.md         104-item held-out eval + McNemar test
+│   ├── 06-ppl-recheck.md            post-quantization PPL gate (local CPU)
 │   ├── taxonomy.md                  canonical LABEL contract per archetype
 │   └── development-log.md           session-to-session status and bug fixes
 ├── scripts/
