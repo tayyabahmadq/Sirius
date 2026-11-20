@@ -6,7 +6,7 @@
 
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776ab?logo=python&logoColor=white)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Model: Qwen2.5-0.5B](https://img.shields.io/badge/Model-Qwen2.5--0.5B-Instruct-8a2be2)](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct)
+[![Model: Qwen2.5-0.5B](https://img.shields.io/badge/Model-Qwen2.5--0.5B--Instruct-8a2be2)](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct)
 [![Runtime: Ollama](https://img.shields.io/badge/Runtime-Ollama-4c1?logo=ollama)](https://ollama.com)
 [![Hardware: CPU 8GB / T4](https://img.shields.io/badge/Hardware-8GB%20CPU%20%2F%20Colab%20T4-orange)](https://colab.research.google.com)
 [![Status: acceptance passed](https://img.shields.io/badge/Acceptance-PASSED-2ea44f)](docs/04-final-results.md)
