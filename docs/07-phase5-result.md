@@ -55,3 +55,58 @@ problem; restraint in particular collapsed to 0/5 (the model manufactures findin
 - `sirius_pass6_Q6_K.gguf`, `sirius_pass6_Q5_K_M.gguf`, `sirius-pass6:latest` (local, NOT shipped)
 - `sirius_eval_gate_pass6.json`, `sirius_train_log_pass6.json`
 - `lead_report_sirius-pass6.json`, `sirius_reports/baseline_sirius-pass6_*.json/.md`
+# 07a — Correction to 07-phase5-result.md (post-review)
+
+Append this to `docs/07-phase5-result.md` in the repo (or commit this
+file alongside it). It supersedes two claims in the original result doc.
+
+## 1. The suite regression claim is withdrawn as unverified
+
+The original doc attributes the 0.795 → 0.673 suite34 drop to "replay
+diluted enough to lose ~0.12". Three facts contradict that causal story:
+
+- **Scale**: −0.122 on 34 items ≈ 4 flips. Exact McNemar at the best
+  plausible split (4,0) gives p = 0.125; (5,1) p = 0.219; (6,2)
+  p = 0.289. Not significant at any plausible split. The delta is
+  *directionally lower, not established* — the same honesty standard we
+  applied to the lead-eval "wins" applies to this loss.
+  (`22_significance.py selftest` reproduces these numbers from code.)
+- **Mechanism**: replay of pass5 data should *preserve* pass5 behavior.
+  At lr 1e-5 / r=8 / down_proj-only / 1 epoch, training barely moved
+  weights — the pass6 adapter's dual-PPL ratio against its own chained
+  base was 0.9927. A near-no-op run is an implausible cause of a
+  0.12-point capability loss.
+- **Confounds**: the deployed artifact = base + 0.5·(retrained pass5) +
+  1.0·pass6. The s=0.5 chain halves the pass5 adapter, and the pass5
+  adapter itself was retrained from scratch (gate ratio 0.8062 measures
+  retention, not behavioral equivalence to the adapter that scored
+  0.795). The categories that dropped — web_config 0.844→0.667,
+  dependency_cve 0.875→0.750, load_testing 0.750→0.625 — are exactly
+  the pass5-taught ones: the signature of the diluted/recovered chain.
+
+**Required control (Step 0b in NEXT_PROMPT Part 4):** evaluate
+`sirius_merged_pass5_s05` bare (no pass6 adapter) on the full
+acceptance set. ≈0.67 ⇒ the chain/recovery caused the whole regression
+(fix: chain at s=1.0 or resume the pass5 adapter — no second merge);
+≈0.79 ⇒ pass6 training genuinely damaged the suite. Until this runs,
+the regression's cause is *unresolved*.
+
+## 2. The baseline column was under-weighted
+
+Stock Q8_0 scored **0.200** on the lead eval — above both fine-tunes
+(pass5 0.107, pass6 0.127; overlapping Wilson CIs, but directionally
+consistent). Restraint: stock 1/5, pass5 1/5, pass6 0/5 — restraint was
+never present to lose. Conclusion recorded for Phase 5R: the auditor
+distribution suppresses lead behavior, so (a) restraint must be trained
+as a first-class behavior (counterfactual safe/vuln pairs), and (b) a
+role-split deployment (stock + ROLE serving stack for lead queries,
+sirius-final for diff/audit gates) is a live option — the serving-stack
+A/B is Step 0c.
+
+## What stands unchanged
+
+The no-ship verdict, the keep-pass5-deployed decision, the absolute
+target failures (0.127 vs ≥0.55 lead, 0/5 vs ≥4/5 restraint), and the
+refusal to escalate capacity against a data problem. The correction
+narrows the *diagnosis*, not the verdict.
+

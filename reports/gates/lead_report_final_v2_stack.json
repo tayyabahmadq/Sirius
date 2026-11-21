@@ -1,0 +1,971 @@
+{
+ "model": "sirius-final",
+ "items": "v2",
+ "stack": true,
+ "n_items": 110,
+ "capabilities": {
+  "api_security": {
+   "n_items": 10,
+   "mean_score": 0.067,
+   "pass_rate": 0.0,
+   "items": [
+    {
+     "id": "F2-I001",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-I002",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-I003",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-I004",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-I005",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-I006",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-I007",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-I008",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-I009",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-I010",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    }
+   ]
+  },
+  "ci_pipeline_security": {
+   "n_items": 10,
+   "mean_score": 0.067,
+   "pass_rate": 0.0,
+   "items": [
+    {
+     "id": "F2-P001",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-P002",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-P003",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-P004",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-P005",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-P006",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-P007",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-P008",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-P009",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-P010",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    }
+   ]
+  },
+  "container_k8s_security": {
+   "n_items": 10,
+   "mean_score": 0.1,
+   "pass_rate": 0.0,
+   "items": [
+    {
+     "id": "F2-K001",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-K002",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-K003",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-K004",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-K005",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-K006",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-K007",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-K008",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-K009",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-K010",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    }
+   ]
+  },
+  "incident_response": {
+   "n_items": 10,
+   "mean_score": 0.033,
+   "pass_rate": 0.0,
+   "items": [
+    {
+     "id": "F2-R001",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-R002",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-R003",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-R004",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-R005",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-R006",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-R007",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-R008",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-R009",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-R010",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    }
+   ]
+  },
+  "logging_monitoring": {
+   "n_items": 10,
+   "mean_score": 0.0,
+   "pass_rate": 0.0,
+   "items": [
+    {
+     "id": "F2-L001",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-L002",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-L003",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-L004",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-L005",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "No finding"
+    },
+    {
+     "id": "F2-L006",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-L007",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-L008",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-L009",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-L010",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    }
+   ]
+  },
+  "restraint": {
+   "n_items": 20,
+   "mean_score": 0.492,
+   "pass_rate": 0.0,
+   "items": [
+    {
+     "id": "R001",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R002",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R003",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R004",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R005",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R006",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R007",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R008",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R009",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R010",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R011",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R012",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R013",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R014",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R015",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R016",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R017",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R018",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R019",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "R020",
+     "score": 0.5,
+     "hits": 1,
+     "groups": 2,
+     "passed": false,
+     "answer": "no finding"
+    }
+   ]
+  },
+  "secrets_management": {
+   "n_items": 10,
+   "mean_score": 0.033,
+   "pass_rate": 0.0,
+   "items": [
+    {
+     "id": "F2-S001",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-S002",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-S003",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-S004",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-S005",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-S006",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-S007",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-S008",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-S009",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-S010",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "No finding."
+    }
+   ]
+  },
+  "secure_architecture": {
+   "n_items": 10,
+   "mean_score": 0.1,
+   "pass_rate": 0.0,
+   "items": [
+    {
+     "id": "F2-A001",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-A002",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "No finding"
+    },
+    {
+     "id": "F2-A003",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-A004",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-A005",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "**No Finding**\nThe six services are implementing their own authentication middleware, which does not match the existing architecture or control flow."
+    },
+    {
+     "id": "F2-A006",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-A007",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-A008",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-A009",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-A010",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    }
+   ]
+  },
+  "secure_code_review": {
+   "n_items": 10,
+   "mean_score": 0.067,
+   "pass_rate": 0.0,
+   "items": [
+    {
+     "id": "F2-C001",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-C002",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-C003",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-C004",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-C005",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-C006",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-C007",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-C008",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "No finding. The provided JSON does not contain any relevant data to create a profile or identify a problem in the SDLC."
+    },
+    {
+     "id": "F2-C009",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-C010",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    }
+   ]
+  },
+  "threat_modeling": {
+   "n_items": 10,
+   "mean_score": 0.067,
+   "pass_rate": 0.0,
+   "items": [
+    {
+     "id": "F2-T001",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "**No finding**\nThe feature pitches are not restricted; therefore, no issues will be found."
+    },
+    {
+     "id": "F2-T002",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-T003",
+     "score": 0.333,
+     "hits": 1,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-T004",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-T005",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-T006",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-T007",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-T008",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-T009",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    },
+    {
+     "id": "F2-T010",
+     "score": 0.0,
+     "hits": 0,
+     "groups": 3,
+     "passed": false,
+     "answer": "no finding"
+    }
+   ]
+  }
+ },
+ "overall_mean": 0.059,
+ "floor_fail": [
+  "api_security",
+  "ci_pipeline_security",
+  "container_k8s_security",
+  "incident_response",
+  "logging_monitoring",
+  "restraint",
+  "secrets_management",
+  "secure_architecture",
+  "secure_code_review",
+  "threat_modeling"
+ ]
+}
