@@ -110,6 +110,7 @@ SIRIUS-Security-Audit/
 │   ├── 04-final-results.md          acceptance table + verdict
 │   ├── 05-eval100-result.md         104-item held-out eval + McNemar test
 │   ├── 06-ppl-recheck.md            post-quantization PPL gate (local CPU)
+│   ├── 13-cyberseceval-prereg.md    external benchmark, frozen before running
 │   ├── taxonomy.md                  canonical LABEL contract per archetype
 │   └── development-log.md           session-to-session status and bug fixes
 ├── experiments/
@@ -128,12 +129,15 @@ SIRIUS-Security-Audit/
 │   ├── 10_remerge_scaled.py                         re-merge at chosen scale
 │   ├── 11_export_gguf.py                            lean llama.cpp export
 │   ├── 13_dump_raw_outputs.py                       failure-mode classifier
+│   ├── 24_cyberseceval_derived.py                   external benchmark runner
 │   └── build_sirius_report.py                       telemetry report builder
 ├── reports/
 │   ├── results.svg                  baseline vs final chart
 │   ├── telemetry/SIRIUS_Telemetry_Report.json
 │   ├── gates/                       train + gate logs (Pass 5)
 │   └── dumps/                       raw output dumps (s=1.0 and s=0.5)
+├── results/
+│   └── cyberseceval_derived.json    external benchmark: raw answers + scores
 └── models/README.md                 where to download the GGUFs
 ```
 
