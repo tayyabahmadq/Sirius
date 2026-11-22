@@ -141,3 +141,13 @@ r / epoch / target changes — those are recipe, and the recipe is frozen.
 
 *Registration closes here. Anything decided after the 0b numbers exist
 must appear in §7 with a reason, or it did not happen.*
+
+## 7b. Decision actually reached (appended after results)
+
+| # | Deviation / result | Why | Approved by |
+|---|---|---|---|
+| D5 | Step 0b ran on recovered adapter #4, not #3 | prior sessions lost the adapter to Colab resets | protocol §0 (recovery chain) |
+| D6 | 0b outcome: bare s=0.5 = 0.705, s=1.0 = 0.493 -> RECOVERY-WEAK | mechanical `23_zero_b_control.py` decision | PREREG §2 |
+| D7 | pass6 v2 NOT trained; no knob-turning on lr/r/epochs/data | pre-registered failure branch §2/§6 honored | PREREG §2 |
+
+See `docs/10-phase5r-decision.md` for the full decision and the path forward.
