@@ -73,7 +73,7 @@ def load_04b():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default="sirius-final")
-    ap.add_argument("--host", default="localhost:11434")
+    ap.add_argument("--host", default="http://localhost:11434")
     ap.add_argument("--num-predict", type=int, default=320)
     ap.add_argument("--timeout", type=int, default=180)
     ap.add_argument("--selftest", action="store_true")
