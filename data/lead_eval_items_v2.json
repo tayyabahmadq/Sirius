@@ -1,0 +1,2296 @@
+{
+ "system_prompt": "You are a security auditor assistant. Answer concisely, technically, and name the exact issue.",
+ "note": "v2 lead eval — 110 held-out items (10/cap + 20 restraint traps). Authored fresh, disjoint from lead2 seeds (verified both directions, 13-gram). Consumed by 19_eval_capabilities.py --items v2.",
+ "items": [
+  {
+   "id": "F2-T001",
+   "cap": "threat_modeling",
+   "min_pass": 2,
+   "groups": [
+    [
+     "ssrf",
+     "server-side request forgery"
+    ],
+    [
+     "metadata",
+     "internal",
+     "localhost"
+    ],
+    [
+     "allowlist",
+     "block private",
+     "private ranges"
+    ]
+   ],
+   "prompt": "Feature pitch: an internal tool where ops paste any incident-related URL and our backend mirrors the page for the timeline. No restrictions planned.",
+   "reference": "RECOMMENDATION: reject — server-side fetch of arbitrary URLs is ssrf; the mirror can hit metadata endpoints and internal services. FIRST ACTION: host allowlist plus post-DNS private-IP blocking."
+  },
+  {
+   "id": "F2-T002",
+   "cap": "threat_modeling",
+   "min_pass": 2,
+   "groups": [
+    [
+     "hmac",
+     "signature"
+    ],
+    [
+     "replay",
+     "timestamp"
+    ],
+    [
+     "no finding",
+     "approve"
+    ]
+   ],
+   "prompt": "Webhook design: signature verified with constant-time compare, 5-minute window, event id dedup. Threat model spoofing/replay.",
+   "reference": "RECOMMENDATION: no finding — constant-time HMAC with a timestamp window and dedup closes spoofing and replay. VERDICT: approve."
+  },
+  {
+   "id": "F2-T003",
+   "cap": "threat_modeling",
+   "min_pass": 2,
+   "groups": [
+    [
+     "enumerat",
+     "sequential"
+    ],
+    [
+     "random",
+     "slug"
+    ],
+    [
+     "approve",
+     "no finding"
+    ]
+   ],
+   "prompt": "Referral links use 128-bit random tokens with expiry. Threat model unauthorized access.",
+   "reference": "RECOMMENDATION: no finding — random unguessable tokens with expiry defeat enumeration. VERDICT: approve."
+  },
+  {
+   "id": "F2-T004",
+   "cap": "threat_modeling",
+   "min_pass": 2,
+   "groups": [
+    [
+     "client-side",
+     "browser"
+    ],
+    [
+     "bypass"
+    ],
+    [
+     "server-side",
+     "server side"
+    ]
+   ],
+   "prompt": "New form validates a tax id in JavaScript and the API trusts whatever arrives. Threat model it.",
+   "reference": "RECOMMENDATION: reject — client-side validation is bypassable; the server must validate server-side against a schema."
+  },
+  {
+   "id": "F2-T005",
+   "cap": "threat_modeling",
+   "min_pass": 2,
+   "groups": [
+    [
+     "privileg",
+     "admin"
+    ],
+    [
+     "audit",
+     "record",
+     "log"
+    ],
+    [
+     "immutable",
+     "trail"
+    ]
+   ],
+   "prompt": "Proposed feature: admins can grant themselves higher scope temporarily; only an in-app notice is written. Threat model misuse.",
+   "reference": "RECOMMENDATION: reject — self-granted privilege without an immutable audit trail is unauditable. FIRST ACTION: log every grant immutably with actor/target/duration and alert on self-grants."
+  },
+  {
+   "id": "F2-T006",
+   "cap": "threat_modeling",
+   "min_pass": 2,
+   "groups": [
+    [
+     "upload",
+     "content"
+    ],
+    [
+     "xss",
+     "polyglot"
+    ],
+    [
+     "disposition",
+     "sniff",
+     "re-encod"
+    ]
+   ],
+   "prompt": "Feature: avatar upload stored as-is and served inline from our domain. Threat model it.",
+   "reference": "RECOMMENDATION: reject — as-stored, as-served uploads are a stored-xss polyglot vector. FIRST ACTION: sniff content type, re-encode, force Content-Disposition: attachment."
+  },
+  {
+   "id": "F2-T007",
+   "cap": "threat_modeling",
+   "min_pass": 2,
+   "groups": [
+    [
+     "localstorage"
+    ],
+    [
+     "xss"
+    ],
+    [
+     "httponly"
+    ]
+   ],
+   "prompt": "Mobile-web hybrid stores the auth token in localStorage for offline convenience. Threat model token theft.",
+   "reference": "RECOMMENDATION: reject — localStorage is script-readable, so one xss steals the token. FIRST ACTION: httpOnly Secure cookie with short lifetime."
+  },
+  {
+   "id": "F2-T008",
+   "cap": "threat_modeling",
+   "min_pass": 2,
+   "groups": [
+    [
+     "rate limit",
+     "rate-limit",
+     "throttl"
+    ],
+    [
+     "stuffing",
+     "brute"
+    ],
+    [
+     "lockout"
+    ]
+   ],
+   "prompt": "The partner SSO portal has no attempt limiting on its password form. Threat model it.",
+   "reference": "RECOMMENDATION: reject — unlimited password attempts invite stuffing. FIRST ACTION: per-account and per-IP throttling with lockout."
+  },
+  {
+   "id": "F2-T009",
+   "cap": "threat_modeling",
+   "min_pass": 2,
+   "groups": [
+    [
+     "debug",
+     "pprof",
+     "vars"
+    ],
+    [
+     "leak",
+     "expose"
+    ],
+    [
+     "localhost",
+     "internal"
+    ]
+   ],
+   "prompt": "Gateway config routes /debug/* from every backend to the public listener. Threat model it.",
+   "reference": "RECOMMENDATION: reject — public debug endpoints leak internals and memory. FIRST ACTION: bind to localhost/internal or remove in prod builds."
+  },
+  {
+   "id": "F2-T010",
+   "cap": "threat_modeling",
+   "min_pass": 2,
+   "groups": [
+    [
+     "unbounded",
+     "all",
+     "no limit"
+    ],
+    [
+     "denial",
+     "scrap"
+    ],
+    [
+     "cap",
+     "limit"
+    ]
+   ],
+   "prompt": "New export endpoint streams every row of a 40M-row table per request. Threat model availability.",
+   "reference": "RECOMMENDATION: reject — unbounded export is a DoS/scraping primitive. FIRST ACTION: cap pages, cursor pagination, and per-tenant quotas."
+  },
+  {
+   "id": "F2-A001",
+   "cap": "secure_architecture",
+   "min_pass": 2,
+   "groups": [
+    [
+     "mtls",
+     "mutual tls",
+     "service token"
+    ],
+    [
+     "internal",
+     "network"
+    ],
+    [
+     "no finding",
+     "approve"
+    ]
+   ],
+   "prompt": "Design: all east-west traffic rides mTLS with per-workload identities from the mesh. Architecture review.",
+   "reference": "RECOMMENDATION: no finding — mutual TLS with per-workload identity removes implicit internal-network trust. VERDICT: approve."
+  },
+  {
+   "id": "F2-A002",
+   "cap": "secure_architecture",
+   "min_pass": 2,
+   "groups": [
+    [
+     "shared",
+     "one dsn",
+     "admin"
+    ],
+    [
+     "least-privilege",
+     "per-service"
+    ],
+    [
+     "grant"
+    ]
+   ],
+   "prompt": "Every microservice shares one admin DB DSN. Architecture review.",
+   "reference": "RECOMMENDATION: reject — shared admin credentials make every service a DBA. FIRST ACTION: per-service users with least-privilege grants."
+  },
+  {
+   "id": "F2-A003",
+   "cap": "secure_architecture",
+   "min_pass": 2,
+   "groups": [
+    [
+     "row-level",
+     "rls",
+     "per-tenant",
+     "database-enforced"
+    ],
+    [
+     "tenant"
+    ],
+    [
+     "no finding",
+     "approve"
+    ]
+   ],
+   "prompt": "Tenancy: Postgres RLS keyed to a session tenant variable; unfiltered queries fail closed. Architecture review.",
+   "reference": "RECOMMENDATION: no finding — database-enforced tenant isolation fails closed. VERDICT: approve."
+  },
+  {
+   "id": "F2-A004",
+   "cap": "secure_architecture",
+   "min_pass": 2,
+   "groups": [
+    [
+     "kms",
+     "envelope",
+     "data key"
+    ],
+    [
+     "config",
+     "file"
+    ],
+    [
+     "rotat"
+    ]
+   ],
+   "prompt": "Design: master key in a config file, single key across all environments. Architecture review.",
+   "reference": "RECOMMENDATION: reject — config-file keys leak with any config read; use KMS envelope encryption with per-environment data keys and rotation."
+  },
+  {
+   "id": "F2-A005",
+   "cap": "secure_architecture",
+   "min_pass": 2,
+   "groups": [
+    [
+     "gateway",
+     "centraliz"
+    ],
+    [
+     "per-service",
+     "each service"
+    ],
+    [
+     "drift",
+     "inconsist"
+    ]
+   ],
+   "prompt": "Six services each implement their own auth middleware. Architecture review.",
+   "reference": "RECOMMENDATION: reject — per-service auth drifts; centralize authn at a gateway and sign internal requests."
+  },
+  {
+   "id": "F2-A006",
+   "cap": "secure_architecture",
+   "min_pass": 2,
+   "groups": [
+    [
+     "mask",
+     "synthetic",
+     "tokeniz"
+    ],
+    [
+     "pii"
+    ],
+    [
+     "dev"
+    ]
+   ],
+   "prompt": "Nightly full-prod replica into dev, no masking. Architecture review.",
+   "reference": "RECOMMENDATION: reject — unmasked PII in dev puts the dataset behind dev-grade access. FIRST ACTION: mask/tokenize in the replication pipeline."
+  },
+  {
+   "id": "F2-A007",
+   "cap": "secure_architecture",
+   "min_pass": 2,
+   "groups": [
+    [
+     "cross-az",
+     "cross-region",
+     "different az"
+    ],
+    [
+     "restore",
+     "drill"
+    ],
+    [
+     "no finding",
+     "approve"
+    ]
+   ],
+   "prompt": "Backups replicate cross-region; restore drill ran last month within RTO. Architecture review.",
+   "reference": "RECOMMENDATION: no finding — cross-region copies plus a drilled restore satisfy recovery design. VERDICT: approve."
+  },
+  {
+   "id": "F2-A008",
+   "cap": "secure_architecture",
+   "min_pass": 2,
+   "groups": [
+    [
+     "ephemeral",
+     "short-lived",
+     "instance role"
+    ],
+    [
+     "metadata",
+     "user-data"
+    ],
+    [
+     "ssrf"
+    ]
+   ],
+   "prompt": "Bootstrap: one long-lived master key in each VM's user-data fetches all secrets. Architecture review.",
+   "reference": "RECOMMENDATION: reject — user-data secrets are readable via the metadata service (even by ssrf); use short-lived workload identities."
+  },
+  {
+   "id": "F2-A009",
+   "cap": "secure_architecture",
+   "min_pass": 2,
+   "groups": [
+    [
+     "per-tenant",
+     "fair",
+     "quota"
+    ],
+    [
+     "global"
+    ],
+    [
+     "denial",
+     "exhaust",
+     "starve"
+    ]
+   ],
+   "prompt": "Edge throttling: one global bucket, no per-tenant limits. Architecture review.",
+   "reference": "RECOMMENDATION: reject — a single global bucket lets one tenant starve everyone. FIRST ACTION: per-tenant quotas with fair queuing."
+  },
+  {
+   "id": "F2-A010",
+   "cap": "secure_architecture",
+   "min_pass": 2,
+   "groups": [
+    [
+     "sri",
+     "integrity"
+    ],
+    [
+     "csp"
+    ],
+    [
+     "vendor",
+     "supply"
+    ]
+   ],
+   "prompt": "Third-party analytics JS loads unpinned with no CSP. Architecture review.",
+   "reference": "RECOMMENDATION: reject — unpinned vendor script is a supply-chain injection point. FIRST ACTION: SRI attributes plus a real CSP and version bumps."
+  },
+  {
+   "id": "F2-C001",
+   "cap": "secure_code_review",
+   "min_pass": 2,
+   "groups": [
+    [
+     "sql injection"
+    ],
+    [
+     "concatenat",
+     "string"
+    ],
+    [
+     "parameteriz",
+     "bind"
+    ]
+   ],
+   "prompt": "Diff: query = \"SELECT * FROM audit WHERE user = '\" + uid + \"'\"; db.run(query). Finding?",
+   "reference": "RECOMMENDATION: reject — concatenated SQL with user input is sql injection. FIRST ACTION: parameterize the query."
+  },
+  {
+   "id": "F2-C002",
+   "cap": "secure_code_review",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "parameteriz",
+     "bound"
+    ],
+    [
+     "injection",
+     "as data"
+    ]
+   ],
+   "prompt": "Diff: db.run(\"SELECT * FROM audit WHERE user = $1\", [uid]). Finding?",
+   "reference": "RECOMMENDATION: no finding — the parameterized query treats uid as data. VERDICT: approve."
+  },
+  {
+   "id": "F2-C003",
+   "cap": "secure_code_review",
+   "min_pass": 2,
+   "groups": [
+    [
+     "command injection"
+    ],
+    [
+     "shell",
+     "os.system"
+    ],
+    [
+     "argv",
+     "list",
+     "shell=false"
+    ]
+   ],
+   "prompt": "Diff: os.system('tar czf ' + backup_path) where backup_path is user-influenced. Finding?",
+   "reference": "RECOMMENDATION: reject — shell string concatenation is command injection. FIRST ACTION: subprocess with an argument list and shell=False."
+  },
+  {
+   "id": "F2-C004",
+   "cap": "secure_code_review",
+   "min_pass": 2,
+   "groups": [
+    [
+     "idor",
+     "object-level",
+     "authorization"
+    ],
+    [
+     "ownership",
+     "owner"
+    ],
+    [
+     "403",
+     "check"
+    ]
+   ],
+   "prompt": "Diff: GET /invoices/<id> returns the invoice to any authenticated user. Finding?",
+   "reference": "RECOMMENDATION: reject — missing object-level authorization (idor). FIRST ACTION: check invoice ownership before returning."
+  },
+  {
+   "id": "F2-C005",
+   "cap": "secure_code_review",
+   "min_pass": 2,
+   "groups": [
+    [
+     "pickle",
+     "deserial"
+    ],
+    [
+     "code execution",
+     "rce",
+     "arbitrary"
+    ],
+    [
+     "json"
+    ]
+   ],
+   "prompt": "Diff: state = pickle.loads(b64decode(cookie)). Finding?",
+   "reference": "RECOMMENDATION: reject — pickle on client data is code execution. FIRST ACTION: JSON only."
+  },
+  {
+   "id": "F2-C006",
+   "cap": "secure_code_review",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "realpath",
+     "resolve",
+     "contain"
+    ],
+    [
+     "traversal"
+    ]
+   ],
+   "prompt": "Diff: p = realpath(base + name); if not p.startswith(base): abort(403). Finding?",
+   "reference": "RECOMMENDATION: no finding — realpath containment blocks path traversal. VERDICT: approve."
+  },
+  {
+   "id": "F2-C007",
+   "cap": "secure_code_review",
+   "min_pass": 2,
+   "groups": [
+    [
+     "open redirect",
+     "redirect"
+    ],
+    [
+     "unvalidated",
+     "next"
+    ],
+    [
+     "allowlist",
+     "same-origin"
+    ]
+   ],
+   "prompt": "Diff: return redirect(request.args['url']) after password change. Finding?",
+   "reference": "RECOMMENDATION: reject — unvalidated redirect target is an open redirect. FIRST ACTION: same-origin allowlist."
+  },
+  {
+   "id": "F2-C008",
+   "cap": "secure_code_review",
+   "min_pass": 2,
+   "groups": [
+    [
+     "mass assignment"
+    ],
+    [
+     "whole payload",
+     "whole-payload",
+     "request.json",
+     "**"
+    ],
+    [
+     "allowlist",
+     "explicit"
+    ]
+   ],
+   "prompt": "Diff: Profile.objects.create(**request.json). Finding?",
+   "reference": "RECOMMENDATION: reject — whole-payload construction is mass assignment. FIRST ACTION: explicit field allowlist."
+  },
+  {
+   "id": "F2-C009",
+   "cap": "secure_code_review",
+   "min_pass": 2,
+   "groups": [
+    [
+     "md5",
+     "weak"
+    ],
+    [
+     "crack",
+     "fast",
+     "unsalted"
+    ],
+    [
+     "bcrypt",
+     "argon2"
+    ]
+   ],
+   "prompt": "Diff: stored = md5(password + 'staticsalt').hexdigest(). Finding?",
+   "reference": "RECOMMENDATION: reject — MD5 with a static salt is trivially crackable. FIRST ACTION: bcrypt/argon2 with per-user salt."
+  },
+  {
+   "id": "F2-C010",
+   "cap": "secure_code_review",
+   "min_pass": 2,
+   "groups": [
+    [
+     "verify=false",
+     "verify false"
+    ],
+    [
+     "mitm",
+     "certificate",
+     "man-in-the-middle",
+     "tls"
+    ],
+    [
+     "ca",
+     "pin",
+     "validat"
+    ]
+   ],
+   "prompt": "Diff: requests.post(hook_url, data=p, verify=False) 'to make staging work'. Finding?",
+   "reference": "RECOMMENDATION: reject — verify=False disables TLS validation, enabling man-in-the-middle. FIRST ACTION: remove it; add the internal CA bundle."
+  },
+  {
+   "id": "F2-I001",
+   "cap": "api_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "unauthenticated",
+     "auth: none",
+     "no auth"
+    ],
+    [
+     "export",
+     "data"
+    ],
+    [
+     "token",
+     "mtls",
+     "authenticat"
+    ]
+   ],
+   "prompt": "Spec: /v1/reports/feed is documented as 'no auth, internal consumers only'. API review.",
+   "reference": "RECOMMENDATION: reject — unauthenticated data endpoints get found by scanners. FIRST ACTION: require service tokens or mTLS."
+  },
+  {
+   "id": "F2-I002",
+   "cap": "api_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "account",
+     "owner",
+     "403"
+    ],
+    [
+     "idor",
+     "object-level"
+    ]
+   ],
+   "prompt": "Spec: every object route checks the resource's account against the caller's token claims. API review.",
+   "reference": "RECOMMENDATION: no finding — per-object account checks close idor. VERDICT: approve."
+  },
+  {
+   "id": "F2-I003",
+   "cap": "api_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "rate limit",
+     "quota"
+    ],
+    [
+     "sms",
+     "otp",
+     "enumerat"
+    ],
+    [
+     "captcha",
+     "backoff"
+    ]
+   ],
+   "prompt": "Spec: POST /v1/pin sends an SMS per call, unlimited. API review.",
+   "reference": "RECOMMENDATION: reject — unlimited SMS sending is toll-fraud and an enumeration oracle. FIRST ACTION: per-number/per-IP quotas and captcha."
+  },
+  {
+   "id": "F2-I004",
+   "cap": "api_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "leak",
+     "whole row",
+     "serializ"
+    ],
+    [
+     "password hash",
+     "internal"
+    ],
+    [
+     "schema",
+     "allowlist"
+    ]
+   ],
+   "prompt": "Spec: GET /v1/account returns model_dump() of the user row. API review.",
+   "reference": "RECOMMENDATION: reject — full-row serialization leaks internal fields. FIRST ACTION: strict response schema."
+  },
+  {
+   "id": "F2-I005",
+   "cap": "api_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "client-controlled",
+     "amount",
+     "price"
+    ],
+    [
+     "server-side",
+     "server side"
+    ],
+    [
+     "order"
+    ]
+   ],
+   "prompt": "Spec: the client posts the amount to charge; the server trusts it. API review.",
+   "reference": "RECOMMENDATION: reject — client-controlled price means charge-what-you-want. FIRST ACTION: resolve price server-side from the order."
+  },
+  {
+   "id": "F2-I006",
+   "cap": "api_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "idempoten"
+    ],
+    [
+     "retry",
+     "duplicate",
+     "double-execute",
+     "double-execut"
+    ],
+    [
+     "key",
+     "replay"
+    ]
+   ],
+   "prompt": "Spec: POST /v1/transfers has no idempotency mechanism; SDK retries on timeout. API review.",
+   "reference": "RECOMMENDATION: reject — retries without idempotency keys double-execute transfers. FIRST ACTION: Idempotency-Key header with stored responses."
+  },
+  {
+   "id": "F2-I007",
+   "cap": "api_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "uncapped",
+     "limit",
+     "caps"
+    ],
+    [
+     "cap",
+     "cursor"
+    ],
+    [
+     "no finding",
+     "approve"
+    ]
+   ],
+   "prompt": "Spec: list endpoints cap limit at 50 server-side and use cursor pagination. API review.",
+   "reference": "RECOMMENDATION: no finding — server-side caps bound request cost. VERDICT: approve."
+  },
+  {
+   "id": "F2-I008",
+   "cap": "api_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "enumerat",
+     "account-existence",
+     "existence"
+    ],
+    [
+     "differ",
+     "exist",
+     "oracle"
+    ],
+    [
+     "generic"
+    ]
+   ],
+   "prompt": "Spec: login returns 'user not found' vs 'wrong password'. API review.",
+   "reference": "RECOMMENDATION: reject — differential messages are an account-existence oracle. FIRST ACTION: one generic message plus rate limits."
+  },
+  {
+   "id": "F2-I009",
+   "cap": "api_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "cors",
+     "wildcard"
+    ],
+    [
+     "credentials"
+    ],
+    [
+     "allowlist",
+     "explicit"
+    ]
+   ],
+   "prompt": "Spec: Access-Control-Allow-Origin: * with Allow-Credentials: true. API review.",
+   "reference": "RECOMMENDATION: reject — wildcard origins with credentials let any site call with victim cookies. FIRST ACTION: explicit origin allowlist."
+  },
+  {
+   "id": "F2-I010",
+   "cap": "api_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "verify=false",
+     "verify false",
+     "skipping"
+    ],
+    [
+     "forge",
+     "signature"
+    ],
+    [
+     "pin",
+     "algorithm",
+     "key"
+    ]
+   ],
+   "prompt": "Spec: tokens are read with jwt.decode(token, verify=False). API review.",
+   "reference": "RECOMMENDATION: reject — skipping signature verification lets clients forge claims. FIRST ACTION: verify with pinned keys and algorithms."
+  },
+  {
+   "id": "F2-P001",
+   "cap": "ci_pipeline_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "pull_request_target"
+    ],
+    [
+     "secret"
+    ],
+    [
+     "checkout",
+     "untrusted",
+     "pr"
+    ]
+   ],
+   "prompt": "Workflow: pull_request_target + checks out the PR head + runs make lint. CI review.",
+   "reference": "RECOMMENDATION: reject — pull_request_target with PR code execution exposes repo secrets to forks. FIRST ACTION: switch to pull_request or never run PR code."
+  },
+  {
+   "id": "F2-P002",
+   "cap": "ci_pipeline_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "pull_request",
+     "unprivileged"
+    ],
+    [
+     "secret",
+     "sandbox",
+     "pinned"
+    ]
+   ],
+   "prompt": "Workflow: pull_request event, SHA-pinned actions, no secrets inherited. CI review.",
+   "reference": "RECOMMENDATION: no finding — unprivileged event plus pinned actions is the right trust split. VERDICT: approve."
+  },
+  {
+   "id": "F2-P003",
+   "cap": "ci_pipeline_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "latest",
+     "main",
+     "tag",
+     "refs"
+    ],
+    [
+     "pin",
+     "sha"
+    ],
+    [
+     "supply",
+     "re-run"
+    ]
+   ],
+   "prompt": "Workflow: every uses: line points at a branch or tag. CI review.",
+   "reference": "RECOMMENDATION: reject — mutable refs re-run whatever was pushed today; pin full commit SHAs."
+  },
+  {
+   "id": "F2-P004",
+   "cap": "ci_pipeline_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "cache"
+    ],
+    [
+     "poison",
+     "fork",
+     "pr"
+    ],
+    [
+     "read-only",
+     "protected",
+     "scope"
+    ]
+   ],
+   "prompt": "Design: fork PRs save dependency caches that main builds restore. CI review.",
+   "reference": "RECOMMENDATION: reject — untrusted builds writing caches consumed by privileged builds is cache poisoning. FIRST ACTION: PRs read-only for caches."
+  },
+  {
+   "id": "F2-P005",
+   "cap": "ci_pipeline_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "oidc",
+     "short-lived"
+    ],
+    [
+     "cosign",
+     "sign",
+     "provenance"
+    ],
+    [
+     "no finding",
+     "approve"
+    ]
+   ],
+   "prompt": "Design: ephemeral runners, OIDC registry creds, cosign + SLSA provenance. CI review.",
+   "reference": "RECOMMENDATION: no finding — short-lived creds plus signed provenance give a verifiable chain. VERDICT: approve."
+  },
+  {
+   "id": "F2-P006",
+   "cap": "ci_pipeline_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "bypass",
+     "admin"
+    ],
+    [
+     "review"
+    ],
+    [
+     "break-glass",
+     "incident",
+     "two",
+     "second"
+    ]
+   ],
+   "prompt": "Policy: admins routinely push straight to main using the bypass flag. CI review.",
+   "reference": "RECOMMENDATION: reject — routine bypass makes review theater. FIRST ACTION: break-glass only with two approvers and an auto-filed incident."
+  },
+  {
+   "id": "F2-P007",
+   "cap": "ci_pipeline_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "shared",
+     "root",
+     "fork"
+    ],
+    [
+     "separat",
+     "ephemeral"
+    ],
+    [
+     "pool"
+    ]
+   ],
+   "prompt": "Design: one self-hosted runner pool serves public forks and private repos, as root. CI review.",
+   "reference": "RECOMMENDATION: reject — fork code as root on machines holding private creds is compromise by design. FIRST ACTION: separate pools, unprivileged, ephemeral."
+  },
+  {
+   "id": "F2-P008",
+   "cap": "ci_pipeline_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "curl",
+     "bash",
+     "pipe",
+     "piping"
+    ],
+    [
+     "arbitrary",
+     "remote"
+    ],
+    [
+     "checksum",
+     "verify",
+     "pin"
+    ]
+   ],
+   "prompt": "Setup step: curl -fsSL https://install.vendor.sh | sh. CI review.",
+   "reference": "RECOMMENDATION: reject — piping remote scripts into sh runs arbitrary network-served code. FIRST ACTION: download, verify checksum, then run."
+  },
+  {
+   "id": "F2-P009",
+   "cap": "ci_pipeline_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "committed",
+     "repo",
+     "history"
+    ],
+    [
+     "token"
+    ],
+    [
+     "rotate",
+     "secret store",
+     "scrub"
+    ]
+   ],
+   "prompt": "The pipeline config has NPM_TOKEN pasted directly in YAML. CI review.",
+   "reference": "RECOMMENDATION: reject — the token is in version control forever. FIRST ACTION: move to the secret store, rotate, scrub history."
+  },
+  {
+   "id": "F2-P010",
+   "cap": "ci_pipeline_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "lockfile",
+     "hash",
+     "pin"
+    ],
+    [
+     "floating",
+     "non-reproducible"
+    ],
+    [
+     "verify",
+     "fail"
+    ]
+   ],
+   "prompt": "Build: pip install -r requirements.txt, no hashes, no lockfile. CI review.",
+   "reference": "RECOMMENDATION: reject — floating dependencies make builds non-reproducible and let poisoned releases in. FIRST ACTION: lockfile with hashes, fail on mismatch."
+  },
+  {
+   "id": "F2-K001",
+   "cap": "container_k8s_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "latest",
+     "mutable"
+    ],
+    [
+     "root"
+    ],
+    [
+     "digest",
+     "pin",
+     "non-root",
+     "minimal"
+    ]
+   ],
+   "prompt": "Dockerfile: FROM ubuntu:latest, installs everything, USER root. Container review.",
+   "reference": "RECOMMENDATION: reject — mutable base, huge surface, root runtime. FIRST ACTION: digest-pinned minimal base and a non-root user."
+  },
+  {
+   "id": "F2-K002",
+   "cap": "container_k8s_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "digest",
+     "pin",
+     "immutable"
+    ],
+    [
+     "non-root"
+    ],
+    [
+     "no finding",
+     "approve"
+    ]
+   ],
+   "prompt": "Dockerfile: distroless base at a pinned digest, USER appuser, read-only rootfs. Container review.",
+   "reference": "RECOMMENDATION: no finding — pinned minimal base and non-root runtime is the hardening bar. VERDICT: approve."
+  },
+  {
+   "id": "F2-K003",
+   "cap": "container_k8s_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "privileged",
+     "hostpid"
+    ],
+    [
+     "host",
+     "node",
+     "escape"
+    ],
+    [
+     "drop",
+     "capabilit"
+    ]
+   ],
+   "prompt": "Pod spec: securityContext privileged: true and hostPID: true. K8s review.",
+   "reference": "RECOMMENDATION: reject — privileged with hostPID is near-host root. FIRST ACTION: drop both, grant only needed capabilities."
+  },
+  {
+   "id": "F2-K004",
+   "cap": "container_k8s_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "resource",
+     "limit"
+    ],
+    [
+     "starve",
+     "node"
+    ],
+    [
+     "request",
+     "quota"
+    ]
+   ],
+   "prompt": "Pod spec: no resources block at all. K8s review.",
+   "reference": "RECOMMENDATION: reject — unbounded pods can starve node co-tenants. FIRST ACTION: requests and limits per workload class."
+  },
+  {
+   "id": "F2-K005",
+   "cap": "container_k8s_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "secretkeyref",
+     "secret"
+    ],
+    [
+     "inline",
+     "manifest"
+    ],
+    [
+     "no finding",
+     "approve"
+    ]
+   ],
+   "prompt": "Pod spec: DB password via secretKeyRef from a K8s Secret, etcd encrypted. K8s review.",
+   "reference": "RECOMMENDATION: no finding — secret-based injection keeps the credential out of manifests. VERDICT: approve."
+  },
+  {
+   "id": "F2-K006",
+   "cap": "container_k8s_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "latest",
+     "mutable"
+    ],
+    [
+     "rollback",
+     "roll back",
+     "what ran",
+     "what runs"
+    ],
+    [
+     "digest",
+     "immutable"
+    ]
+   ],
+   "prompt": "Deployment: image: registry/app:latest, pullPolicy Always. K8s review.",
+   "reference": "RECOMMENDATION: reject — latest means you cannot say what runs or roll back to it. FIRST ACTION: immutable tags/digests from CI."
+  },
+  {
+   "id": "F2-K007",
+   "cap": "container_k8s_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "networkpolic",
+     "default-deny",
+     "network polic"
+    ],
+    [
+     "flat",
+     "lateral"
+    ],
+    [
+     "allow",
+     "explicit"
+    ]
+   ],
+   "prompt": "Namespace: no NetworkPolicies, flat pod network. K8s review.",
+   "reference": "RECOMMENDATION: reject — flat networking makes lateral movement free. FIRST ACTION: default-deny plus explicit allows."
+  },
+  {
+   "id": "F2-K008",
+   "cap": "container_k8s_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "admission",
+     "psa",
+     "restricted"
+    ],
+    [
+     "privileged",
+     "hostpath",
+     "rejects"
+    ],
+    [
+     "no finding",
+     "approve"
+    ]
+   ],
+   "prompt": "Cluster: PSA restricted enforced; admission rejects privileged and hostPath. K8s review.",
+   "reference": "RECOMMENDATION: no finding — admission rejects privileged and hostPath specs, which beats conventions. VERDICT: approve."
+  },
+  {
+   "id": "F2-K009",
+   "cap": "container_k8s_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "cluster-admin"
+    ],
+    [
+     "rbac",
+     "service account",
+     "binds"
+    ],
+    [
+     "least-privilege",
+     "namespaced"
+    ]
+   ],
+   "prompt": "RBAC: the app's service account binds cluster-admin. K8s review.",
+   "reference": "RECOMMENDATION: reject — cluster-admin RBAC on the service account means any pod compromise becomes cluster compromise. FIRST ACTION: namespaced least-privilege role."
+  },
+  {
+   "id": "F2-K010",
+   "cap": "container_k8s_security",
+   "min_pass": 2,
+   "groups": [
+    [
+     "hostpath",
+     "host root"
+    ],
+    [
+     "escape",
+     "node"
+    ],
+    [
+     "remove",
+     "daemonset",
+     "narrow"
+    ]
+   ],
+   "prompt": "Pod mounts hostPath / into the container at /host. K8s review.",
+   "reference": "RECOMMENDATION: reject — host root mounts are an escape primitive. FIRST ACTION: remove the mount or narrow it to a specific dir."
+  },
+  {
+   "id": "F2-S001",
+   "cap": "secrets_management",
+   "min_pass": 2,
+   "groups": [
+    [
+     "hardcoded",
+     "source",
+     "version control"
+    ],
+    [
+     "rotat"
+    ],
+    [
+     "secret manager",
+     "env",
+     "vault"
+    ]
+   ],
+   "prompt": "Code: API_KEY = 'sk_live_...' at module top. Secrets review.",
+   "reference": "RECOMMENDATION: reject — hardcoded credentials live in every clone and rotation means a code change. FIRST ACTION: secret manager + env injection."
+  },
+  {
+   "id": "F2-S002",
+   "cap": "secrets_management",
+   "min_pass": 2,
+   "groups": [
+    [
+     "env",
+     "environment",
+     "env-injected"
+    ],
+    [
+     "no finding"
+    ],
+    [
+     "rotat",
+     "version control"
+    ]
+   ],
+   "prompt": "Code: API_KEY = os.environ['API_KEY'] injected by the platform secret store. Secrets review.",
+   "reference": "RECOMMENDATION: no finding — the env-injected credential never enters version control. VERDICT: approve."
+  },
+  {
+   "id": "F2-S003",
+   "cap": "secrets_management",
+   "min_pass": 2,
+   "groups": [
+    [
+     "rotat"
+    ],
+    [
+     "kms",
+     "hsm",
+     "new key"
+    ],
+    [
+     "overlap"
+    ]
+   ],
+   "prompt": "Practice: the same signing key since 2021, stored on the build server. Secrets review.",
+   "reference": "RECOMMENDATION: reject — stale key on a shared host; generate a new key in the KMS and rotate with a dual-key overlap window."
+  },
+  {
+   "id": "F2-S004",
+   "cap": "secrets_management",
+   "min_pass": 2,
+   "groups": [
+    [
+     "authorization",
+     "token",
+     "header"
+    ],
+    [
+     "log"
+    ],
+    [
+     "fingerprint",
+     "scrub",
+     "redact"
+    ]
+   ],
+   "prompt": "Logger prints the full Authorization header at debug. Secrets review.",
+   "reference": "RECOMMENDATION: reject — bearer tokens in logs spread across the pipeline. FIRST ACTION: log a token fingerprint only."
+  },
+  {
+   "id": "F2-S005",
+   "cap": "secrets_management",
+   "min_pass": 2,
+   "groups": [
+    [
+     "chat",
+     "shared"
+    ],
+    [
+     "vault",
+     "per-person"
+    ],
+    [
+     "audit",
+     "time-boxed"
+    ]
+   ],
+   "prompt": "Practice: prod password lives in a pinned chat message, shared by all. Secrets review.",
+   "reference": "RECOMMENDATION: reject — chat is not a secret store. FIRST ACTION: rotate, per-person vault credentials, audited access."
+  },
+  {
+   "id": "F2-S006",
+   "cap": "secrets_management",
+   "min_pass": 2,
+   "groups": [
+    [
+     "client",
+     "frontend",
+     "bundle"
+    ],
+    [
+     "public"
+    ],
+    [
+     "server-side",
+     "session"
+    ]
+   ],
+   "prompt": "Web app: a 'client secret' is embedded in the JS bundle and sent as a header. Secrets review.",
+   "reference": "RECOMMENDATION: reject — anything in the bundle is public. FIRST ACTION: server-issued session tokens instead."
+  },
+  {
+   "id": "F2-S007",
+   "cap": "secrets_management",
+   "min_pass": 2,
+   "groups": [
+    [
+     "fork",
+     "pr"
+    ],
+    [
+     "prod",
+     "deploy key"
+    ],
+    [
+     "scope",
+     "protected",
+     "oidc"
+    ]
+   ],
+   "prompt": "CI: the prod deploy key is available to every workflow including fork PRs. Secrets review.",
+   "reference": "RECOMMENDATION: reject — fork code with prod credentials is pipeline takeover. FIRST ACTION: scope to protected workflows or use OIDC."
+  },
+  {
+   "id": "F2-S008",
+   "cap": "secrets_management",
+   "min_pass": 2,
+   "groups": [
+    [
+     "committed",
+     "repo",
+     "history"
+    ],
+    [
+     "gitignore",
+     "purge"
+    ],
+    [
+     "rotate",
+     "rotat"
+    ]
+   ],
+   "prompt": "Repo: .env with live keys was committed; repo is private. Secrets review.",
+   "reference": "RECOMMENDATION: reject — private is not secret; rotate, gitignore, and purge history."
+  },
+  {
+   "id": "F2-S009",
+   "cap": "secrets_management",
+   "min_pass": 2,
+   "groups": [
+    [
+     "hs256",
+     "symmetric",
+     "shared secret"
+    ],
+    [
+     "forge",
+     "every host"
+    ],
+    [
+     "rs256",
+     "asymmetric",
+     "kms"
+    ]
+   ],
+   "prompt": "JWTs: HS256, secret in a plaintext file copied to every app server. Secrets review.",
+   "reference": "RECOMMENDATION: reject — a replicated symmetric secret means any host forges every token. FIRST ACTION: asymmetric signing with the key in KMS."
+  },
+  {
+   "id": "F2-S010",
+   "cap": "secrets_management",
+   "min_pass": 2,
+   "groups": [
+    [
+     "admin scope",
+     "over-privileged",
+     "least-privilege"
+    ],
+    [
+     "vendor"
+    ],
+    [
+     "audit",
+     "delete"
+    ]
+   ],
+   "prompt": "Inventory: 40 vendor keys, all admin scope 'for convenience'. Secrets review.",
+   "reference": "RECOMMENDATION: reject — over-privileged vendor keys turn any leak into account takeover. FIRST ACTION: audit scopes, request least privilege, delete unused."
+  },
+  {
+   "id": "F2-R001",
+   "cap": "incident_response",
+   "min_pass": 2,
+   "groups": [
+    [
+     "rotat",
+     "revoke"
+    ],
+    [
+     "order",
+     "first",
+     "priority"
+    ],
+    [
+     "attribut",
+     "forensic"
+    ]
+   ],
+   "prompt": "Incident: live key in a public gist; team is 2h deep in finding who posted it; key still works. Call?",
+   "reference": "RECOMMENDATION: wrong order — rotate the credential first, attribution can wait; every active hour is attacker time."
+  },
+  {
+   "id": "F2-R002",
+   "cap": "incident_response",
+   "min_pass": 2,
+   "groups": [
+    [
+     "evidence",
+     "memory",
+     "volatile"
+    ],
+    [
+     "image",
+     "capture",
+     "snapshot"
+    ],
+    [
+     "no finding",
+     "correct",
+     "well-run"
+    ]
+   ],
+   "prompt": "Incident: memory and disk captured before the rebuild; service restored in 2h. Call?",
+   "reference": "RECOMMENDATION: correct sequence — evidence captured before restoration. VERDICT: well-run."
+  },
+  {
+   "id": "F2-R003",
+   "cap": "incident_response",
+   "min_pass": 2,
+   "groups": [
+    [
+     "spokesperson",
+     "one voice",
+     "comms"
+    ],
+    [
+     "public",
+     "post"
+    ],
+    [
+     "verif",
+     "facts"
+    ]
+   ],
+   "prompt": "Incident: an engineer tweeted 'yeah we got hacked lol' mid-response. Call?",
+   "reference": "RECOMMENDATION: comms discipline — one spokesperson, verified facts only, stated update cadence; have the post removed."
+  },
+  {
+   "id": "F2-R004",
+   "cap": "incident_response",
+   "min_pass": 2,
+   "groups": [
+    [
+     "lateral",
+     "sweep",
+     "fleet"
+    ],
+    [
+     "entry",
+     "root cause"
+    ],
+    [
+     "rotat",
+     "credential"
+    ]
+   ],
+   "prompt": "Incident: miner killed on one host, declared contained, no sweep. Call?",
+   "reference": "RECOMMENDATION: not contained — find the entry vector, sweep all hosts, rotate what the host could read."
+  },
+  {
+   "id": "F2-R005",
+   "cap": "incident_response",
+   "min_pass": 2,
+   "groups": [
+    [
+     "notif",
+     "disclos"
+    ],
+    [
+     "legal",
+     "regulat",
+     "obligation"
+    ],
+    [
+     "reset",
+     "credential"
+    ]
+   ],
+   "prompt": "Incident: logs show user records read 3 weeks ago; leadership wants silence. Call?",
+   "reference": "RECOMMENDATION: notify — data exposure triggers disclosure obligations; engage legal, reset credentials, prepare the disclosure."
+  },
+  {
+   "id": "F2-R006",
+   "cap": "incident_response",
+   "min_pass": 2,
+   "groups": [
+    [
+     "persist"
+    ],
+    [
+     "enumerate",
+     "inventory",
+     "created"
+    ],
+    [
+     "reset",
+     "audit"
+    ]
+   ],
+   "prompt": "Post-incident: attacker had admin; one account disabled, nothing else. Call?",
+   "reference": "RECOMMENDATION: incomplete — enumerate accounts/keys created in the window, org-wide reset, audit for persistence."
+  },
+  {
+   "id": "F2-R007",
+   "cap": "incident_response",
+   "min_pass": 2,
+   "groups": [
+    [
+     "owner",
+     "date"
+    ],
+    [
+     "concrete",
+     "measurable",
+     "actionable",
+     "verification"
+    ],
+    [
+     "track"
+    ]
+   ],
+   "prompt": "Postmortem: action items are 'be more careful' with no owners. Call?",
+   "reference": "RECOMMENDATION: reject — rewrite each item with an owner, a date, and a verification step, tracked like releases."
+  },
+  {
+   "id": "F2-R008",
+   "cap": "incident_response",
+   "min_pass": 2,
+   "groups": [
+    [
+     "silence",
+     "mute",
+     "muting",
+     "fatigue"
+    ],
+    [
+     "recurring",
+     "flap"
+    ],
+    [
+     "fix",
+     "root cause",
+     "split"
+    ]
+   ],
+   "prompt": "On-call mutes the recurring alert 'because it always self-heals'. Call?",
+   "reference": "RECOMMENDATION: unacceptable — muting hides slow-burn incidents; fix the flapping cause or split the alert."
+  },
+  {
+   "id": "F2-R009",
+   "cap": "incident_response",
+   "min_pass": 2,
+   "groups": [
+    [
+     "isolat",
+     "network"
+    ],
+    [
+     "reboot",
+     "evidence",
+     "snapshot"
+    ],
+    [
+     "egress",
+     "exfiltrat"
+    ]
+   ],
+   "prompt": "Ransom note on staging; on-call rebooted the box. Call?",
+   "reference": "RECOMMENDATION: stop touching it — isolate by network cut (not shutdown), snapshot disk, verify the exfiltration claim in egress logs."
+  },
+  {
+   "id": "F2-R010",
+   "cap": "incident_response",
+   "min_pass": 2,
+   "groups": [
+    [
+     "specif",
+     "detail",
+     "written"
+    ],
+    [
+     "inventory"
+    ],
+    [
+     "disclos"
+    ]
+   ],
+   "prompt": "Vendor email: 'your data may be involved'; team archived it. Call?",
+   "reference": "RECOMMENDATION: demand written specifics (types, volume, dates), inventory what the vendor holds, prepare your own disclosure path."
+  },
+  {
+   "id": "F2-L001",
+   "cap": "logging_monitoring",
+   "min_pass": 2,
+   "groups": [
+    [
+     "fail",
+     "outcome"
+    ],
+    [
+     "stuffing",
+     "brute"
+    ],
+    [
+     "alert",
+     "spike"
+    ]
+   ],
+   "prompt": "Auth logging: successes only. Monitoring review.",
+   "reference": "RECOMMENDATION: reject — without failure events, stuffing is invisible. FIRST ACTION: log all outcomes and alert on failure-rate spikes."
+  },
+  {
+   "id": "F2-L002",
+   "cap": "logging_monitoring",
+   "min_pass": 2,
+   "groups": [
+    [
+     "append-only",
+     "immutable",
+     "worm"
+    ],
+    [
+     "edit",
+     "rewrite"
+    ],
+    [
+     "audit"
+    ]
+   ],
+   "prompt": "Audit log: same DB as app data, admins can edit rows. Monitoring review.",
+   "reference": "RECOMMENDATION: reject — an editable audit log is not an audit trail. FIRST ACTION: append-only/WORM store outside admin reach."
+  },
+  {
+   "id": "F2-L003",
+   "cap": "logging_monitoring",
+   "min_pass": 2,
+   "groups": [
+    [
+     "noise",
+     "false positive",
+     "self-resolv",
+     "pager"
+    ],
+    [
+     "ignor",
+     "fatigue",
+     "ignores"
+    ],
+    [
+     "symptom",
+     "dedup"
+    ]
+   ],
+   "prompt": "Paging: 300 alerts/day, 95% auto-resolve, team ignores them. Monitoring review.",
+   "reference": "RECOMMENDATION: reject — the ignored pager is noise; page on user-impact symptoms, move causes to dashboards, burn down noisy rules."
+  },
+  {
+   "id": "F2-L004",
+   "cap": "logging_monitoring",
+   "min_pass": 2,
+   "groups": [
+    [
+     "whitelist",
+     "field",
+     "mask"
+    ],
+    [
+     "payload",
+     "pan",
+     "card"
+    ],
+    [
+     "pci",
+     "scope"
+    ]
+   ],
+   "prompt": "Charge handler logs the full request payload including card data. Monitoring review.",
+   "reference": "RECOMMENDATION: reject — payment data in logs drags PCI onto the pipeline. FIRST ACTION: field whitelist, mask PANs, purge captured values."
+  },
+  {
+   "id": "F2-L005",
+   "cap": "logging_monitoring",
+   "min_pass": 2,
+   "groups": [
+    [
+     "security",
+     "detection",
+     "infra"
+    ],
+    [
+     "compromis",
+     "dwell"
+    ],
+    [
+     "admin",
+     "export",
+     "travel",
+     "role"
+    ]
+   ],
+   "prompt": "Alerting: uptime and CPU only. Monitoring review.",
+   "reference": "RECOMMENDATION: reject — infra alerts catch crashes, not compromise. FIRST ACTION: five starter rules — admin off-hours, impossible travel, mass export, role changes, new keys."
+  },
+  {
+   "id": "F2-L006",
+   "cap": "logging_monitoring",
+   "min_pass": 2,
+   "groups": [
+    [
+     "retention",
+     "7 day",
+     "evidence window"
+    ],
+    [
+     "investigat",
+     "window",
+     "evidence"
+    ],
+    [
+     "90",
+     "archive"
+    ]
+   ],
+   "prompt": "Retention: 7 days of logs; an investigated breach started 3 weeks ago. Monitoring review.",
+   "reference": "RECOMMENDATION: reject — the evidence window is gone. FIRST ACTION: 90-day hot + 1-year archive for security logs."
+  },
+  {
+   "id": "F2-L007",
+   "cap": "logging_monitoring",
+   "min_pass": 2,
+   "groups": [
+    [
+     "ntp",
+     "drift",
+     "clock"
+    ],
+    [
+     "correlat",
+     "timeline"
+    ],
+    [
+     "alert",
+     "baseline"
+    ]
+   ],
+   "prompt": "Fleet: NTP off after an image change, 40s drift between hosts. Monitoring review.",
+   "reference": "RECOMMENDATION: reject — drift breaks cross-service timeline correlation. FIRST ACTION: re-enable NTP, alert on drift, bake it into the baseline."
+  },
+  {
+   "id": "F2-L008",
+   "cap": "logging_monitoring",
+   "min_pass": 2,
+   "groups": [
+    [
+     "slo",
+     "error budget"
+    ],
+    [
+     "dashboard",
+     "board"
+    ],
+    [
+     "burn rate"
+    ]
+   ],
+   "prompt": "Dashboards: one 200-metric board, no SLOs. Monitoring review.",
+   "reference": "RECOMMENDATION: reject — define 2-3 user-facing SLOs, alert on burn rate, cut the mega-board."
+  },
+  {
+   "id": "F2-L009",
+   "cap": "logging_monitoring",
+   "min_pass": 2,
+   "groups": [
+    [
+     "pii"
+    ],
+    [
+     "shared",
+     "access"
+    ],
+    [
+     "scrub",
+     "restrict",
+     "audit"
+    ]
+   ],
+   "prompt": "Logs: one shared index, PII unchecked, all-engineers read access. Monitoring review.",
+   "reference": "RECOMMENDATION: reject — a shared PII index is a standing privacy incident. FIRST ACTION: scrub at ingestion, role-restrict, audit queries."
+  },
+  {
+   "id": "F2-L010",
+   "cap": "logging_monitoring",
+   "min_pass": 2,
+   "groups": [
+    [
+     "test",
+     "validat",
+     "simulation"
+    ],
+    [
+     "never tested",
+     "untested",
+     "do not know",
+     "unknown"
+    ],
+    [
+     "mttd",
+     "quarterly"
+    ]
+   ],
+   "prompt": "Detections: rules written in 2023, never exercised, MTTD unknown. Monitoring review.",
+   "reference": "RECOMMENDATION: reject — untested detections are hypotheses. FIRST ACTION: attack-simulate each rule, record MTTD, repeat quarterly."
+  },
+  {
+   "id": "R001",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "parameteriz",
+     "bound",
+     "prepared"
+    ]
+   ],
+   "prompt": "PR: db.query('SELECT * FROM t WHERE id = $1', [uid]) — parameterized, connection pooled. Finding?",
+   "reference": "RECOMMENDATION: no finding — the parameterized query is correct. VERDICT: approve."
+  },
+  {
+   "id": "R002",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "allowlist",
+     "private"
+    ]
+   ],
+   "prompt": "Design: URL previews restricted to an allowlist, post-DNS private-IP blocks, 3s timeout. Threat model ssrf.",
+   "reference": "RECOMMENDATION: no finding — allowlist plus private-IP blocking closes the ssrf path. VERDICT: approve."
+  },
+  {
+   "id": "R003",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "env",
+     "environment"
+    ]
+   ],
+   "prompt": "Code: token = os.environ['SERVICE_TOKEN'] from the platform secret store; never logged. Finding?",
+   "reference": "RECOMMENDATION: no finding — env-injected secret with no logging is the correct pattern. VERDICT: approve."
+  },
+  {
+   "id": "R004",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "non-root",
+     "digest",
+     "pin"
+    ]
+   ],
+   "prompt": "Dockerfile: distroless@sha256 pinned, USER nonroot, read-only rootfs. Finding?",
+   "reference": "RECOMMENDATION: no finding — pinned minimal base with non-root runtime is the hardening bar. VERDICT: approve."
+  },
+  {
+   "id": "R005",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "idempoten"
+    ]
+   ],
+   "prompt": "API: charges require Idempotency-Key; duplicates return the stored response. Finding?",
+   "reference": "RECOMMENDATION: no finding — idempotency keys make retries safe. VERDICT: approve."
+  },
+  {
+   "id": "R006",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "pull_request",
+     "unprivileged"
+    ],
+    [
+     "sha",
+     "pin",
+     "pinned"
+    ]
+   ],
+   "prompt": "Workflow: pull_request event, all actions SHA-pinned, no secrets exposed. Finding?",
+   "reference": "RECOMMENDATION: no finding — unprivileged event with pinned actions is correct. VERDICT: approve."
+  },
+  {
+   "id": "R007",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "mask",
+     "field",
+     "whitelist"
+    ]
+   ],
+   "prompt": "Handler logs order_id and amount only; a lint rule blocks payload logging. Finding?",
+   "reference": "RECOMMENDATION: no finding — field whitelisting with lint enforcement is correct. VERDICT: approve."
+  },
+  {
+   "id": "R008",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "rls",
+     "row-level",
+     "database-enforced"
+    ]
+   ],
+   "prompt": "Tenancy: RLS keyed to a session tenant variable; unfiltered queries fail closed. Finding?",
+   "reference": "RECOMMENDATION: no finding — database-enforced isolation fails closed. VERDICT: approve."
+  },
+  {
+   "id": "R009",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "realpath",
+     "contain"
+    ]
+   ],
+   "prompt": "Diff: realpath containment check with 403 outside the root. Finding?",
+   "reference": "RECOMMENDATION: no finding — realpath containment blocks traversal. VERDICT: approve."
+  },
+  {
+   "id": "R010",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding",
+     "correct",
+     "well-run"
+    ],
+    [
+     "rotat",
+     "revoke"
+    ]
+   ],
+   "prompt": "Incident: leaked key rotated in 10 minutes, history preserved, comms drafted. Call?",
+   "reference": "RECOMMENDATION: correct sequence — rotation first, evidence preserved. VERDICT: well-run."
+  },
+  {
+   "id": "R011",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "account",
+     "owner",
+     "403"
+    ]
+   ],
+   "prompt": "API: every object route 403s unless the resource belongs to the caller. Finding?",
+   "reference": "RECOMMENDATION: no finding — per-object ownership checks close idor. VERDICT: approve."
+  },
+  {
+   "id": "R012",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "default-deny",
+     "networkpolic"
+    ]
+   ],
+   "prompt": "Namespace: default-deny NetworkPolicy with explicit per-dependency allows. Finding?",
+   "reference": "RECOMMENDATION: no finding — default-deny plus named allows is correct. VERDICT: approve."
+  },
+  {
+   "id": "R013",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "fingerprint"
+    ]
+   ],
+   "prompt": "Logger prints user id and an 8-char token fingerprint. Finding?",
+   "reference": "RECOMMENDATION: no finding — fingerprints are safe to log and correlate sessions. VERDICT: approve."
+  },
+  {
+   "id": "R014",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "mfa",
+     "vpn",
+     "internal"
+    ]
+   ],
+   "prompt": "Admin panel: internal-only binding, SSO with MFA. Threat model exposure.",
+   "reference": "RECOMMENDATION: no finding — internal binding with MFA removes the anonymous surface. VERDICT: approve."
+  },
+  {
+   "id": "R015",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "oidc",
+     "short-lived",
+     "ephemeral"
+    ]
+   ],
+   "prompt": "Releases: ephemeral runners, OIDC registry creds, cosign signatures. Finding?",
+   "reference": "RECOMMENDATION: no finding — short-lived creds plus signed artifacts is correct. VERDICT: approve."
+  },
+  {
+   "id": "R016",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "worm",
+     "hash",
+     "immutable",
+     "write-once"
+    ]
+   ],
+   "prompt": "Audit log: WORM bucket, hash-chained records, no admin edit rights. Finding?",
+   "reference": "RECOMMENDATION: no finding — write-once with tamper evidence is correct. VERDICT: approve."
+  },
+  {
+   "id": "R017",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "mtls",
+     "mutual tls"
+    ]
+   ],
+   "prompt": "East-west: mTLS with per-workload identities from the mesh. Finding?",
+   "reference": "RECOMMENDATION: no finding — per-workload mTLS removes implicit network trust. VERDICT: approve."
+  },
+  {
+   "id": "R018",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "hmac",
+     "constant-time",
+     "compare_digest",
+     "verification"
+    ]
+   ],
+   "prompt": "Webhook: HMAC-SHA256 over raw body, constant-time compare, 5-min window. Finding?",
+   "reference": "RECOMMENDATION: no finding — the verification pattern is correct. VERDICT: approve."
+  },
+  {
+   "id": "R019",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding"
+    ],
+    [
+     "cap",
+     "cursor",
+     "limit"
+    ]
+   ],
+   "prompt": "List API: server-side limit cap of 50 with cursor pagination. Finding?",
+   "reference": "RECOMMENDATION: no finding — server-side caps bound request cost. VERDICT: approve."
+  },
+  {
+   "id": "R020",
+   "cap": "restraint",
+   "min_pass": 2,
+   "groups": [
+    [
+     "no finding",
+     "correct",
+     "well-run"
+    ],
+    [
+     "owner",
+     "date"
+    ]
+   ],
+   "prompt": "Postmortem: each action item has owner, due date, verification, linked ticket. Call?",
+   "reference": "RECOMMENDATION: solid follow-through — owned, dated, verifiable items. VERDICT: well-run."
+  }
+ ]
+}
