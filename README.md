@@ -13,6 +13,10 @@
 
 **34-item security baseline · 0.753 → 0.795 overall · code-vuln label errors 5/5 → 1/5 · dual PPL gate passed**
 
+> **Shipped model:** `sirius-final` (Pass 5). Later Phase 5/6 "head of security" experiments
+> are quarantined in [experiments/FAILED-NOT-SHIPPED/](experiments/FAILED-NOT-SHIPPED/README.md)
+> and are **not** part of this deliverable.
+
 </div>
 
 ---
@@ -50,11 +54,13 @@ unseen phrasings — reported openly in [docs/05-eval100-result.md](docs/05-eval
 PPL(base Q8_0) = 15.68 and PPL(shipped Q6_K) = 14.71 → ratio **0.938 ≤ 1.05 → PASS**. Details
 and the measurement caveats: [docs/06-ppl-recheck.md](docs/06-ppl-recheck.md).
 
-**Security-lead layer (Phase 5).** `security-lead/` adds the Head-of-Security role, 9 SDLC
-playbooks, a 50-item capability eval, and `sirius_cli.py` — a deterministic CI gate with
-**dynamic context routing** (only the relevant playbook is injected into a 0.5B's context),
-conservative decoding (`min_p=0.05`, `repeat_penalty=1.1`), syntax anchors and an explicit
-restraint rule. Baseline lead score: stock 0.200, current Sirius 0.107 (p=0.219, paired noise).
+**Security-lead layer (research, not shipped).** `security-lead/` adds the Head-of-Security
+role, 9 SDLC playbooks, a 110-item capability eval, and `sirius_cli.py` — a deterministic CI
+gate with **dynamic context routing** (only the relevant playbook is injected into a 0.5B's
+context), conservative decoding (`min_p=0.05`, `repeat_penalty=1.1`), syntax anchors and an
+explicit restraint rule. Two training attempts improved the capability score (0.127 → 0.419)
+and restraint (0 → 12/20) but both missed the pre-registered bars, so **none of this is part
+of the deployed model**. Full audit trail: [experiments/FAILED-NOT-SHIPPED/](experiments/FAILED-NOT-SHIPPED/README.md).
 
 ---
 
@@ -106,6 +112,10 @@ SIRIUS-Security-Audit/
 │   ├── 06-ppl-recheck.md            post-quantization PPL gate (local CPU)
 │   ├── taxonomy.md                  canonical LABEL contract per archetype
 │   └── development-log.md           session-to-session status and bug fixes
+├── experiments/
+│   └── FAILED-NOT-SHIPPED/          ⛔ quarantined failed Phase 5/6 attempts
+│       └── README.md                why they failed + the shipped result for contrast
+
 ├── scripts/
 │   ├── 00_check_setup.py … 05_compare_models.py    diagnostic toolkit
 │   ├── 04b_run_eval100.py                           104-item eval + McNemar
