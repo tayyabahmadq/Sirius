@@ -62,6 +62,16 @@ explicit restraint rule. Two training attempts improved the capability score (0.
 and restraint (0 → 12/20) but both missed the pre-registered bars, so **none of this is part
 of the deployed model**. Full audit trail: [experiments/FAILED-NOT-SHIPPED/](experiments/FAILED-NOT-SHIPPED/README.md).
 
+**External benchmark (CyberSecEval-derived, preregistered).** To avoid grading only our own
+homework, we ran 351 third-party CyberSecEval Python snippets as a vulnerability-identification
+test, shipped model vs stock. Result is honest but mixed: Sirius **0.225** vs stock **0.288**
+micro accuracy (McNemar **p = 0.0467**, a significant *loss*), while on secure-code restraint
+Sirius abstained **3.6%** vs stock **0%**. Gains concentrated in SQLi/hardcoded secrets; losses
+in eval/exec, PRNG and weak hashes. **This is not the official CyberSecEval score** and no ship
+decision was attached. Prereg [docs/13-cyberseceval-prereg.md](docs/13-cyberseceval-prereg.md),
+full result [docs/14-cyberseceval-result.md](docs/14-cyberseceval-result.md),
+raw answers [results/cyberseceval_derived.json](results/cyberseceval_derived.json).
+
 ---
 
 ## How it works
@@ -111,6 +121,7 @@ SIRIUS-Security-Audit/
 │   ├── 05-eval100-result.md         104-item held-out eval + McNemar test
 │   ├── 06-ppl-recheck.md            post-quantization PPL gate (local CPU)
 │   ├── 13-cyberseceval-prereg.md    external benchmark, frozen before running
+│   ├── 14-cyberseceval-result.md    mixed result, reported as-is
 │   ├── taxonomy.md                  canonical LABEL contract per archetype
 │   └── development-log.md           session-to-session status and bug fixes
 ├── experiments/
