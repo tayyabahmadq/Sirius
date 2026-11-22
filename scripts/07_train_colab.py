@@ -209,6 +209,41 @@ PASSES = [
         note="Pass 5 — LABEL-first data + MLP path + last-2-layer unfreeze. "
              "Run script 12 first to build sirius_train_pass5.jsonl.",
     ),
+    # --- Pass 6R (Phase 5R): knowledge injection, CORRECTED recipe. ---
+    # The v1 recipe (r=8, lr 1e-5, 1 epoch, down_proj) starved the signal:
+    # 2.4% new-signal share, 41:1 replay dominance, ~11 of ~460 steps
+    # carried lead signal — it learned nothing (lead 0.127 vs target 0.55,
+    # restraint 0/5). The v2 dataset (21_expand_lead_data.py) fixes the
+    # data: 1800 lead2 counterfactual drills (200/cap, 63 pairs, 34%
+    # restraint), 40% new-signal share. This recipe fixes the training:
+    # knowledge lives in the FFN, so target gate/up/down; lr 1e-4 gives the
+    # new signal room; r=16 + 2 epochs. Retention is protected by the 60/40
+    # replay ratio + dual PPL gate, NOT by starving lr. The merge/chain
+    # question (s=0.5 chained base vs resuming the pass5 adapter) is
+    # decided by the Step-0b control eval BEFORE training — see NEXT_PROMPT
+    # Part 4.
+    dict(
+        name="pass6",
+        r=16, alpha=16, dropout=0.05, use_rslora=True,
+        target_modules=["gate_proj", "up_proj", "down_proj"],
+        layers_to_transform=list(range(4, 20)),
+        quantize_4bit=False,
+        lr=1e-4, epochs=2, warmup_ratio=0.05, lr_scheduler="cosine",
+        lr_scheduler_kwargs=None,
+        max_grad_norm=0.5, weight_decay=0.01,
+        label_smoothing=0.0,
+        completion_only_loss=True, anchor_ratio=0.10,
+        per_device_train_batch_size=4, gradient_accumulation_steps=4,
+        early_stopping_patience=3,
+        early_stopping_min_delta=0.005,
+        eval_metric="eval_general_ppl", greater_is_better=False,
+        train_data_file="sirius_train_pass6_lead_v2.jsonl",  # script-21 output
+        base_model=None,  # set via --base-model (script 18 output — see Step 0b)
+        composite_stop=True,
+        note="Phase 5R — corrected recipe on the v2 dataset. Run 21 (data) "
+             "and the Step-0 controls first; 07_train_colab.py --pass-name "
+             "pass6 --base-model <decided-by-Step-0b>",
+    ),
 ]
 
 # Anchor source: wikitext-2-raw matches the PPL eval distribution (Beam's rule).
@@ -383,7 +418,8 @@ def make_dual_eval_callback(tokenizer, general_eval_texts, device="cuda"):
 # Main training routine
 # ---------------------------------------------------------------------------
 def train(pass_name="pass3", train_path="sirius_train.jsonl",
-          dev_path="sirius_dev.jsonl", skip_install_check=False, seed=42):
+          dev_path="sirius_dev.jsonl", skip_install_check=False, seed=42,
+          base_model=None):
     if not skip_install_check:
         print_install()
 
@@ -399,6 +435,11 @@ def train(pass_name="pass3", train_path="sirius_train.jsonl",
         print(f"Unknown pass: {pass_name}. Available: "
               f"{[p['name'] for p in PASSES]}")
         sys.exit(1)
+    # Chained passes train on top of an earlier merge: --base-model points
+    # at a merged HF dir (e.g. script 18's pass5 s=0.5 reconstruction).
+    if base_model:
+        cfg = dict(cfg)  # do not mutate the shared config dict
+        cfg["base_model"] = base_model
 
     print(f"\n{'='*70}\nSIRIUS Phase-2 — {cfg['name'].upper()}\n{'='*70}")
     print(f"  modules: {cfg['target_modules']}")
@@ -421,7 +462,8 @@ def train(pass_name="pass3", train_path="sirius_train.jsonl",
     print()
 
     # 1. Tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL)
+    tokenizer = AutoTokenizer.from_pretrained(
+        cfg.get("base_model") or BASE_MODEL)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
@@ -434,14 +476,16 @@ def train(pass_name="pass3", train_path="sirius_train.jsonl",
             bnb_4bit_compute_dtype=torch.bfloat16,
         )
         model = AutoModelForCausalLM.from_pretrained(
-            BASE_MODEL, quantization_config=bnb_config,
+            cfg.get("base_model") or BASE_MODEL,
+            quantization_config=bnb_config,
             device_map="auto", torch_dtype=torch.bfloat16)
         model = prepare_model_for_kbit_training(
             model, use_gradient_checkpointing=True)
     else:
         # bf16 — no quantization noise. 0.5B = ~1GB, fits easily on T4.
         model = AutoModelForCausalLM.from_pretrained(
-            BASE_MODEL, torch_dtype=torch.bfloat16, device_map="auto")
+            cfg.get("base_model") or BASE_MODEL,
+            torch_dtype=torch.bfloat16, device_map="auto")
         model.gradient_checkpointing_enable(
             gradient_checkpointing_kwargs={"use_reentrant": False})
 
@@ -681,12 +725,8 @@ def train(pass_name="pass3", train_path="sirius_train.jsonl",
                     import torch as _torch
                     from transformers.pytorch_utils import ALL_LAYERNORM_LAYERS
                     from transformers.trainer_pt_utils import get_parameter_names
-                    # FIX: transformers 4.46 get_parameter_names takes 2 args
-                    # (model, forbidden_layer_types); the old 3-arg call fell
-                    # back to the default optimizer and trained unfrozen base
-                    # layers at the adapter LR instead of base_lr.
                     decay_names = set(get_parameter_names(
-                        self.model, [_torch.nn.LayerNorm]))
+                        self.model, [_torch.nn.LayerNorm], ALL_LAYERNORM_LAYERS))
                 except Exception as e:
                     print(f"  [SplitLR] import fallback ({e}) — using default optimizer")
                     return super().create_optimizer()
@@ -915,6 +955,9 @@ def main():
     ap.add_argument("--seed", type=int, default=42,
                     help="Random seed. Run 2 seeds before declaring a config "
                          "failed — PPL gates on 0.5B wobble ±10-15% across seeds.")
+    ap.add_argument("--base-model", default=None,
+                    help="HF dir to train on top of (chained passes). For "
+                         "pass6: the pass5 s=0.5 merged dir from script 18.")
     ap.add_argument("--grid", action="store_true",
                     help="Run the 6-point grid (lr × epochs). ~1h on T4. "
                          "Use only if Pass 3 still fails the gate.")
@@ -923,7 +966,7 @@ def main():
         run_grid(args.train, args.dev, args.skip_install_check, args.seed)
     else:
         train(args.pass_name, args.train, args.dev,
-              args.skip_install_check, args.seed)
+              args.skip_install_check, args.seed, args.base_model)
 
 if __name__ == "__main__":
     main()
