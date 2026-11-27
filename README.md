@@ -80,8 +80,10 @@ code (0%). After a prereg amendment moving restraint to a *post-training* gate
 the **unmodified Pass 5 recipe** onto that base on a Kaggle T4 x2: training PPL gate **0.835
 PASS**, dual gate passed at all scales, chosen s=1.0, Q6_K/Q5_K_M GGUFs exported locally.
 Acceptance suite34: **0.912 overall**, but code-vuln **0.900 → 0.650** — a ship-gate failure.
-The co-primary external test on the trained model was still running at the time of this update.
-**Not shipped:** `sirius-final` remains deployed. Prereg
+The co-primary external test is now complete: identification **0.396** (vs stock coder 0.501,
+McNemar p=0.001 — a loss) but restraint **17.4%** (vs stock 0%, shipped 3.6%). Full numbers:
+[docs/18-stage-b-result.md](docs/18-stage-b-result.md). **Not shipped:** `sirius-final`
+remains deployed. Prereg
 [docs/15-base-model-ab-prereg.md](docs/15-base-model-ab-prereg.md),
 [docs/16-stage-b-prereg.md](docs/16-stage-b-prereg.md),
 run notebook [notebooks/stage_b_coder15.ipynb](notebooks/stage_b_coder15.ipynb).
@@ -139,6 +141,7 @@ SIRIUS-Security-Audit/
 │   ├── 15-base-model-ab-prereg.md   base-model A/B, frozen before running
 │   ├── 16-stage-b-prereg.md         Stage B recipe + ship gates
 │   ├── 17-stage-a-result-and-amendment.md   mixed Stage A result + prereg fix
+│   ├── 18-stage-b-result.md         trained 1.5B result, not shipped
 │   ├── taxonomy.md                  canonical LABEL contract per archetype
 │   └── development-log.md           session-to-session status and bug fixes
 ├── experiments/
@@ -168,8 +171,8 @@ SIRIUS-Security-Audit/
 │   └── dumps/                       raw output dumps (s=1.0 and s=0.5)
 ├── results/
 │   ├── cyberseceval_derived.json    external benchmark: raw answers + scores
-│   ├── cyberseceval_derived_coder15.json   base-model A/B candidate run
-│       (stageb external test JSON is written when the run completes)
+│   ├── cyberseceval_derived_coder15.json   stock coder A/B run
+│   └── cyberseceval_derived_stageb.json    trained coder external test
 ├── notebooks/
 │   └── stage_b_coder15.ipynb        Kaggle T4 x2 training notebook
 └── models/README.md                 where to download the GGUFs
