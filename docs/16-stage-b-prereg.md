@@ -49,7 +49,8 @@ No rank change, no epoch change, no new data. Any deviation is logged in the res
 | 5 | post-quant PPL ratio | ≤ 1.05 |
 | 6 | eval100 vs stock coder | not significantly worse (p ≥ 0.05 or significant in candidate's favour) |
 | 7 | CVIdent identification vs stock coder | ≥ stock-coder micro, not significantly worse |
-| 8 | CVIdent restraint vs stock coder | ≥ stock-coder restraint |
+| 8 | CVIdent restraint vs stock coder | ≥ stock-coder restraint (0.0) |
+| 8b | CVIdent restraint vs **shipped** model | ≥ 0.036 (moved here from Stage A rule 2 by `docs/17-stage-a-result-and-amendment.md`) |
 
 If shipped: update README badge/results, CITATION.cff model description, models/README.md,
 and create a new Ollama tag. `sirius-final` artifacts are retained, not deleted.
