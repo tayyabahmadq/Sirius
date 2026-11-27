@@ -725,8 +725,13 @@ def train(pass_name="pass3", train_path="sirius_train.jsonl",
                     import torch as _torch
                     from transformers.pytorch_utils import ALL_LAYERNORM_LAYERS
                     from transformers.trainer_pt_utils import get_parameter_names
-                    decay_names = set(get_parameter_names(
-                        self.model, [_torch.nn.LayerNorm], ALL_LAYERNORM_LAYERS))
+                    try:
+                        decay_names = set(get_parameter_names(
+                            self.model, [_torch.nn.LayerNorm], ALL_LAYERNORM_LAYERS))
+                    except TypeError:
+                        # transformers >=4.46: get_parameter_names(model, forbidden)
+                        decay_names = set(get_parameter_names(
+                            self.model, [_torch.nn.LayerNorm]))
                 except Exception as e:
                     print(f"  [SplitLR] import fallback ({e}) — using default optimizer")
                     return super().create_optimizer()
