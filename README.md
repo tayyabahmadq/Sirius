@@ -122,6 +122,7 @@ SIRIUS-Security-Audit/
 │   ├── 06-ppl-recheck.md            post-quantization PPL gate (local CPU)
 │   ├── 13-cyberseceval-prereg.md    external benchmark, frozen before running
 │   ├── 14-cyberseceval-result.md    mixed result, reported as-is
+│   ├── 15-base-model-ab-prereg.md   base-model A/B, frozen before running
 │   ├── taxonomy.md                  canonical LABEL contract per archetype
 │   └── development-log.md           session-to-session status and bug fixes
 ├── experiments/
@@ -141,6 +142,7 @@ SIRIUS-Security-Audit/
 │   ├── 11_export_gguf.py                            lean llama.cpp export
 │   ├── 13_dump_raw_outputs.py                       failure-mode classifier
 │   ├── 24_cyberseceval_derived.py                   external benchmark runner
+│   ├── 25_base_ab_decision.py                       mechanical Stage A gate
 │   └── build_sirius_report.py                       telemetry report builder
 ├── reports/
 │   ├── results.svg                  baseline vs final chart
@@ -148,7 +150,8 @@ SIRIUS-Security-Audit/
 │   ├── gates/                       train + gate logs (Pass 5)
 │   └── dumps/                       raw output dumps (s=1.0 and s=0.5)
 ├── results/
-│   └── cyberseceval_derived.json    external benchmark: raw answers + scores
+│   ├── cyberseceval_derived.json    external benchmark: raw answers + scores
+│   └── cyberseceval_derived_coder15.json   base-model A/B candidate run
 └── models/README.md                 where to download the GGUFs
 ```
 
