@@ -1,0 +1,421 @@
+{
+  "cpp:CWE-119": [
+    "access",
+    "bounds",
+    "cwe-119",
+    "functions",
+    "improper",
+    "potential",
+    "return",
+    "snprintf",
+    "validation",
+    "values"
+  ],
+  "cpp:CWE-120": [
+    "buffer",
+    "cwe-120",
+    "overflow",
+    "potential",
+    "strcat"
+  ],
+  "cpp:CWE-121": [
+    "buffer",
+    "calls",
+    "cwe-121",
+    "stack",
+    "strcpy",
+    "write"
+  ],
+  "cpp:CWE-242": [
+    "buffer",
+    "cwe-242",
+    "overflow",
+    "potential"
+  ],
+  "cpp:CWE-328": [
+    "considered",
+    "cwe-328",
+    "function",
+    "insecure"
+  ],
+  "cpp:CWE-335": [
+    "cwe-335",
+    "fixed"
+  ],
+  "cpp:CWE-338": [
+    "algorithm",
+    "cwe-338",
+    "generation",
+    "insecure",
+    "number",
+    "random",
+    "underlying",
+    "weakness"
+  ],
+  "cpp:CWE-347": [
+    "adding",
+    "authentication",
+    "cwe-347",
+    "encryption",
+    "looks",
+    "reason",
+    "separately",
+    "unauthenticated",
+    "unless"
+  ],
+  "cpp:CWE-377": [
+    "access",
+    "conditions",
+    "cwe-377",
+    "exclusive",
+    "generates",
+    "temporary",
+    "tmpnam",
+    "usage",
+    "without"
+  ],
+  "cpp:CWE-416": [
+    "after",
+    "cwe-416",
+    "invalidated",
+    "iterator",
+    "resulting"
+  ],
+  "cpp:CWE-665": [
+    "behavior",
+    "cwe-665",
+    "deprecated",
+    "undefined"
+  ],
+  "cpp:CWE-676": [
+    "buffer",
+    "cwe-676",
+    "insecure",
+    "often",
+    "overflow",
+    "strtok",
+    "thread",
+    "usage",
+    "vulnerabilities"
+  ],
+  "cpp:CWE-680": [
+    "buffer",
+    "cwe-680",
+    "integer",
+    "overflow",
+    "potential",
+    "result"
+  ],
+  "cpp:CWE-78": [
+    "command",
+    "cwe-78",
+    "injection",
+    "input",
+    "potential",
+    "sanitized"
+  ],
+  "cpp:CWE-798": [
+    "credentials",
+    "cwe-798",
+    "hardcoded",
+    "management",
+    "prefer",
+    "secret",
+    "system"
+  ],
+  "java:CWE-200": [
+    "access",
+    "allowed",
+    "content",
+    "cwe-200",
+    "filesystem",
+    "loaded",
+    "webview"
+  ],
+  "java:CWE-276": [
+    "application",
+    "creates",
+    "cwe-276",
+    "files",
+    "readable",
+    "world",
+    "writable"
+  ],
+  "java:CWE-295": [
+    "cwe-295",
+    "hostname",
+    "unsafe",
+    "verification"
+  ],
+  "java:CWE-327": [
+    "cwe-327",
+    "padding",
+    "without"
+  ],
+  "java:CWE-330": [
+    "context",
+    "cryptographic",
+    "cwe-330",
+    "depending",
+    "exploitable",
+    "expose",
+    "functions",
+    "generating",
+    "numbers",
+    "random",
+    "sensitive",
+    "these",
+    "values"
+  ],
+  "java:CWE-352": [
+    "against",
+    "application",
+    "cross",
+    "cwe-352",
+    "disabling",
+    "fails",
+    "features",
+    "forgery",
+    "protect",
+    "protection",
+    "request",
+    "spring"
+  ],
+  "java:CWE-502": [
+    "cwe-502",
+    "deserialization",
+    "detected",
+    "ensure",
+    "handling",
+    "insecure",
+    "proper",
+    "serialized",
+    "validation"
+  ],
+  "java:CWE-589": [
+    "cwe-589",
+    "deprecated",
+    "methods",
+    "obsolete"
+  ],
+  "java:CWE-611": [
+    "abused",
+    "allow",
+    "communicate",
+    "contain",
+    "cwe-611",
+    "documents",
+    "entities",
+    "external",
+    "feature",
+    "files",
+    "hosts",
+    "parsers",
+    "references"
+  ],
+  "java:CWE-643": [
+    "adversary",
+    "application",
+    "control",
+    "cwe-643",
+    "influence",
+    "input",
+    "logic",
+    "malicious",
+    "potentially",
+    "processes",
+    "queries",
+    "query",
+    "xpath"
+  ],
+  "java:CWE-78": [
+    "command",
+    "cwe-78",
+    "injection",
+    "input",
+    "method",
+    "potential",
+    "runtime",
+    "unsanitized"
+  ],
+  "java:CWE-79": [
+    "application",
+    "cross",
+    "cwe-79",
+    "directly",
+    "input",
+    "malicious",
+    "output",
+    "request",
+    "response",
+    "returning",
+    "scripting",
+    "supplied",
+    "writer"
+  ],
+  "java:CWE-798": [
+    "cwe-798"
+  ],
+  "java:CWE-918": [
+    "backend",
+    "constructing",
+    "cwe-918",
+    "exploits",
+    "forgery",
+    "initiate",
+    "input",
+    "parties",
+    "request",
+    "requests",
+    "server",
+    "systems",
+    "third"
+  ],
+  "javascript:CWE-119": [
+    "allows",
+    "application",
+    "argument",
+    "beyond",
+    "buffer",
+    "calling",
+    "cwe-119",
+    "deprecated",
+    "found",
+    "noassert",
+    "offset",
+    "since",
+    "specified"
+  ],
+  "javascript:CWE-185": [
+    "adversary",
+    "called",
+    "cause",
+    "constructor",
+    "cwe-185",
+    "expression",
+    "literal",
+    "malicious",
+    "regex",
+    "regexp",
+    "regular",
+    "supply",
+    "value"
+  ],
+  "javascript:CWE-208": [
+    "against",
+    "application",
+    "comparisons",
+    "constant",
+    "cwe-208",
+    "executing",
+    "first",
+    "found",
+    "meaning",
+    "security",
+    "sensitive",
+    "string",
+    "values"
+  ],
+  "javascript:CWE-22": [
+    "abused",
+    "access",
+    "application",
+    "comes",
+    "constructs",
+    "cwe-22",
+    "dynamically",
+    "files",
+    "information",
+    "input",
+    "sensitive",
+    "supplied",
+    "users"
+  ],
+  "javascript:CWE-319": [
+    "channel",
+    "communication",
+    "cwe-319",
+    "unencrypted",
+    "usage"
+  ],
+  "javascript:CWE-338": [
+    "context",
+    "cryptographic",
+    "cwe-338",
+    "depending",
+    "exploitable",
+    "expose",
+    "functions",
+    "generating",
+    "numbers",
+    "random",
+    "sensitive",
+    "these",
+    "values"
+  ],
+  "javascript:CWE-345": [
+    "authenticity",
+    "check",
+    "cwe-345",
+    "insufficient",
+    "origin",
+    "target",
+    "verification"
+  ],
+  "javascript:CWE-770": [
+    "adversary",
+    "allocate",
+    "application",
+    "buffer",
+    "calling",
+    "constructor",
+    "cwe-770",
+    "deprecated",
+    "found",
+    "literal",
+    "passing",
+    "since",
+    "value"
+  ],
+  "javascript:CWE-79": [
+    "application",
+    "before",
+    "calling",
+    "components",
+    "cross",
+    "cwe-79",
+    "dangerouslysetinnerhtml",
+    "default",
+    "encode",
+    "found",
+    "properly",
+    "react",
+    "scripting"
+  ],
+  "javascript:CWE-798": [
+    "cwe-798"
+  ],
+  "javascript:CWE-908": [
+    "buffer",
+    "cwe-908",
+    "information",
+    "related",
+    "risks",
+    "uninitialized"
+  ],
+  "javascript:CWE-95": [
+    "adversary",
+    "application",
+    "arbitrary",
+    "calling",
+    "cwe-95",
+    "dynamically",
+    "first",
+    "found",
+    "import",
+    "literal",
+    "module",
+    "require",
+    "string"
+  ]
+}
