@@ -1,0 +1,75 @@
+{
+  "project": "SIRIUS",
+  "phase": "2-eval-gate",
+  "base_model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+  "merged_dir": "/kaggle/working/sirius_merged_pass5",
+  "adapter_dir": "/kaggle/working/sirius_lora_adapter_pass5",
+  "run_tag": "stageb",
+  "gate_thresholds": {
+    "general_ppl_max_ratio": 1.3,
+    "security_loss_max_ratio": 1.2,
+    "kl_soft_target": 0.1,
+    "accuracy_min_ratio": 0.95
+  },
+  "base_reference": {
+    "general_ppl": 23.62653219101485,
+    "general_nats": 3.162370325922966,
+    "general_acc": 0.40641963988542557,
+    "security_ppl": 122.63795298562736,
+    "security_loss": 4.809236543178558,
+    "security_acc": 0.3058263920247555
+  },
+  "sweep": [
+    {
+      "s": 1.0,
+      "general_ppl": 19.741701911640437,
+      "general_ppl_ratio": 0.8355734033261212,
+      "general_delta_nats": -0.1796370792388915,
+      "general_acc": 0.42219394728541376,
+      "security_ppl": 238.05606245341258,
+      "security_loss": 5.472506202459336,
+      "security_loss_ratio": 1.1379157904431967,
+      "kl_base_tuned": 0.17963706731796264,
+      "sec_gate": true,
+      "gen_gate": true,
+      "kl_advisory": false,
+      "acc_advisory": true,
+      "passes": true
+    },
+    {
+      "s": 0.75,
+      "general_ppl": 20.14937081415808,
+      "general_ppl_ratio": 0.8528281108397646,
+      "general_delta_nats": -0.1591972631216052,
+      "general_acc": 0.4196485113352537,
+      "security_ppl": 125.99619787725999,
+      "security_loss": 4.836251730918884,
+      "security_loss_ratio": 1.0056173547501306,
+      "kl_base_tuned": 0.15919723451137544,
+      "sec_gate": true,
+      "gen_gate": true,
+      "kl_advisory": false,
+      "acc_advisory": true,
+      "passes": true
+    },
+    {
+      "s": 0.5,
+      "general_ppl": 20.905664591010236,
+      "general_ppl_ratio": 0.8848384698182936,
+      "general_delta_nats": -0.12235017061233533,
+      "general_acc": 0.4169748020917177,
+      "security_ppl": 97.55065930618629,
+      "security_loss": 4.580371825695038,
+      "security_loss_ratio": 0.9524114242606463,
+      "kl_base_tuned": 0.1223501467704773,
+      "sec_gate": true,
+      "gen_gate": true,
+      "kl_advisory": false,
+      "acc_advisory": true,
+      "passes": true
+    }
+  ],
+  "chosen_s": 1.0,
+  "passed": true,
+  "next_step": "PASS at s=1.0. Run 08_prune_quantize_colab.py with --merged /kaggle/working/sirius_merged_pass5. Set s=1.0 if re-merging adapter."
+}
