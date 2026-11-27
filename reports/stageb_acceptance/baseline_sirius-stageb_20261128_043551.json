@@ -1,0 +1,348 @@
+{
+  "meta": {
+    "model": "sirius-stageb",
+    "host": "http://localhost:11434",
+    "raw": false,
+    "quick": false,
+    "num_predict": 240,
+    "ran_at": "2026-11-27T23:03:58.550870+00:00",
+    "suite_version": "SIRIUS Security Baseline v0.1"
+  },
+  "capabilities": {
+    "code_vuln_scan": {
+      "items": [
+        {
+          "id": "V01",
+          "hits": 2,
+          "groups": 2,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 9.4,
+          "answer": "LABEL: no vulnerability found\nFUNCTION: The input is directly interpolated into a SQL query string \u2014 never parameterized.\nRISK: No escaping is applied; an attacker can inject arbitrary SQL that the database executes against any role with read or execute on tables."
+        },
+        {
+          "id": "V02",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.0,
+          "answer": "LABEL: hardcoded secret \u2014 sensitive data is embedded in source code\nFUNCTION: A live production key is hard-coded into the module.\nRISK: Anyone with access to the binary can reproduce the leak; no mitigation is possible without redeploying."
+        },
+        {
+          "id": "V03",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 2.9,
+          "answer": "LABEL: no vulnerability found\nFUNCTION: The same command is executed in a subprocess with no sensitive data.\nRISK: None \u2014 there are no security vulnerabilities to detect."
+        },
+        {
+          "id": "V04",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.1,
+          "answer": "LABEL: eval \u2014 arbitrary code execution from untrusted input\nFUNCTION: A user-supplied string was passed to Python's built-in eval().\nRISK: The attacker executes arbitrary Python code; a session can now steal cookies, take over the account, or restart the server."
+        },
+        {
+          "id": "V05",
+          "hits": 1,
+          "groups": 2,
+          "score": 0.5,
+          "passed": false,
+          "seconds": 2.8,
+          "answer": "LABEL: no vulnerability found\nFUNCTION: A common salted hash function with a fixed salt length.\nRISK: none \u2014 secure."
+        },
+        {
+          "id": "V06",
+          "hits": 0,
+          "groups": 1,
+          "score": 0.0,
+          "passed": false,
+          "seconds": 2.8,
+          "answer": "LABEL: no vulnerability found\nFUNCTION: The request is made over HTTPS; the CA bundle is verified.\nRISK: none \u2014 the issue is not present."
+        },
+        {
+          "id": "V07",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 2.8,
+          "answer": "LABEL: no vulnerability found\nFUNCTION: The request path is a static directory, not a file upload.\nRISK: None \u2014 the issue does not exist."
+        },
+        {
+          "id": "V08",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.1,
+          "answer": "LABEL: xss, cross-site scripting, innerHTML\nFUNCTION: Untrusted content is inserted into the DOM without escaping.\nRISK: The attacker injects script that runs in the victim's browser, stealing cookies or performing actions as the user."
+        },
+        {
+          "id": "V09",
+          "hits": 0,
+          "groups": 1,
+          "score": 0.0,
+          "passed": false,
+          "seconds": 2.8,
+          "answer": "LABEL: no vulnerability found\nFUNCTION: The request path is not sensitive; it does not contain user input.\nRISK: None \u2014 the endpoint has no security impact."
+        },
+        {
+          "id": "V10",
+          "hits": 0,
+          "groups": 2,
+          "score": 0.0,
+          "passed": false,
+          "seconds": 2.9,
+          "answer": "LABEL: no vulnerability found\nFUNCTION: The same function is unchanged from a previous audit.\nRISK: none \u2014 the code does not leak any sensitive information."
+        }
+      ],
+      "mean_score": 0.65,
+      "pass_rate": 0.6,
+      "n_items": 10
+    },
+    "web_config_checks": {
+      "items": [
+        {
+          "id": "W01",
+          "hits": 4,
+          "groups": 4,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.3,
+          "answer": "LABEL: strict-transport-security, content-security-policy, x-frame-options, x-content-type-options, x-xss-protection\nFUNCTION: Production responses omit default CORS/HTTP headers that expose defaults policies.\nRISK: Without these, the response allows XSS/FPS without a Content Security Policy."
+        },
+        {
+          "id": "W02",
+          "hits": 3,
+          "groups": 3,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.1,
+          "answer": "LABEL: httponly, samesite, secure\nFUNCTION: The session cookie is set without HttpOnly, SameSite=None, and Secure.\nRISK: JavaScript can read it, cross-site attacks can send it without HTTPS."
+        },
+        {
+          "id": "W03",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.0,
+          "answer": "LABEL: https, redirect, hsts\nFUNCTION: The site is reachable over clear HTTP in addition to HTTPS.\nRISK: Users on clear connect are subject to man-in-the-middle and session ID theft; cookies are no longer secure."
+        },
+        {
+          "id": "W04",
+          "hits": 3,
+          "groups": 3,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.1,
+          "answer": "LABEL: content-security-policy, script, xss\nFUNCTION: No Content-Security-Policy is set, or it allows unsafe-inline scripts.\nRISK: Injected script has no source restriction, so XSS is unconstrained."
+        },
+        {
+          "id": "W05",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.1,
+          "answer": "LABEL: directory listing, file exposure, enumeration\nFUNCTION: The web server lists directory contents when no index file is present.\nRISK: Sensitive files (backups, configs, source) are enumerated and downloaded by any visitor."
+        },
+        {
+          "id": "W06",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.0,
+          "answer": "LABEL: stack trace, information disclosure, verbose error, leak\nFUNCTION: Unhandled exceptions return full stack traces and framework internals to the client.\nRISK: Attackers learn file paths, library versions, and query structure, accelerating exploitation."
+        },
+        {
+          "id": "W07",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.2,
+          "answer": "LABEL: https, tls, plaintext, sniff, credentials\nFUNCTION: Data is transmitted over the unencrypted internet \u2014 the network is a wire that carries plaintext.\nRISK: Credentials and session cookies reach users over the network; anyone on the path reads them; attackers can sniff or modify them, too."
+        },
+        {
+          "id": "W08",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.2,
+          "answer": "LABEL: hash, plaintext, storage, access, encrypt, database\nFUNCTION: Passwords are stored in plaintext in the database.\nRISK: Users who have access to the database also get a copy of the encrypted passwords; future logins validate the hash against the database instead of the password entry field."
+        }
+      ],
+      "mean_score": 1.0,
+      "pass_rate": 1.0,
+      "n_items": 8
+    },
+    "dependency_cve": {
+      "items": [
+        {
+          "id": "D01",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.1,
+          "answer": "LABEL: outdated, pin, semver, lockfile, dependency\nFUNCTION: The package manager knows nothing about the dependency's semver range.\nRISK: Any published version outside that range can break end-users' deployments, including critical ones."
+        },
+        {
+          "id": "D02",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.2,
+          "answer": "LABEL: common vulnerability disclosure, cve, identifier, registry\nFUNCTION: A CVE is a unique, public string identifier for a known vulnerability.\nRISK: Without a CVE there is no standard means to sort and rank matches, so false positives abound."
+        },
+        {
+          "id": "D03",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.1,
+          "answer": "LABEL: bandit, black, flake8, mypy, pyupgrade, safety, pylint\nFUNCTION: A codebase with no known security or quality issues.\nRISK: There is no scanner to run; there are no known vulnerabilities."
+        },
+        {
+          "id": "D04",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.1,
+          "answer": "LABEL: npx audit, npm audit, npm, yarn, yarn\nFUNCTION: npm/yarn run an internal dependency-scan against installed packages.\nRISK: A vulnerable package is not exposed if npm/yarn are not invoked \u2014 a full scan must be scheduled."
+        },
+        {
+          "id": "D05",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.1,
+          "answer": "LABEL: package-lock.json, pin, lock, version\nFUNCTION: The lock file links specific versions to avoid installer ambiguity in future installs.\nRISK: A dev dependency update can break all installs due to library instability; the lock re-links to a consistent set."
+        },
+        {
+          "id": "D06",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.4,
+          "answer": "LABEL: typosquat, typo, subdomain, domain, registration\nFUNCTION: Users must resolve typosquatting subdomains (sub.tld) to servers not authorized by the primary domain.\nRISK: As users migrate to subdomains, they are less protected by host header matching and can now land on any server registered under the domain."
+        },
+        {
+          "id": "D07",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.3,
+          "answer": "LABEL: abandoned, unmaintained, orphaned, dead, maintenance, support\nFUNCTION: A maintained dependency has been orphaned: no maintainer is still actively developing it.\nRISK: The project may go to EOL or enter a new unsupported state; new vulnerabilities are unpatched for at least 6 months."
+        },
+        {
+          "id": "D08",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.2,
+          "answer": "LABEL: digest, tag, latest, vulnerable, pull\nFUNCTION: Multiple tags identify an image; 'latest' is not always what you mean.\nRISK: Pulling with a tag pins the image to a known digest, but \"latest\" can still be vulnerable."
+        }
+      ],
+      "mean_score": 1.0,
+      "pass_rate": 1.0,
+      "n_items": 8
+    },
+    "load_runtime": {
+      "items": [
+        {
+          "id": "L01",
+          "hits": 2,
+          "groups": 2,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.1,
+          "answer": "LABEL: k6, vus, iterations, duration\nFUNCTION: A k6 script defines a fixed-vus loop with number of iterations and duration.\nRISK: Without a loop the test would fire once and exit, missing load."
+        },
+        {
+          "id": "L02",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.5,
+          "answer": "LABEL: percentiles \u2014 95, 98, 99\nFUNCTION: The outer tail: 95th, 98th, 99th percentiles (longest observed latencies).\nRISK: Without them, you have no sense of the worst-case latency; the service might be fine most of the time but just occasionally fall into a long stall."
+        },
+        {
+          "id": "L03",
+          "hits": 2,
+          "groups": 2,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.4,
+          "answer": "LABEL: requests/second, rps, concurrent user, throughput\nFUNCTION: RPS is throughput (requests completed per time); concurrency is how many in-flight requests the system serves at once.\nRISK: Modeling only throughput (RPM) without concurrency underloades idle sessions but saturates busy ones; dashboards show both."
+        },
+        {
+          "id": "L04",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": false,
+          "seconds": 3.2,
+          "answer": "LABEL: logs, metrics, monitoring, cpu, memory, slow query, database\nFUNCTION: Compare before/after graphs against standard workloads to locate the cause.\nRISK: Without a metric trail you cannot isolate the effect of each change and scale back."
+        },
+        {
+          "id": "L05",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.2,
+          "answer": "LABEL: leak, heap, profile, memory, gc\nFUNCTION: A retained-reference reference-allocated object never gets collected.\nRISK: Until the heap is exhausted the process stays responsive but consumes memory; eventually the system runs out of address space."
+        },
+        {
+          "id": "L06",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.5,
+          "answer": "LABEL: connection pool, database, exhaust, fallback, leak, mutex, poison, queue, reload, sample, slow, tcp, timeout\nFUNCTION: The fault is a thread or connection leak, a metric histogram fails to sample, or a handler logic bypasses the health check.\nRISK: The service falls over until an end-user request kills it, escalating to a full-scale DDoS."
+        },
+        {
+          "id": "L07",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.4,
+          "answer": "LABEL: canary, gradual, rollout, percentage\nFUNCTION: A canary routes a small percentage of traffic to the new build, watches error/latency metrics, and rolls forward only if they hold.\nRISK: A full rollout of a bad build takes everything down at once; a canary bounds the blast radius."
+        },
+        {
+          "id": "L08",
+          "hits": 1,
+          "groups": 1,
+          "score": 1.0,
+          "passed": true,
+          "seconds": 3.2,
+          "answer": "LABEL: 502 proxy, upstream down, service unavailable\nFUNCTION: The target host is unreachable during the request path; 502 Back-pressure is returned to the client.\nRISK: The target is down; users see either the soft or hard timeout error page and the session is lost."
+        }
+      ],
+      "mean_score": 1.0,
+      "pass_rate": 0.875,
+      "n_items": 8
+    }
+  },
+  "overall_mean": 0.912
+}

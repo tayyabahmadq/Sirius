@@ -34,3 +34,8 @@ Thumbs.db
 # Secrets
 .env
 *.token
+# Stage B local export toolchain (download from llama.cpp when needed)
+conversion/
+gguf-py/
+convert_hf_to_gguf.py
+stageb_merged/
