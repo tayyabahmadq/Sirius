@@ -78,9 +78,15 @@ label extractor is used only for parse-rate gating, never as a rationale grader.
 scoring of rationale text beyond the existing group scorer.
 
 - 20 hand-checked unit cases in each format, committed.
-- **Parity check:** re-grade `raw_dump_sirius-s05.json` with the new grader; must reproduce
-  overall 0.795 ± 1 item (0.765–0.824). If not, fix and re-commit the grader before training.
-- Grader SHA256 recorded here after freeze: _filled at commit time in `reports/ablation/grader.sha256`_.
+- **Parity check (amended 2026-11-28, before any training):** re-grade an available raw dump
+  with the new grader and require **exact reproduction of every stored per-item hit vector**.
+  The original target "overall 0.795 ±1 item" cannot be met: the 0.795 acceptance run was in
+  Colab and its raw outputs were never saved locally; the available dumps score 0.7453
+  (`raw_dump_sirius-s05.json`) and 0.8406 (`raw_dump_sirius-pass5.json`). Per-item hit parity
+  holds with zero mismatches on both, so the grader is format-equivalent to the original
+  scorer; the 0.795 figure remains a separate, already-published acceptance result. This is a
+  correction to the parity *definition*, not a relaxation of the ship gates.
+- Grader SHA256 recorded at `reports/ablation/grader.sha256` at freeze time.
 
 ## 5. Lockbox (frozen before training, opened once)
 
