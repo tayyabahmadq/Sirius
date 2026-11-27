@@ -14,8 +14,8 @@
 **34-item security baseline · 0.753 → 0.795 overall · code-vuln label errors 5/5 → 1/5 · dual PPL gate passed**
 
 > **Shipped model:** `sirius-final` (Pass 5). Later Phase 5/6 "head of security" experiments
-> are quarantined in [experiments/FAILED-NOT-SHIPPED/](experiments/FAILED-NOT-SHIPPED/README.md)
-> and are **not** part of this deliverable.
+> are quarantined in [experiments/FAILED-NOT-SHIPPED/](experiments/FAILED-NOT-SHIPPED/README.md),
+> and the Stage B broader-base candidate failed a ship gate — **neither is part of this deliverable**.
 
 </div>
 
@@ -72,6 +72,20 @@ decision was attached. Prereg [docs/13-cyberseceval-prereg.md](docs/13-cybersece
 full result [docs/14-cyberseceval-result.md](docs/14-cyberseceval-result.md),
 raw answers [results/cyberseceval_derived.json](results/cyberseceval_derived.json).
 
+**Broader-base experiment (Stage B, not shipped).** We tested whether the base model was the
+bottleneck. Stock `Qwen2.5-Coder-1.5B` scored **0.501** on the same external identification test
+(vs stock 0.5B's 0.288, McNemar p≈1e-40) and **0.902** on suite34, but never abstained on secure
+code (0%). After a prereg amendment moving restraint to a *post-training* gate
+([docs/17-stage-a-result-and-amendment.md](docs/17-stage-a-result-and-amendment.md)), we ported
+the **unmodified Pass 5 recipe** onto that base on a Kaggle T4 x2: training PPL gate **0.835
+PASS**, dual gate passed at all scales, chosen s=1.0, Q6_K/Q5_K_M GGUFs exported locally.
+Acceptance suite34: **0.912 overall**, but code-vuln **0.900 → 0.650** — a ship-gate failure.
+The co-primary external test on the trained model was still running at the time of this update.
+**Not shipped:** `sirius-final` remains deployed. Prereg
+[docs/15-base-model-ab-prereg.md](docs/15-base-model-ab-prereg.md),
+[docs/16-stage-b-prereg.md](docs/16-stage-b-prereg.md),
+run notebook [notebooks/stage_b_coder15.ipynb](notebooks/stage_b_coder15.ipynb).
+
 ---
 
 ## How it works
@@ -123,6 +137,8 @@ SIRIUS-Security-Audit/
 │   ├── 13-cyberseceval-prereg.md    external benchmark, frozen before running
 │   ├── 14-cyberseceval-result.md    mixed result, reported as-is
 │   ├── 15-base-model-ab-prereg.md   base-model A/B, frozen before running
+│   ├── 16-stage-b-prereg.md         Stage B recipe + ship gates
+│   ├── 17-stage-a-result-and-amendment.md   mixed Stage A result + prereg fix
 │   ├── taxonomy.md                  canonical LABEL contract per archetype
 │   └── development-log.md           session-to-session status and bug fixes
 ├── experiments/
@@ -143,6 +159,7 @@ SIRIUS-Security-Audit/
 │   ├── 13_dump_raw_outputs.py                       failure-mode classifier
 │   ├── 24_cyberseceval_derived.py                   external benchmark runner
 │   ├── 25_base_ab_decision.py                       mechanical Stage A gate
+│   ├── 26_merge_stageb_local.py                     local PEFT merge for Stage B
 │   └── build_sirius_report.py                       telemetry report builder
 ├── reports/
 │   ├── results.svg                  baseline vs final chart
@@ -151,7 +168,10 @@ SIRIUS-Security-Audit/
 │   └── dumps/                       raw output dumps (s=1.0 and s=0.5)
 ├── results/
 │   ├── cyberseceval_derived.json    external benchmark: raw answers + scores
-│   └── cyberseceval_derived_coder15.json   base-model A/B candidate run
+│   ├── cyberseceval_derived_coder15.json   base-model A/B candidate run
+│       (stageb external test JSON is written when the run completes)
+├── notebooks/
+│   └── stage_b_coder15.ipynb        Kaggle T4 x2 training notebook
 └── models/README.md                 where to download the GGUFs
 ```
 
