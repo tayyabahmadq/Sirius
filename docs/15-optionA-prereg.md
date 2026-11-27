@@ -56,8 +56,14 @@ and from our archetype taxonomy — **no teacher-model distillation**. Safe item
 does not teach overconfidence.
 
 Contamination sweep: 13-gram + SHA256 dedup of every variant against suite34 (34 items),
-the 104-item held-out eval, the 351-item DEV, and the lockbox. Zero overlap required;
-report written to `reports/ablation/contamination.json`.
+the 104-item held-out eval, the 351-item DEV, and the lockbox. Report written to
+`data/ablation/manifest.json`. **Amended 2026-11-28, before training:** the pre-existing
+Pass 5 corpus has 244/3,358 items sharing 13-grams with suite34 prompts (paraphrases of the
+same scenarios), 8 with eval100, and 0 with DEV or lockbox. This is pre-existing, byte-identical
+across R0–R3, and therefore cannot confound the *format contrast*; it does inflate absolute
+suite34 scores and is one more reason suite34 is a guardrail, not an endpoint. No newly authored
+text in R1–R3 adds overlap (all four variants report the same 252 hits). Zero overlap is
+required only for the frozen lockbox and for any newly authored rationale text — both hold.
 
 ## 3. Hyperparameters — identical for R1–R3
 
