@@ -69,8 +69,13 @@ required only for the frozen lockbox and for any newly authored rationale text �
 
 r=16, α=16, rsLoRA, dropout 0.05; target `q_proj,k_proj,v_proj,o_proj,down_proj`; layers 4–20;
 bf16; completion-only loss; 10% wikitext anchor; lr 3e-5, 2 epochs, cosine, 5% warmup;
-SplitLR (last 2 layers 1e-6, adapter 3e-5); effective batch 16; seed 42; early stop on
+SplitLR (last 2 layers 1e-6, adapter 3e-5); **effective batch 16**; seed 42; early stop on
 general PPL with composite stop; same trainer `scripts/07_train_colab.py`.
+
+**Memory match (2026-11-28, before any successful run):** the 4 GB local GPU OOMs at
+per-device batch 4. The new `ablation` pass config is byte-identical to pass5 except
+`per_device_train_batch_size=1, gradient_accumulation_steps=16` — **effective batch remains
+16**. Identical across R0–R3, so ceteris paribus is preserved. No learning-rate or data change.
 
 **Hardware amendment (2026-11-28, before any ablation training):** Kaggle T4 sessions
 recycled repeatedly mid-run (R1 lost twice at 260/462 and 292/462). To preserve the

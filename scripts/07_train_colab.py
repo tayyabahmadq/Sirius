@@ -209,6 +209,31 @@ PASSES = [
         note="Pass 5 — LABEL-first data + MLP path + last-2-layer unfreeze. "
              "Run script 12 first to build sirius_train_pass5.jsonl.",
     ),
+    # --- Ablation: pass5 recipe, memory-matched for a 4 GB local GPU. ---
+    # Identical to pass5 in every respect except per-device batch 1 / accum 16
+    # (effective batch still 16). Frozen in docs/15-optionA-prereg.md.
+    dict(
+        name="ablation",
+        r=16, alpha=16, dropout=0.05, use_rslora=True,
+        target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "down_proj"],
+        layers_to_transform=list(range(4, 20)),
+        quantize_4bit=False,
+        lr=3e-5, epochs=2, warmup_ratio=0.05, lr_scheduler="cosine",
+        lr_scheduler_kwargs=None,
+        max_grad_norm=0.5, weight_decay=0.01,
+        label_smoothing=0.0,
+        completion_only_loss=True, anchor_ratio=0.10,
+        per_device_train_batch_size=1, gradient_accumulation_steps=16,
+        early_stopping_patience=3,
+        early_stopping_min_delta=0.005,
+        eval_metric="eval_general_ppl", greater_is_better=False,
+        unfreeze_last_n_layers=2,
+        unfreeze_base_lr=1e-6,
+        train_data_file="sirius_train_pass5.jsonl",
+        composite_stop=True,
+        note="Option A ablation: pass5 recipe, per-device batch 1 / accum 16 "
+             "for 4 GB GPU. Effective batch unchanged at 16.",
+    ),
     # --- Pass 6R (Phase 5R): knowledge injection, CORRECTED recipe. ---
     # The v1 recipe (r=8, lr 1e-5, 1 epoch, down_proj) starved the signal:
     # 2.4% new-signal share, 41:1 replay dominance, ~11 of ~460 steps

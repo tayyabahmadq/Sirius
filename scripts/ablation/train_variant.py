@@ -37,14 +37,15 @@ def main():
         "trainer_sha256": hashlib.sha256(open(TRAINER, "rb").read()).hexdigest(),
         "grader_sha256": open(os.path.join(RUNS, "grader.sha256")).read().strip()
         if os.path.isfile(os.path.join(RUNS, "grader.sha256")) else None,
-        "command": f"python {TRAINER} --pass-name pass5 --train {data} "
+        "command": f"python {TRAINER} --pass-name ablation --train {data} "
                    "--dev data/sirius_dev.jsonl --skip-install-check",
     }
     json.dump(meta, open(os.path.join(outdir, "config_snapshot.json"), "w"), indent=2)
     print(json.dumps(meta, indent=2), flush=True)
-    cmd = ["python", TRAINER, "--pass-name", "pass5", "--train", data,
+    cmd = ["python", TRAINER, "--pass-name", "ablation", "--train", data,
            "--dev", "data/sirius_dev.jsonl", "--skip-install-check"]
-    env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUTF8="1")
+    env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUTF8="1",
+               PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True")
     r = subprocess.run(cmd, env=env)
     json.dump({"returncode": r.returncode},
               open(os.path.join(outdir, "train_result.json"), "w"), indent=2)

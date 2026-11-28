@@ -1,0 +1,9 @@
+{
+  "variant": "R0",
+  "data": "data/ablation/R0_label_first.jsonl",
+  "data_sha256": "e2f04d650a33be1f77d010748fca4928cb21808dc8b257228a054dd483099135",
+  "git_commit": "93bb535866c3675428d5272b844e9914b2ed1a62",
+  "trainer_sha256": "006af164bbdb388e7c5bbf05bc7f8fe5ae3f41e61b83734ffc7cde2997132017",
+  "grader_sha256": "02D9B4C99FB058A02584A45A2219A9182EC153B8CFA7D795798FE0C05162CA97",
+  "command": "python scripts/07_train_colab.py --pass-name pass5 --train data/ablation/R0_label_first.jsonl --dev data/sirius_dev.jsonl --skip-install-check"
+}
