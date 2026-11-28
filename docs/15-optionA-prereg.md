@@ -77,15 +77,14 @@ per-device batch 4. The new `ablation` pass config is byte-identical to pass5 ex
 `per_device_train_batch_size=1, gradient_accumulation_steps=16` — **effective batch remains
 16**. Identical across R0–R3, so ceteris paribus is preserved. No learning-rate or data change.
 
-**Hardware amendment (2026-11-28, before any ablation training):** Kaggle T4 sessions
-recycled repeatedly mid-run (R1 lost twice at 260/462 and 292/462). To preserve the
-ablation's ceteris paribus, **all four runs (R0–R3) are trained locally on the same
-GTX 1650 Ti 4 GB with bf16** (torch reports bf16 support), seed 42. Identical hardware across
-all arms keeps the format/negative contrast clean. **R0 is retrained locally** with the
-byte-identical Pass 5 data (SHA256 in the manifest) so R0 vs R1–R3 is hardware-matched;
-the shipped T4-trained Pass 5 adapter remains an external reference. This changes hardware
-from Pass 5's T4 but does not change any hyperparameter or data, and the change is frozen
-before seeing any ablation result. Kaggle Stage B hardware is not mixed into this lineage.
+**Hardware amendment (final, 2026-11-28, before any successful ablation run):** the local
+GTX 1650 Ti 4 GB lost its driver mid-run and is unusable. Training therefore returns to the
+original **Kaggle T4 x2 bf16**, the same accelerator class as Pass 5. Because hardware is
+again matched, **R0 reverts to the original control definition: reuse the shipped Pass 5
+adapter** (data SHA256 byte-identical, verified in `data/ablation/manifest.json`). R1–R3 are
+trained on T4 with the frozen recipe. Each variant cell pushes its adapter to a GitHub
+artifact branch immediately, so a recycled session cannot lose a completed run. No
+hyperparameter or data change; no ablation result had been seen when this was frozen.
 
 A run that fails the PPL gate is documented and quarantined — no hyperparameter retweak.
 
