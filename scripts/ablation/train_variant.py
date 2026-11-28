@@ -44,7 +44,8 @@ def main():
     print(json.dumps(meta, indent=2), flush=True)
     cmd = ["python", TRAINER, "--pass-name", "pass5", "--train", data,
            "--dev", "data/sirius_dev.jsonl", "--skip-install-check"]
-    r = subprocess.run(cmd)
+    env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUTF8="1")
+    r = subprocess.run(cmd, env=env)
     json.dump({"returncode": r.returncode},
               open(os.path.join(outdir, "train_result.json"), "w"), indent=2)
     if r.returncode != 0:
