@@ -70,8 +70,17 @@ required only for the frozen lockbox and for any newly authored rationale text �
 r=16, α=16, rsLoRA, dropout 0.05; target `q_proj,k_proj,v_proj,o_proj,down_proj`; layers 4–20;
 bf16; completion-only loss; 10% wikitext anchor; lr 3e-5, 2 epochs, cosine, 5% warmup;
 SplitLR (last 2 layers 1e-6, adapter 3e-5); effective batch 16; seed 42; early stop on
-general PPL with composite stop; same trainer `scripts/07_train_colab.py`, same accelerator
-class as Pass 5 (T4 bf16). Kaggle Stage B hardware is not mixed into this lineage.
+general PPL with composite stop; same trainer `scripts/07_train_colab.py`.
+
+**Hardware amendment (2026-11-28, before any ablation training):** Kaggle T4 sessions
+recycled repeatedly mid-run (R1 lost twice at 260/462 and 292/462). To preserve the
+ablation's ceteris paribus, **all four runs (R0–R3) are trained locally on the same
+GTX 1650 Ti 4 GB with bf16** (torch reports bf16 support), seed 42. Identical hardware across
+all arms keeps the format/negative contrast clean. **R0 is retrained locally** with the
+byte-identical Pass 5 data (SHA256 in the manifest) so R0 vs R1–R3 is hardware-matched;
+the shipped T4-trained Pass 5 adapter remains an external reference. This changes hardware
+from Pass 5's T4 but does not change any hyperparameter or data, and the change is frozen
+before seeing any ablation result. Kaggle Stage B hardware is not mixed into this lineage.
 
 A run that fails the PPL gate is documented and quarantined — no hyperparameter retweak.
 
